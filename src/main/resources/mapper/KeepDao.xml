@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.api.jello.dao.KeepDao">
+	<select id="listKeeps" resultType="com.api.jello.vo.BillVO">
+		SELECT
+		<if test="time == 'day'">
+			T_KEEP.AMOUNT as value,
+		</if>
+		<if test="time == 'week'">
+			SUM( T_KEEP.AMOUNT ) as value,
+		</if>
+			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM-DD' ) as time,
+			T_KEEP.KEEP_TYPE
+		FROM
+		T_KEEP
+		<if test="time == 'day'">
+			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD')
+		</if>
+		<if test="time == 'week'">
+			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'iw')=TO_CHAR(SYSDATE,'iw')
+		</if>
+		<if test="time == 'month'">
+			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'YYYY-MM')=TO_CHAR(SYSDATE,'YYYY-MM')
+		</if>
+		<if test="time == 'year'">
+			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'YYYY')=TO_CHAR(SYSDATE,'YYYY')
+		</if>
+		<if test="type != ''and type !=null">
+			AND T_KEEP.KEEP_TYPE=#{type}
+		</if>
+		<if test="time!='day'">
+			GROUP BY
+		</if>
+		<if test="time == 'week'">
+			TO_CHAR(T_KEEP.CREATE_TIME,'YYYY-MM-DD'),
+			T_KEEP.KEEP_TYPE
+		</if>
+		ORDER BY  time DESC
+	</select>
+
+	<select id="getBalance" resultType="java.math.BigDecimal">
+SELECT
+	SUM( AMOUNT )
+FROM
+	( SELECT -T_KEEP.amount AS AMOUNT FROM T_KEEP WHERE T_KEEP.KEEP_type = 'KEEP_2' UNION SELECT T_KEEP.amount  FROM T_KEEP WHERE T_KEEP.KEEP_type = 'KEEP_1' )
+    </select>
+
+	<select id="getOutlay" resultType="com.api.jello.entity.Keep">
+		SELECT
+			SUM( T_KEEP.AMOUNT ) as value,
+			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM-DD' ) as day
+		FROM
+			T_KEEP
+			WHERE T_KEEP.KEEP_TYPE='KEEP_2'
+		GROUP BY
+			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM-DD' )
+    </select>
+
+	<select id="getBillTime" resultType="com.api.jello.vo.BillVO">
+		SELECT
+			SUM( T_KEEP.AMOUNT ) as value,
+		<if test="time == 'day'">
+			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM-DD' ) as time,
+		</if>
+		<if test="time == 'week'">
+			TO_CHAR( T_KEEP.CREATE_TIME, 'iw' ) as time,
+		</if>
+		<if test="time == 'month'">
+			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM' ) as time,
+		</if>
+		<if test="time == 'year'">
+			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY' ) as time,
+		</if>
+			T_KEEP.KEEP_TYPE
+		FROM
+			T_KEEP
+		<if test="time == 'day'">
+			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD')
+		</if>
+		<if test="time == 'week'">
+			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'iw')=TO_CHAR(SYSDATE,'iw')
+		</if>
+		<if test="time == 'month'">
+			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'YYYY-MM')=TO_CHAR(SYSDATE,'YYYY-MM')
+		</if>
+		<if test="time == 'year'">
+			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'YYYY')=TO_CHAR(SYSDATE,'YYYY')
+		</if>
+		GROUP BY
+		<if test="time == 'day'">
+			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM-DD' ),
+		</if>
+		<if test="time == 'week'">
+			TO_CHAR( T_KEEP.CREATE_TIME, 'iw' ),
+		</if>
+		<if test="time == 'month'">
+			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM' ),
+		</if>
+		<if test="time == 'year'">
+			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY' ),
+		</if>
+			T_KEEP.KEEP_TYPE
+    </select>
+
+</mapper>

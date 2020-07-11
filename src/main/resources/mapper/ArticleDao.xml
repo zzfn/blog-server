@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.api.jello.dao.ArticleDao">
+    <select id="listArticle" resultType="com.api.jello.entity.Article">
+        SELECT
+            T_ARTICLE.id,
+            T_ARTICLE.title,
+            MYOYNN ( T_ARTICLE.ID ) AS content,
+            T_ARTICLE.view_count,
+            T_ARTICLE.tag,
+            T_ARTICLE.create_by,
+            T_ARTICLE.update_by,
+            T_ARTICLE.create_time,
+            T_ARTICLE.update_time,
+            COUNT( T_COMMENT.ID ) AS countComments
+        FROM
+            T_ARTICLE
+            LEFT JOIN T_COMMENT ON T_COMMENT.ARTICLE_ID = T_ARTICLE.ID
+        WHERE
+            T_ARTICLE.IS_DELETE = 0
+        GROUP BY
+            T_ARTICLE.ID,
+            T_ARTICLE.title,
+            T_ARTICLE.view_count,
+            T_ARTICLE.tag,
+            T_ARTICLE.create_by,
+            T_ARTICLE.update_by,
+            T_ARTICLE.create_time,
+            T_ARTICLE.update_time
+        ORDER BY T_ARTICLE.create_time DESC
+    </select>
+    <select id="getArticle" parameterType="string" resultType="com.api.jello.entity.Article">
+        SELECT
+            ARTICLE.ID,
+            ARTICLE.TITLE,
+            ARTICLE.CONTENT,
+            ARTICLE.UPDATE_TIME,
+            DICT.CODE AS TAG,
+            DICT.NAME AS TAGDESC
+        FROM
+            T_ARTICLE ARTICLE
+            LEFT JOIN SYS_DICT DICT ON ARTICLE.TAG = DICT.CODE
+        WHERE
+            ARTICLE.IS_DELETE = 0
+            AND ARTICLE.ID =#{id}
+    </select>
+</mapper>

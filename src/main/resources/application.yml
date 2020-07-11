@@ -1,0 +1,40 @@
+spring:
+  redis:
+    host: 47.100.47.169
+    port: 6397
+    password: chen
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    url: jdbc:oracle:thin:@119.3.155.253:49161:XE
+    username: OYNN
+    password: LdAiRtx8woTmQOGZ2GVrAgR50HMls9T6y68dXS91Ht/fcOauPephObvgd22LvarGcA286+hugSn3eeukwp08pg==
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      connection-properties: config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIYRHhQMpmKQc+rAKNxfIpROkQVH5qUEIt10qDy8E6m5XNjXtrlYENzhNKi5yKTqDP0cFrrJLQPEUMHEzDynnN8CAwEAAQ==
+      filters: config,stat,wall
+      stat-view-servlet:
+        enabled: true
+      filter:
+        config:
+          enabled: true
+        stat:
+          log-slow-sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:/mapper/*Dao.xml
+  global-config:
+    db-config:
+      table-prefix: t_
+      logic-delete-field: isDelete
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+server:
+  port: 8060
