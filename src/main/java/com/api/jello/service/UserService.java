@@ -10,6 +10,5 @@ import java.util.List;
  * @since 2020-04-11 22:40:47
  */
 public interface UserService {
-
-
+    String getToken(User user);
 }
