@@ -5,6 +5,8 @@ import com.api.jello.dao.UserDao;
 import com.api.jello.entity.User;
 import com.api.jello.util.RedisUtil;
 import com.api.jello.util.ResultUtil;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -48,10 +51,13 @@ public class UserController {
      * @return 登录结果
      */
     @PostMapping("login")
-    public Object login(@RequestBody User user) {
+    public Object login(@RequestBody User user) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
         map.put("username", user.getUsername());
         map.put("password", user.getPassword());
+       String token= JWT.create().withAudience(user.getId())
+                .sign(Algorithm.HMAC256(user.getPassword()));
+       log.info(token);
         Integer count = userDao.selectCount(new QueryWrapper<User>().allEq(map));
         if (count == 1) {
             String uuid = UUID.randomUUID().toString();

@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author cc
  * @date 2020/3/22 17:22
@@ -23,6 +26,12 @@ public class ArticleController {
     ArticleDao articleDao;
     @Autowired
     CommentDao commentDao;
+    @PostMapping("test")
+    public Object test(String str) {
+        List<String> stringList=new ArrayList<>();
+
+        return null;
+    }
     @PostMapping("saveArticle")
     public Object saveArticle(@RequestBody Article article) {
         article.setUpdateTime(null);
