@@ -9,9 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * T_SYS_CONFIG(TSysConfig)表控制层
  *
- * @author makejava
+ * @author chenc
  * @since 2020-04-23 15:46:51
  */
 @RestController

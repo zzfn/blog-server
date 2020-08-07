@@ -26,12 +26,6 @@ public class ArticleController {
     ArticleDao articleDao;
     @Autowired
     CommentDao commentDao;
-    @PostMapping("test")
-    public Object test(String str) {
-        List<String> stringList=new ArrayList<>();
-
-        return null;
-    }
     @PostMapping("saveArticle")
     public Object saveArticle(@RequestBody Article article) {
         article.setUpdateTime(null);
