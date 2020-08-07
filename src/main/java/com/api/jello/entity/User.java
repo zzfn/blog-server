@@ -21,5 +21,8 @@ public class User extends BaseEntity {
      * openid
      */
     private String openid;
-
+    /**
+     * role
+     */
+    private String role;
 }

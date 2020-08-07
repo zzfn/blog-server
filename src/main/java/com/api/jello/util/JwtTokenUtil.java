@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 @Slf4j
-public class JwtTokenUtils {
+public class JwtTokenUtil {
 
     public static final String TOKEN_HEADER = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
