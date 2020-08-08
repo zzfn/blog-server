@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -94,15 +95,18 @@ public class UserController {
         return ResultUtil.success(null);
     }
 
+
     /**
      * 验证token是否正确
      *
-     * @param id 用户token
-     * @return Boolean
+     * @param request
+     * @return
      */
     @GetMapping("getUserState")
-    public Object getUserState(String id) {
-        return ResultUtil.success(redisUtil.hasKey(id));
+    public Object getUserState(HttpServletRequest request) {
+        String tokenHeader = request.getHeader(JwtTokenUtil.TOKEN_HEADER);
+        log.info(tokenHeader);
+        return ResultUtil.success(redisUtil.hasKey(tokenHeader));
     }
 
     /**

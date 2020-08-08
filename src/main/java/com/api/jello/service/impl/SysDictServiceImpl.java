@@ -42,12 +42,16 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDict> impleme
     public String translate(String typeCode, String code) {
         List<SysDict> list = JSON.parseArray(JSON.toJSONString(redisUtil.get("dict::" + typeCode)), SysDict.class);
         final String[] name = {""};
-        list.forEach(sysDict -> {
-            if(sysDict.getCode().equals(code)){
-                name[0] =sysDict.getName();
-            }
-        });
-        return name[0];
+        if(null!=list){
+            list.forEach(sysDict -> {
+                if(sysDict.getCode().equals(code)){
+                    name[0] =sysDict.getName();
+                }
+            });
+            return name[0];
+        }else {
+            return null;
+        }
     }
 
     @Override

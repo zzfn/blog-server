@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * @author cc
+ */
 @Slf4j
 public class JwtTokenUtil {
 
@@ -33,7 +36,7 @@ public class JwtTokenUtil {
      */
     public static String createToken(User user) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("role", user.getRole());
+        map.put("role", user.getRoleId());
         map.put("username", user.getUsername());
         map.put("userid", user.getId());
         return Jwts.builder()
@@ -85,6 +88,22 @@ public class JwtTokenUtil {
                 username=(String)claims.get("username");
             }
             return username;
+        } catch (Exception e) {
+            log.error("token 解析错误");
+            return null;
+        }
+    }
+    /**
+     * 从token中获取登录角色
+     */
+    public static String getUserRoleFromToken(String token) {
+        String role = null;
+        try {
+            Claims claims = getClaimsFromToken(token);
+            if(null!=claims){
+                role=(String)claims.get("role");
+            }
+            return role;
         } catch (Exception e) {
             log.error("token 解析错误");
             return null;

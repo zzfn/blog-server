@@ -3,6 +3,7 @@ package com.api.jello.dao;
 import com.api.jello.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  * @author nanaouyang
  * @since 2020-04-11 22:40:47
  */
-@Resource
+@Repository
 public interface UserDao extends BaseMapper<User> {
 
 

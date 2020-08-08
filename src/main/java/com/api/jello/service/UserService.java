@@ -1,6 +1,8 @@
 package com.api.jello.service;
 
 import com.api.jello.entity.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import java.util.List;
 
 /**
@@ -9,6 +11,6 @@ import java.util.List;
  * @author nanaouyang
  * @since 2020-04-11 22:40:47
  */
-public interface UserService {
+public interface UserService extends UserDetailsService {
     String getToken(User user);
 }
