@@ -59,7 +59,7 @@ public class UserController {
             BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
             if(bCryptPasswordEncoder.matches(user.getPassword(),user1.getPassword())){
                 String token = JwtTokenUtil.createToken(user1);
-                redisUtil.set(user1.getId(), token, 60 * 60 * 24);
+                redisUtil.set(user1.getId(), token, JwtTokenUtil.EXPIRATION);
                 return ResultUtil.success(token);
             }else {
                 return ResultUtil.error("密码错误");

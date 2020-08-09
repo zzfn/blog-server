@@ -25,7 +25,7 @@ public class JwtTokenUtil {
     /**
      * 过期时间是3600秒，既是1个小时
      */
-    private static final long EXPIRATION = 3600L;
+    public static final long EXPIRATION = 3600L;
 
 
     /**
