@@ -1,13 +1,15 @@
 package com.api.jello.util;
 
-import com.api.jello.entity.User;
+import com.api.jello.entity.JwtUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author cc
@@ -26,25 +28,43 @@ public class JwtTokenUtil {
      * 过期时间是3600秒，既是1个小时
      */
     public static final long EXPIRATION = 3600L;
+    /**
+     * 过期时间是21600秒，既是6个小时
+     */
+    public static final long REFRESH_EXPIRATION = 21600L;
 
 
     /**
      * 创建token
      *
-     * @param user 用户实体
+     * @param claims
      * @return token
      */
-    public static String createToken(User user) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("username", user.getUsername());
-        map.put("uid", user.getId());
+    public static String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, SECRET)
-                .setClaims(map)
+                .setClaims(claims)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION * 1000))
                 .compact();
     }
-
+    public static String generateRefreshToken(Map<String, Object> claims) {
+        return Jwts.builder()
+                .signWith(SignatureAlgorithm.HS512, SECRET)
+                .setClaims(claims)
+                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION * 1000))
+                .compact();
+    }
+    public String refreshToken(String token) {
+        String refreshedToken;
+        try {
+            Claims claims = getClaimsFromToken(token);
+            claims.put("created", LocalDate.now());
+            refreshedToken = generateToken(claims);
+        } catch (Exception e) {
+            refreshedToken = null;
+        }
+        return refreshedToken;
+    }
     /**
      * 是否过期
      * @param token
@@ -58,6 +78,11 @@ public class JwtTokenUtil {
         }
     }
 
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        JwtUser user = (JwtUser) userDetails;
+        String username = getUserNameFromToken(token);
+        return (username.equals(user.getUsername()) && !isTokenExpired(token));
+    }
     /**
      * 获取载荷
      * @param token

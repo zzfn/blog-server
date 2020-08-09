@@ -6,6 +6,8 @@ import com.api.jello.entity.User;
 import com.api.jello.util.JwtTokenUtil;
 import com.api.jello.util.RedisUtil;
 import com.api.jello.util.ResultUtil;
+import com.api.jello.vo.LoginVO;
+import com.api.jello.vo.TokenVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
@@ -15,18 +17,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
-
-import static com.api.jello.util.JwtTokenUtil.TOKEN_HEADER;
 
 /**
  * USER(TUser)表控制层
@@ -49,18 +45,25 @@ public class UserController {
     /**
      * 通过账号密码登录
      *
-     * @param user 用户实体
+     * @param loginVO 用户实体
      * @return 登录结果
      */
     @PostMapping("login")
-    public Object login(@RequestBody User user) {
-        User user1 = userDao.selectOne(new QueryWrapper<User>().eq("USERNAME", user.getUsername()));
-        if (null != user1) {
+    public Object login(@RequestBody LoginVO loginVO) {
+        User user = userDao.selectOne(new QueryWrapper<User>().eq("USERNAME", loginVO.getUsername()));
+        if (null != user) {
             BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
-            if(bCryptPasswordEncoder.matches(user.getPassword(),user1.getPassword())){
-                String token = JwtTokenUtil.createToken(user1);
-                redisUtil.set(user1.getId(), token, JwtTokenUtil.EXPIRATION);
-                return ResultUtil.success(token);
+            if(bCryptPasswordEncoder.matches(loginVO.getPassword(),user.getPassword())){
+                Map<String,Object> map=new HashMap<>();
+                map.put("username",user.getUsername());
+                map.put("uid",user.getId());
+                String token = JwtTokenUtil.generateToken(map);
+                redisUtil.set(user.getId(), token, JwtTokenUtil.EXPIRATION);
+                TokenVO tokenVO=new TokenVO();
+                tokenVO.setToken(token);
+                tokenVO.setRefreshToken(JwtTokenUtil.generateRefreshToken(map));
+                tokenVO.setExpired(JwtTokenUtil.EXPIRATION);
+                return ResultUtil.success(tokenVO);
             }else {
                 return ResultUtil.error("密码错误");
             }
