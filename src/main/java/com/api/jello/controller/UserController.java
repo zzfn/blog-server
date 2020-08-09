@@ -73,9 +73,6 @@ public class UserController {
     public Object register(@RequestBody User user) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword().trim()));
-        List<String> roles = new ArrayList<>();
-        roles.add("1");
-        user.setRoleId(roles);
         return ResultUtil.success(userDao.insert(user));
     }
 

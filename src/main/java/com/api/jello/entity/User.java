@@ -1,9 +1,12 @@
 package com.api.jello.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,11 +33,19 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * role
      */
-    private List<String> roleId;
+    private String roleId;
+
+    @TableField(exist = false)
+    private List<Role> roleList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        List<Role> roles = this.getRoleList();
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getRoleValue()));
+        }
+        return authorities;
     }
 
     @Override
