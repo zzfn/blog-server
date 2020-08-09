@@ -24,9 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
+import static com.api.jello.util.JwtTokenUtil.TOKEN_HEADER;
 
 /**
  * USER(TUser)表控制层
@@ -73,6 +73,9 @@ public class UserController {
     public Object register(@RequestBody User user) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword().trim()));
+        List<String> roles = new ArrayList<>();
+        roles.add("1");
+        user.setRoleId(roles);
         return ResultUtil.success(userDao.insert(user));
     }
 
@@ -110,13 +113,12 @@ public class UserController {
     /**
      * 验证token是否正确
      *
-     * @param request
+     * @param authorization
      * @return
      */
     @GetMapping("getUserState")
-    public Object getUserState(HttpServletRequest request) {
-        String tokenHeader = request.getHeader(JwtTokenUtil.TOKEN_HEADER);
-        String token = tokenHeader.substring(JwtTokenUtil.TOKEN_PREFIX.length());
+    public Object getUserState(@RequestHeader String authorization) {
+        String token = authorization.substring(JwtTokenUtil.TOKEN_PREFIX.length());
         String uid = JwtTokenUtil.getUserIdFromToken(token);
         if (null != uid) {
             return ResultUtil.success(redisUtil.hasKey(uid));
@@ -129,14 +131,13 @@ public class UserController {
     /**
      * 获取用户信息
      *
-     * @param request
+     * @param authorization
      * @return
      */
     @GetMapping("getUserInfo")
     @PreAuthorize("hasRole('USER')")
-    public Object getUserInfo(HttpServletRequest request) {
-        String tokenHeader = request.getHeader(JwtTokenUtil.TOKEN_HEADER);
-        String token = tokenHeader.substring(JwtTokenUtil.TOKEN_PREFIX.length());
+    public Object getUserInfo(@RequestHeader String authorization) {
+        String token = authorization.substring(JwtTokenUtil.TOKEN_PREFIX.length());
         String uid = JwtTokenUtil.getUserIdFromToken(token);
         if (null != uid) {
             return ResultUtil.success(userDao.selectById(uid));

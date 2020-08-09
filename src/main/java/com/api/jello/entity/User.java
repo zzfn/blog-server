@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * USER(TUser)实体类
@@ -29,7 +30,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * role
      */
-    private String roleId;
+    private List<String> roleId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
