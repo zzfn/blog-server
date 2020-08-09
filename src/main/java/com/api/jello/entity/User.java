@@ -1,6 +1,8 @@
 package com.api.jello.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +20,7 @@ import java.util.List;
  * @since 2020-04-11 22:40:47
  */
 @Data
-public class User extends BaseEntity implements UserDetails {
+public class User extends BaseEntity {
     /**
      * 用户名
      */
@@ -26,6 +28,7 @@ public class User extends BaseEntity implements UserDetails {
     /**
      * 密码
      */
+    @JSONField(serialize = false)
     private String password;
     /**
      * openid
@@ -35,33 +38,4 @@ public class User extends BaseEntity implements UserDetails {
     @TableField(exist = false)
     private List<Role> roleList;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        List<Role> roles = this.getRoleList();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getRoleValue()));
-        }
-        return authorities;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
 }

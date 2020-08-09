@@ -3,9 +3,6 @@ spring:
     host: 47.100.47.169
     port: 6397
     password: chen
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
   datasource:
     url: jdbc:oracle:thin:@119.3.155.253:49161:XE
     username: OYNN
