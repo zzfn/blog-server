@@ -51,15 +51,14 @@ public class UserController {
      * @return 登录结果
      */
     @PostMapping("login")
-    public Object login(@RequestBody User user) throws UnsupportedEncodingException {
+    public Object login(@RequestBody User user) {
         Map<String, String> map = new HashMap<>();
         map.put("username", user.getUsername());
         map.put("password", user.getPassword());
-        String token = JwtTokenUtil.createToken(user);
-        Integer count = userDao.selectCount(new QueryWrapper<User>().allEq(map));
-        JwtTokenUtil.getUserNameFromToken(token);
-        if (count == 1) {
-            redisUtil.set(userDao.selectOne(new QueryWrapper<User>().select("id").allEq(map)).getId(), token, 60 * 60 * 24);
+        User user1 = userDao.selectOne(new QueryWrapper<User>().allEq(map));
+        if (null != user1) {
+            String token = JwtTokenUtil.createToken(user1);
+            redisUtil.set(user1.getId(), token, 60 * 60 * 24);
             return ResultUtil.success(token);
         }
         return ResultUtil.error("登录失败");
@@ -105,8 +104,13 @@ public class UserController {
     @GetMapping("getUserState")
     public Object getUserState(HttpServletRequest request) {
         String tokenHeader = request.getHeader(JwtTokenUtil.TOKEN_HEADER);
-        log.info(tokenHeader);
-        return ResultUtil.success(redisUtil.hasKey(tokenHeader));
+        String token = tokenHeader.substring(JwtTokenUtil.TOKEN_PREFIX.length());
+        String uid = JwtTokenUtil.getUserIdFromToken(token);
+        if (null != uid) {
+            return ResultUtil.success(redisUtil.hasKey(uid));
+        } else {
+            return ResultUtil.success(false);
+        }
     }
 
     /**
@@ -116,7 +120,14 @@ public class UserController {
      * @return
      */
     @GetMapping("getUserInfo")
-    public Object getUserInfo(String id) {
-        return ResultUtil.success(userDao.selectById((Serializable) redisUtil.get(id)));
+    public Object getUserInfo(HttpServletRequest request) {
+        String tokenHeader = request.getHeader(JwtTokenUtil.TOKEN_HEADER);
+        String token = tokenHeader.substring(JwtTokenUtil.TOKEN_PREFIX.length());
+        String uid = JwtTokenUtil.getUserIdFromToken(token);
+        if (null != uid) {
+            return ResultUtil.success(userDao.selectById(uid));
+        } else {
+            return ResultUtil.success(false);
+        }
     }
 }

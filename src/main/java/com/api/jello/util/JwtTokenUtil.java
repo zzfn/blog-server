@@ -38,7 +38,7 @@ public class JwtTokenUtil {
         HashMap<String, Object> map = new HashMap<>();
         map.put("role", user.getRoleId());
         map.put("username", user.getUsername());
-        map.put("userid", user.getId());
+        map.put("uid", user.getId());
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .setClaims(map)
@@ -102,6 +102,22 @@ public class JwtTokenUtil {
             Claims claims = getClaimsFromToken(token);
             if(null!=claims){
                 role=(String)claims.get("role");
+            }
+            return role;
+        } catch (Exception e) {
+            log.error("token 解析错误");
+            return null;
+        }
+    }
+    /**
+     * 从token中获取登录用户id
+     */
+    public static String getUserIdFromToken(String token) {
+        String role = null;
+        try {
+            Claims claims = getClaimsFromToken(token);
+            if(null!=claims){
+                role=(String)claims.get("uid");
             }
             return role;
         } catch (Exception e) {
