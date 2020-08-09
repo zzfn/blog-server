@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,7 +27,9 @@ public class ArticleController {
     ArticleDao articleDao;
     @Autowired
     CommentDao commentDao;
+
     @PostMapping("saveArticle")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object saveArticle(@RequestBody Article article) {
         article.setUpdateTime(null);
         if(null==article.getId()||null == articleDao.selectById(article.getId())){

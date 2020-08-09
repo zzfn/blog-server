@@ -69,6 +69,11 @@ public class UserController {
         }
     }
 
+    /**
+     * 注册
+     * @param user
+     * @return
+     */
     @PostMapping("register")
     public Object register(@RequestBody User user) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -132,7 +137,6 @@ public class UserController {
      * @return
      */
     @GetMapping("getUserInfo")
-    @PreAuthorize("hasRole('USER')")
     public Object getUserInfo(@RequestHeader String authorization) {
         String token = authorization.substring(JwtTokenUtil.TOKEN_PREFIX.length());
         String uid = JwtTokenUtil.getUserIdFromToken(token);
