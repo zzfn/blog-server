@@ -1,4 +1,4 @@
-package com.api.jello.vo;
+package com.api.jello.component;
 
 import com.alibaba.fastjson.JSON;
 import com.api.jello.util.ResultUtil;
@@ -18,7 +18,7 @@ import java.io.IOException;
  * @date 2018/4/26
  */
 @Component
-public class AccessDeniedVO implements AccessDeniedHandler {
+public class ResultAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
