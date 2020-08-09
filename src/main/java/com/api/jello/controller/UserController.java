@@ -15,6 +15,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -52,16 +54,26 @@ public class UserController {
      */
     @PostMapping("login")
     public Object login(@RequestBody User user) {
-        Map<String, String> map = new HashMap<>();
-        map.put("username", user.getUsername());
-        map.put("password", user.getPassword());
-        User user1 = userDao.selectOne(new QueryWrapper<User>().allEq(map));
+        User user1 = userDao.selectOne(new QueryWrapper<User>().eq("USERNAME", user.getUsername()));
         if (null != user1) {
-            String token = JwtTokenUtil.createToken(user1);
-            redisUtil.set(user1.getId(), token, 60 * 60 * 24);
-            return ResultUtil.success(token);
+            BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
+            if(bCryptPasswordEncoder.matches(user.getPassword(),user1.getPassword())){
+                String token = JwtTokenUtil.createToken(user1);
+                redisUtil.set(user1.getId(), token, 60 * 60 * 24);
+                return ResultUtil.success(token);
+            }else {
+                return ResultUtil.error("密码错误");
+            }
+        } else {
+            return ResultUtil.error("用户不存在");
         }
-        return ResultUtil.error("登录失败");
+    }
+
+    @PostMapping("register")
+    public Object register(@RequestBody User user) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword().trim()));
+        return ResultUtil.success(userDao.insert(user));
     }
 
     /**
@@ -116,10 +128,12 @@ public class UserController {
 
     /**
      * 获取用户信息
+     *
      * @param request
      * @return
      */
     @GetMapping("getUserInfo")
+    @PreAuthorize("hasRole('USER')")
     public Object getUserInfo(HttpServletRequest request) {
         String tokenHeader = request.getHeader(JwtTokenUtil.TOKEN_HEADER);
         String token = tokenHeader.substring(JwtTokenUtil.TOKEN_PREFIX.length());
