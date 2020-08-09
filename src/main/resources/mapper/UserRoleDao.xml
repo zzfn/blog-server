@@ -9,6 +9,7 @@
                 LEFT JOIN T_ROLE ON T_USER_ROLE.ROLE_ID = T_ROLE.id
         WHERE
             USER_ID = #{userId}
+        AND T_USER_ROLE.IS_DELETE=0
     </select>
 
 </mapper>
