@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -33,30 +31,18 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain chain) {
-
-        try {
-            String tokenHeader = request.getHeader(JwtTokenUtil.TOKEN_HEADER);
-            if (null != tokenHeader && tokenHeader.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
-                String token = tokenHeader.substring(JwtTokenUtil.TOKEN_PREFIX.length());
-                String username = JwtTokenUtil.getUserNameFromToken(token);
-                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = userService.loadUserByUsername(username);
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, userDetails.getAuthorities());
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+                                    FilterChain chain) throws IOException, ServletException {
+        String tokenHeader = request.getHeader(JwtTokenUtil.TOKEN_HEADER);
+        if (null != tokenHeader && tokenHeader.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
+            String token = tokenHeader.substring(JwtTokenUtil.TOKEN_PREFIX.length());
+            String username = JwtTokenUtil.getUserNameFromToken(token);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-            chain.doFilter(request, response);
-        } catch (UsernameNotFoundException e) {
-            log.info("a1");
-            e.printStackTrace();
-        } catch (IOException e) {
-            log.info("a2");
-            e.printStackTrace();
-        } catch (ServletException e) {
-            log.info("a3");
-            e.printStackTrace();
         }
+        chain.doFilter(request, response);
     }
 }
