@@ -39,11 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     ResultAuthenticationEntryPoint resultAuthenticationEntryPoint;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
-    }
-
-    @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll();
         httpSecurity.cors();

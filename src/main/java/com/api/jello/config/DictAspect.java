@@ -29,8 +29,9 @@ import java.util.Optional;
 public class DictAspect {
     @Autowired
     RedisUtil redisUtil;
-@Autowired
+    @Autowired
     SysDictService sysDictService;
+
     @Pointcut("execution( * com.api.jello.controller.*.*(..))")
     public void dictExecution() {
     }
@@ -40,26 +41,26 @@ public class DictAspect {
         Object result = pjp.proceed();
         Map<String, Object> resultMap = (HashMap) result;
         Object resultObj = null;
-        if(null==resultMap.get("data")){
+        if (null == resultMap.get("data")) {
             return result;
         }
         resultObj = resultMap.get("data");
-        if(resultObj instanceof BaseEntity){
+        if (resultObj instanceof BaseEntity) {
             translation(resultObj);
-        }else if(resultObj instanceof List) {
+        } else if (resultObj instanceof List) {
             List list = (List) resultObj;
             Optional.of((List) list).ifPresent(objects -> objects.forEach(this::translation));
-        }else if (resultObj instanceof IPage){
-            IPage ipage=(IPage)resultObj;
+        } else if (resultObj instanceof IPage) {
+            IPage ipage = (IPage) resultObj;
             List list = (List) ipage.getRecords();
             Optional.of((List) list).ifPresent(objects -> objects.forEach(this::translation));
-        }else {
+        } else {
             translation(resultObj);
         }
         return result;
     }
 
-    private void translation(Object content){
+    private void translation(Object content) {
         try {
             Field[] fields = FieldUtils.getAllFields(content.getClass());
             for (Field field : fields) {
@@ -67,7 +68,7 @@ public class DictAspect {
                 if (field.isAnnotationPresent(Dict.class)) {
                     field.setAccessible(true);
                     Dict dict = field.getAnnotation(Dict.class);
-                    String name=sysDictService.translate(dict.codeType(), (String) field.get(content));
+                    String name = sysDictService.translate(dict.codeType(), (String) field.get(content));
                     Field targetField = FieldUtils.getField(content.getClass(), dict.target(), true);
                     targetField.set(content, name);
                 }

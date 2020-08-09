@@ -31,10 +31,6 @@ public class User extends BaseEntity implements UserDetails {
      * openid
      */
     private String openid;
-    /**
-     * role
-     */
-    private String roleId;
 
     @TableField(exist = false)
     private List<Role> roleList;
@@ -43,9 +39,12 @@ public class User extends BaseEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         List<Role> roles = this.getRoleList();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getRoleValue()));
-        }
+//        if(!roles.isEmpty()){
+            for (Role role : roles) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+            }
+//        }
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         return authorities;
     }
 

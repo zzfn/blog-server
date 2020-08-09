@@ -36,7 +36,6 @@ public class JwtTokenUtil {
      */
     public static String createToken(User user) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("role", user.getRoleId());
         map.put("username", user.getUsername());
         map.put("uid", user.getId());
         return Jwts.builder()
@@ -93,22 +92,7 @@ public class JwtTokenUtil {
             return null;
         }
     }
-    /**
-     * 从token中获取登录角色
-     */
-    public static String getUserRoleFromToken(String token) {
-        String role = null;
-        try {
-            Claims claims = getClaimsFromToken(token);
-            if(null!=claims){
-                role=(String)claims.get("role");
-            }
-            return role;
-        } catch (Exception e) {
-            log.error("token 解析错误");
-            return null;
-        }
-    }
+
     /**
      * 从token中获取登录用户id
      */
