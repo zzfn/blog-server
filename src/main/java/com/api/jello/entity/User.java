@@ -20,12 +20,12 @@ import java.util.List;
 @Data
 public class User extends BaseEntity implements UserDetails {
     /**
-    * 用户名
-    */
+     * 用户名
+     */
     private String username;
     /**
-    * 密码
-    */
+     * 密码
+     */
     private String password;
     /**
      * openid
@@ -39,12 +39,9 @@ public class User extends BaseEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         List<Role> roles = this.getRoleList();
-//        if(!roles.isEmpty()){
-            for (Role role : roles) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-            }
-//        }
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getRoleValue()));
+        }
         return authorities;
     }
 
