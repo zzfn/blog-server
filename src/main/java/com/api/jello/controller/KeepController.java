@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("keep")
 @Slf4j
@@ -34,7 +36,8 @@ public class KeepController {
      */
     @GetMapping("listKeeps")
     public Object listKeeps(String time,String type) {
-        return ResultUtil.success(keepDao.selectList(new QueryWrapper<Keep>().orderByDesc("CREATE_TIME")));
+//        return ResultUtil.success(keepDao.selectList(new QueryWrapper<Keep>().orderByDesc("CREATE_TIME")));
+        return ResultUtil.success(keepDao.listKeeps("week","KEEP_2"));
     }
 
     /***
