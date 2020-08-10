@@ -49,11 +49,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-resources/**",
                         "/swagger-ui.html#/**",
                         "/swagger-ui.html",
+                        "/keep/**",
                         "/v2/api-docs/**"
                 )
                 .permitAll()
                 .antMatchers(HttpMethod.POST,
                         "/user/login",
+                        "/keep/**",
                         "/user/register"
                 )
                 .permitAll()
