@@ -6,6 +6,7 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.ListObjectsRequest;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.api.jello.service.SysConfigService;
+import com.api.jello.util.RedisUtil;
 import com.api.jello.util.ResultUtil;
 import com.api.jello.vo.RequestVO;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,9 @@ import java.io.IOException;
 public class FileController {
     @Autowired
     private SysConfigService sysConfigService;
+    @Autowired
+    RedisUtil redisUtil;
+
     @GetMapping("/druid/stat")
     public Object druidStat() {
         return DruidStatManagerFacade.getInstance().getDataSourceStatDataList();
@@ -33,10 +37,10 @@ public class FileController {
 
     @GetMapping("listFiles")
     public Object listFiles(String path) {
-        String endpoint=sysConfigService.selectOne("endpoint").getValue();
-        String accessKeyId=sysConfigService.selectOne("accessKeyId").getValue();
-        String accessKeySecret=sysConfigService.selectOne("accessKeySecret").getValue();
-        String bucketName=sysConfigService.selectOne("bucketName").getValue();
+         String endpoint=(String)redisUtil.get("endpoint");
+         String accessKeyId=(String)redisUtil.get("accessKeyId");
+         String accessKeySecret=(String)redisUtil.get("accessKeySecret");
+         String bucketName=(String)redisUtil.get("bucketName");
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest(bucketName);
         listObjectsRequest.setDelimiter("/");
@@ -46,10 +50,10 @@ public class FileController {
 
     @GetMapping("listImages")
     public Object listImages() {
-        String endpoint=sysConfigService.selectOne("endpoint").getValue();
-        String accessKeyId=sysConfigService.selectOne("accessKeyId").getValue();
-        String accessKeySecret=sysConfigService.selectOne("accessKeySecret").getValue();
-        String bucketName=sysConfigService.selectOne("bucketName").getValue();
+        String endpoint=(String)redisUtil.get("endpoint");
+        String accessKeyId=(String)redisUtil.get("accessKeyId");
+        String accessKeySecret=(String)redisUtil.get("accessKeySecret");
+        String bucketName=(String)redisUtil.get("bucketName");
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest(bucketName);
         listObjectsRequest.setDelimiter("/");
@@ -59,10 +63,10 @@ public class FileController {
 
     @PostMapping("upload")
     public Object upload(MultipartFile file) throws IOException {
-        String endpoint=sysConfigService.selectOne("endpoint").getValue();
-        String accessKeyId=sysConfigService.selectOne("accessKeyId").getValue();
-        String accessKeySecret=sysConfigService.selectOne("accessKeySecret").getValue();
-        String bucketName=sysConfigService.selectOne("bucketName").getValue();
+        String endpoint=(String)redisUtil.get("endpoint");
+        String accessKeyId=(String)redisUtil.get("accessKeyId");
+        String accessKeySecret=(String)redisUtil.get("accessKeySecret");
+        String bucketName=(String)redisUtil.get("bucketName");
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, "img/" + file.getOriginalFilename(), file.getInputStream());
         ossClient.putObject(putObjectRequest);
@@ -72,10 +76,10 @@ public class FileController {
 
     @DeleteMapping("deleteFile")
     public Object deleteFile(@RequestBody RequestVO requestVo) throws IOException {
-        String endpoint=sysConfigService.selectOne("endpoint").getValue();
-        String accessKeyId=sysConfigService.selectOne("accessKeyId").getValue();
-        String accessKeySecret=sysConfigService.selectOne("accessKeySecret").getValue();
-        String bucketName=sysConfigService.selectOne("bucketName").getValue();
+        String endpoint=(String)redisUtil.get("endpoint");
+        String accessKeyId=(String)redisUtil.get("accessKeyId");
+        String accessKeySecret=(String)redisUtil.get("accessKeySecret");
+        String bucketName=(String)redisUtil.get("bucketName");
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         ossClient.deleteObject(bucketName,requestVo.getId());
         ossClient.shutdown();
