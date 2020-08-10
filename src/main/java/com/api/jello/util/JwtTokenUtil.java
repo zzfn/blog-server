@@ -33,12 +33,10 @@ public class JwtTokenUtil {
      */
     public static final long REFRESH_EXPIRATION = 21600L;
 
-
     /**
      * 创建token
-     *
      * @param claims
-     * @return token
+     * @return
      */
     public static String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
@@ -47,6 +45,12 @@ public class JwtTokenUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION * 1000))
                 .compact();
     }
+
+    /**
+     * 创建refreshToken
+     * @param claims
+     * @return
+     */
     public static String generateRefreshToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, SECRET)
@@ -54,6 +58,12 @@ public class JwtTokenUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION * 1000))
                 .compact();
     }
+
+    /**
+     * 刷新token
+     * @param token
+     * @return
+     */
     public String refreshToken(String token) {
         String refreshedToken;
         try {
@@ -78,7 +88,7 @@ public class JwtTokenUtil {
         }
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public static Boolean validateToken(String token, UserDetails userDetails) {
         JwtUser user = (JwtUser) userDetails;
         String username = getUserNameFromToken(token);
         return (username.equals(user.getUsername()) && !isTokenExpired(token));
