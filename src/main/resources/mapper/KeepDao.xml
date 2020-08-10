@@ -9,6 +9,9 @@
 		<if test="time == 'week'">
 			SUM( T_KEEP.AMOUNT ) as value,
 		</if>
+		<if test="time == 'month'">
+			SUM( T_KEEP.AMOUNT ) as value,
+		</if>
 			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM-DD' ) as time,
 		T_KEEP.REMARK,
 			T_KEEP.KEEP_TYPE
