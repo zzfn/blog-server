@@ -50,7 +50,6 @@ public class UserController {
      * @return 登录结果
      */
     @PostMapping("login")
-    @PermitAll
     public Object login(@RequestBody LoginVO loginVO) {
         User user = userDao.selectOne(new QueryWrapper<User>().eq("USERNAME", loginVO.getUsername()));
         if (null != user) {

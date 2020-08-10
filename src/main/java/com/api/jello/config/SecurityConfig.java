@@ -63,7 +63,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.POST,
                         "/keep/**",
-                        "/user/register"
+                        "/user/register",
+                        "/user/login"
                 )
                 .permitAll()
                 .anyRequest().authenticated()
