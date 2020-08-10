@@ -17,6 +17,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +51,7 @@ public class UserController {
      * @return 登录结果
      */
     @PostMapping("login")
+    @PreAuthorize("hasRole('ANONYMOUS')")
     public Object login(@RequestBody LoginVO loginVO) {
         User user = userDao.selectOne(new QueryWrapper<User>().eq("USERNAME", loginVO.getUsername()));
         if (null != user) {
