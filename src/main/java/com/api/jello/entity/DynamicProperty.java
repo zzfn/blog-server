@@ -15,7 +15,11 @@ public class DynamicProperty extends BaseEntity {
      */
     private String tableId;
     /**
-     * 字段名
+     * 字段英文名
+     */
+    private String propertyValue;
+    /**
+     * 字段中文名
      */
     private String propertyName;
     /**

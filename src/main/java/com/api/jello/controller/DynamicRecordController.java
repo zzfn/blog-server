@@ -2,7 +2,10 @@ package com.api.jello.controller;
 
 import com.api.jello.dao.DynamicRecordDao;
 import com.api.jello.dao.DynamicTableDao;
+import com.api.jello.entity.DynamicProperty;
+import com.api.jello.entity.DynamicRecord;
 import com.api.jello.util.ResultUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,8 +23,8 @@ public class DynamicRecordController {
     @Autowired
     DynamicRecordDao dynamicRecordDao;
 
-    @GetMapping("getAllTable")
-    public Object getAllTable() {
-        return ResultUtil.success(dynamicRecordDao.selectList(null));
+    @GetMapping("getRecordByTableId")
+    public Object getRecordByTableId(String id) {
+        return ResultUtil.success(dynamicRecordDao.selectList(new QueryWrapper<DynamicRecord>().eq("TABLE_ID", id)));
     }
 }
