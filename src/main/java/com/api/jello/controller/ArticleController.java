@@ -5,6 +5,7 @@ import com.api.jello.dao.CommentDao;
 import com.api.jello.entity.Article;
 import com.api.jello.util.ResultUtil;
 import com.api.jello.vo.PageVO;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,9 @@ public class ArticleController {
 
     @GetMapping("getArticle")
     public Object getArticle(String id) {
+        Article article=new Article();
+        article.setId(id);
+        articleDao.update(article,new UpdateWrapper<Article>().setSql("view_count=view_count+1").eq("id",id));
         return ResultUtil.success(articleDao.selectById(id));
     }
 
