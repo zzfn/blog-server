@@ -41,6 +41,9 @@ public class DictAspect {
         Object result = pjp.proceed();
         Map<String, Object> resultMap = (HashMap) result;
         Object resultObj = null;
+        if (null == resultMap) {
+            return null;
+        }
         if (null == resultMap.get("data")) {
             return result;
         }

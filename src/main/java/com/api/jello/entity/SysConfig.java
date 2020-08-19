@@ -19,4 +19,5 @@ public class SysConfig extends BaseEntity {
     * 键
     */
     private String key;
+    private String name;
 }
