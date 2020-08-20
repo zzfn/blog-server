@@ -40,7 +40,7 @@ public class DictTypeController {
      */
     @GetMapping("listDictType")
     public Object listDictType() {
-        return ResultUtil.success(sysDictTypeDao.selectList(null));
+        return ResultUtil.success(sysDictTypeDao.selectList(new QueryWrapper<SysDictType>().orderByDesc("CREATE_TIME")));
     }
 
     /**

@@ -38,7 +38,7 @@ public class DictController {
     }
 
     /**
-     * 新增或删除某个字典
+     * 新增某个字典
      *
      * @param sysDict
      * @return

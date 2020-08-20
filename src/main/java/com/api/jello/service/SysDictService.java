@@ -24,5 +24,5 @@ public interface SysDictService extends IService<SysDict> {
 
     List<SysDict> getDict(String code);
 
-    Object saveDict(@RequestBody SysDict sysDict);
+    Object saveDict(SysDict sysDict);
 }

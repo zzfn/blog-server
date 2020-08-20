@@ -68,6 +68,6 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDict> impleme
         } else {
             sysDictDao.insert(sysDict);
         }
-        return getDict(sysDict.getTypeCode());
+        return "操作成功";
     }
 }
