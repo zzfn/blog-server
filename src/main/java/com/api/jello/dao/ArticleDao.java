@@ -18,4 +18,6 @@ public interface ArticleDao extends BaseMapper<Article> {
     IPage<Article> listArticle(IPage<Article> page);
 
     List<Tags> getTags();
+
+    List<Article> getArchives();
 }

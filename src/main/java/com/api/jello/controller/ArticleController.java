@@ -53,6 +53,11 @@ public class ArticleController {
         return ResultUtil.success(articleDao.getTags());
     }
 
+    @GetMapping("listArchives")
+    public Object listArchives() {
+        return ResultUtil.success(articleDao.getArchives());
+    }
+
     @GetMapping("getArticle")
     public Object getArticle(String id) {
         Article article=new Article();

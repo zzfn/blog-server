@@ -36,6 +36,9 @@
         left join SYS_DICT on  tag=SYS_DICT.CODE
         group by TAG,SYS_DICT.NAME
     </select>
+    <select id="getArchives" resultType="com.api.jello.entity.Article">
+        select id,TITLE,CREATE_TIME from T_ARTICLE
+    </select>
     <select id="getArticle" parameterType="string" resultType="com.api.jello.entity.Article">
         SELECT
             ARTICLE.ID,
