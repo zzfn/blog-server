@@ -11,7 +11,7 @@
                T_ARTICLE.update_by,
                T_ARTICLE.create_time,
                T_ARTICLE.update_time,
-               T_ARTICLE."ORDER",
+               T_ARTICLE."ORDER_NUM",
                COUNT(T_COMMENT.ID)  AS countComments
         FROM T_ARTICLE
                  LEFT JOIN T_COMMENT ON T_COMMENT.ARTICLE_ID = T_ARTICLE.ID
@@ -25,7 +25,7 @@
                  T_ARTICLE.update_by,
                  T_ARTICLE.create_time,
                  T_ARTICLE.update_time
-        ORDER BY T_ARTICLE."ORDER" DESC ,T_ARTICLE.create_time DESC
+        ORDER BY T_ARTICLE."ORDER_NUM" DESC ,T_ARTICLE.create_time DESC
     </select>
     <select id="getTags" resultType="com.api.jello.vo.Tags">
                 select count(TAG) as count,
