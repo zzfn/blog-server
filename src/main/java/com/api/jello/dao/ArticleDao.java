@@ -19,5 +19,5 @@ public interface ArticleDao extends BaseMapper<Article> {
 
     List<Tags> getTags();
 
-    List<Article> getArchives();
+    List<Article> getArchives(String code);
 }

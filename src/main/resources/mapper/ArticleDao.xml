@@ -11,12 +11,12 @@
                T_ARTICLE.update_by,
                T_ARTICLE.create_time,
                T_ARTICLE.update_time,
-               T_ARTICLE."ORDER_NUM",
+               T_ARTICLE.ORDER_NUM,
                COUNT(T_COMMENT.ID)  AS countComments
         FROM T_ARTICLE
                  LEFT JOIN T_COMMENT ON T_COMMENT.ARTICLE_ID = T_ARTICLE.ID
         WHERE T_ARTICLE.IS_DELETE = 0
-        GROUP BY T_ARTICLE."ORDER_NUM",
+        GROUP BY T_ARTICLE.ORDER_NUM,
                  T_ARTICLE.ID,
                  T_ARTICLE.title,
                  T_ARTICLE.view_count,
@@ -25,31 +25,36 @@
                  T_ARTICLE.update_by,
                  T_ARTICLE.create_time,
                  T_ARTICLE.update_time
-        ORDER BY T_ARTICLE."ORDER_NUM" DESC ,T_ARTICLE.create_time DESC
+        ORDER BY T_ARTICLE.ORDER_NUM DESC,
+                 T_ARTICLE.create_time DESC
     </select>
     <select id="getTags" resultType="com.api.jello.vo.Tags">
-                select count(TAG) as count,
-               SYS_DICT.NAME as tag
-        from T_ARTICLE
-        left join SYS_DICT on  tag=SYS_DICT.CODE
-        group by TAG,SYS_DICT.NAME
+        SELECT count(TAG)    AS count,
+               SYS_DICT.CODE AS code,
+               SYS_DICT.NAME AS tag
+        FROM T_ARTICLE
+                 LEFT JOIN SYS_DICT ON tag = SYS_DICT.CODE
+        WHERE T_ARTICLE.IS_DELETE = 0
+        GROUP BY SYS_DICT.NAME,
+                 SYS_DICT.CODE
     </select>
     <select id="getArchives" resultType="com.api.jello.entity.Article">
-        select id,TITLE,CREATE_TIME from T_ARTICLE
+        select id,TITLE,CREATE_TIME,TAG from T_ARTICLE where IS_DELETE=0
+        <if test="code != null and code != ''">
+            and T_ARTICLE.tag=#{code}
+        </if>
+        ORDER BY CREATE_TIME DESC
     </select>
     <select id="getArticle" parameterType="string" resultType="com.api.jello.entity.Article">
-        SELECT
-            ARTICLE.ID,
-            ARTICLE.TITLE,
-            ARTICLE.CONTENT,
-            ARTICLE.UPDATE_TIME,
-            DICT.CODE AS TAG,
-            DICT.NAME AS TAGDESC
-        FROM
-            T_ARTICLE ARTICLE
-            LEFT JOIN SYS_DICT DICT ON ARTICLE.TAG = DICT.CODE
-        WHERE
-            ARTICLE.IS_DELETE = 0
-            AND ARTICLE.ID =#{id}
+        SELECT ARTICLE.ID,
+               ARTICLE.TITLE,
+               ARTICLE.CONTENT,
+               ARTICLE.UPDATE_TIME,
+               DICT.CODE AS TAG,
+               DICT.NAME AS TAGDESC
+        FROM T_ARTICLE ARTICLE
+                 LEFT JOIN SYS_DICT DICT ON ARTICLE.TAG = DICT.CODE
+        WHERE ARTICLE.IS_DELETE = 0
+          AND ARTICLE.ID = #{id}
     </select>
 </mapper>

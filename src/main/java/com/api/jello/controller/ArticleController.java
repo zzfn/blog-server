@@ -54,8 +54,8 @@ public class ArticleController {
     }
 
     @GetMapping("listArchives")
-    public Object listArchives() {
-        return ResultUtil.success(articleDao.getArchives());
+    public Object listArchives(String code) {
+        return ResultUtil.success(articleDao.getArchives(code));
     }
 
     @GetMapping("getArticle")
