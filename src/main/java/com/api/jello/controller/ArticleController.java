@@ -48,6 +48,11 @@ public class ArticleController {
         return ResultUtil.success(pageList);
     }
 
+    @GetMapping("listTags")
+    public Object listTags() {
+        return ResultUtil.success(articleDao.getTags());
+    }
+
     @GetMapping("getArticle")
     public Object getArticle(String id) {
         Article article=new Article();

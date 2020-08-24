@@ -29,6 +29,13 @@
             T_ARTICLE.update_time
         ORDER BY T_ARTICLE.create_time DESC
     </select>
+    <select id="getTags" resultType="com.api.jello.vo.Tags">
+                select count(TAG) as count,
+               SYS_DICT.NAME as tag
+        from T_ARTICLE
+        left join SYS_DICT on  tag=SYS_DICT.CODE
+        group by TAG,SYS_DICT.NAME
+    </select>
     <select id="getArticle" parameterType="string" resultType="com.api.jello.entity.Article">
         SELECT
             ARTICLE.ID,
