@@ -4,8 +4,6 @@ import com.api.jello.config.Dict;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
-import java.util.List;
-
 
 /**
  * @author cc
@@ -27,9 +25,9 @@ public class Article extends BaseEntity {
      * view_count
      */
     private Integer viewCount;
-    /**
-     * view_count
-     */
+
+    private Integer order;
+
     @Dict(target = "tagDesc",codeType = "TAG")
     private String tag;
 
