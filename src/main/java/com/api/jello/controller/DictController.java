@@ -79,6 +79,7 @@ public class DictController {
      * @return
      */
     @DeleteMapping("removeDict")
+    @CacheEvict(value = "dict", allEntries = true)
     public Object removeDictType(@RequestBody RequestVO requestVo) {
         return ResultUtil.success(sysDictDao.deleteById(requestVo.getId()));
     }
