@@ -4,5 +4,5 @@ FROM java:8
 COPY jello-0.0.1-SNAPSHOT.jar /jello-0.0.1-SNAPSHOT.jar
 
 RUN mvn package
-EXPOSE 8060
-RUN java -jar /jello-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java", "-jar","/jello-0.0.1-SNAPSHOT.jar"]
+EXPOSE 9602

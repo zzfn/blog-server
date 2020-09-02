@@ -6,7 +6,7 @@ container_name=jello
 docker pull registry.docker.annyyy.com/$container_name
 docker stop $container_name
 docker rm $container_name
-docker run --name=$container_name -d -p 9602:80 registry.docker.annyyy.com/$container_name
+docker run --name=$container_name -d -p 9602:9602 registry.docker.annyyy.com/$container_name
 docker image prune -f
 
 #利用docker-compose部署
