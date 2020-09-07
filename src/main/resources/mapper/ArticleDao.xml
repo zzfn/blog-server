@@ -4,7 +4,6 @@
     <select id="listArticle" resultType="com.api.jello.entity.Article">
         SELECT T_ARTICLE.id,
                T_ARTICLE.title,
-               MYOYNN(T_ARTICLE.ID) AS content,
                T_ARTICLE.view_count,
                T_ARTICLE.tag,
                T_ARTICLE.create_by,
