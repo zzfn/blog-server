@@ -23,8 +23,8 @@ public class SysConfigController {
         return ResultUtil.success(sysConfigDao.insert(sysConfig));
     }
     @GetMapping("selectSysConfig")
-    public Object selectSysConfig(String key) {
-        return ResultUtil.success(sysConfigDao.selectOne(new QueryWrapper<SysConfig>().eq("KEY",key)));
+    public Object selectSysConfig(String field) {
+        return ResultUtil.success(sysConfigDao.selectOne(new QueryWrapper<SysConfig>().eq("FIELD",field)));
     }
     @GetMapping("listSysConfig")
     public Object listSysConfig() {

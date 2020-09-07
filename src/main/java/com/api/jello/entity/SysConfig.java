@@ -1,7 +1,5 @@
 package com.api.jello.entity;
 
-import java.util.Date;
-import java.io.Serializable;
 import lombok.Data;
 /**
  * T_SYS_CONFIG(TSysConfig)实体类
@@ -18,6 +16,6 @@ public class SysConfig extends BaseEntity {
     /**
     * 键
     */
-    private String key;
+    private String field;
     private String name;
 }

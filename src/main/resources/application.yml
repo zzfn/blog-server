@@ -31,9 +31,10 @@ mybatis-plus:
   mapper-locations: classpath:/mapper/*Dao.xml
   global-config:
     db-config:
-      table-prefix: t_
+      table-prefix: T_
       logic-delete-field: isDelete
       logic-delete-value: 1
       logic-not-delete-value: 0
+      capital-mode: true
 server:
   port: 8060
