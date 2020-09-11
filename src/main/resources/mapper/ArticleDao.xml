@@ -10,20 +10,9 @@
                T_ARTICLE.update_by,
                T_ARTICLE.create_time,
                T_ARTICLE.update_time,
-               T_ARTICLE.ORDER_NUM,
-               COUNT(T_COMMENT.ID)  AS countComments
+               T_ARTICLE.ORDER_NUM
         FROM T_ARTICLE
-                 LEFT JOIN T_COMMENT ON T_COMMENT.ARTICLE_ID = T_ARTICLE.ID
         WHERE T_ARTICLE.IS_DELETE = 0
-        GROUP BY T_ARTICLE.ORDER_NUM,
-                 T_ARTICLE.ID,
-                 T_ARTICLE.title,
-                 T_ARTICLE.view_count,
-                 T_ARTICLE.tag,
-                 T_ARTICLE.create_by,
-                 T_ARTICLE.update_by,
-                 T_ARTICLE.create_time,
-                 T_ARTICLE.update_time
         ORDER BY T_ARTICLE.ORDER_NUM DESC,
                  T_ARTICLE.create_time DESC
     </select>
