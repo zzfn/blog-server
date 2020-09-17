@@ -44,10 +44,14 @@
 	</select>
 
 	<select id="getBalance" resultType="java.math.BigDecimal">
-SELECT
-	SUM( AMOUNT )
-FROM
-	( SELECT -T_KEEP.amount AS AMOUNT FROM T_KEEP WHERE T_KEEP.KEEP_type = 'KEEP_2' UNION all SELECT T_KEEP.amount  FROM T_KEEP WHERE T_KEEP.KEEP_type = 'KEEP_1' )
+SELECT SUM(AMOUNT)
+FROM (SELECT -T_KEEP.amount AS AMOUNT
+      FROM T_KEEP
+      WHERE T_KEEP.KEEP_type = 'KEEP_2'
+      UNION ALL
+      SELECT T_KEEP.amount AS AMOUNT
+      FROM T_KEEP
+      WHERE T_KEEP.KEEP_type = 'KEEP_1') AS T
     </select>
 
 	<select id="getOutlay" resultType="com.api.jello.entity.Keep">
