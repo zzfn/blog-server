@@ -1,46 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.api.jello.dao.KeepDao">
-	<select id="listKeeps" resultType="com.api.jello.vo.BillVO">
-		SELECT
-		<if test="time == 'day'">
-			T_KEEP.AMOUNT as value,
-		</if>
-		<if test="time == 'week'">
-			SUM( T_KEEP.AMOUNT ) as value,
-		</if>
-		<if test="time == 'month'">
-			SUM( T_KEEP.AMOUNT ) as value,
-		</if>
-			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM-DD' ) as time,
-		T_KEEP.REMARK,
-			T_KEEP.KEEP_TYPE
-		FROM
-		T_KEEP
-		<if test="time == 'day'">
-			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD')
-		</if>
-		<if test="time == 'week'">
-			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'iw')=TO_CHAR(SYSDATE,'iw')
-		</if>
-		<if test="time == 'month'">
-			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'YYYY-MM')=TO_CHAR(SYSDATE,'YYYY-MM')
-		</if>
-		<if test="time == 'year'">
-			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'YYYY')=TO_CHAR(SYSDATE,'YYYY')
-		</if>
-		<if test="type != ''and type !=null">
-			AND T_KEEP.KEEP_TYPE=#{type}
-		</if>
-		<if test="time!='day'">
-			GROUP BY
-		</if>
-		<if test="time == 'week'">
-			TO_CHAR(T_KEEP.CREATE_TIME,'YYYY-MM-DD'),
-			T_KEEP.REMARK,
-			T_KEEP.KEEP_TYPE
-		</if>
-		ORDER BY  time DESC
+	<select id="listKeeps" resultType="com.api.jello.entity.Keep">
+		SELECT id, KEEP_TYPE, AMOUNT, REMARK, CREATE_TIME
+		FROM T_KEEP
+		WHERE IS_DELETE = 0
+		ORDER BY CREATE_TIME DESC
+		limit 0,50
 	</select>
 
 	<select id="getBalance" resultType="java.math.BigDecimal">
@@ -57,56 +23,56 @@ FROM (SELECT -T_KEEP.amount AS AMOUNT
 	<select id="getOutlay" resultType="com.api.jello.entity.Keep">
 		SELECT
 			SUM( T_KEEP.AMOUNT ) as value,
-			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM-DD' ) as day
+			date_format( T_KEEP.CREATE_TIME, '%Y-%m-%d' ) as day
 		FROM
 			T_KEEP
 			WHERE T_KEEP.KEEP_TYPE='KEEP_2'
 		GROUP BY
-			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM-DD' )
+			date_format( T_KEEP.CREATE_TIME, '%Y-%m-%d' )
     </select>
 
 	<select id="getBillTime" resultType="com.api.jello.vo.BillVO">
 		SELECT
 			SUM( T_KEEP.AMOUNT ) as value,
 		<if test="time == 'day'">
-			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM-DD' ) as time,
+			date_format( T_KEEP.CREATE_TIME, '%Y-%m-%d' ) as time,
 		</if>
 		<if test="time == 'week'">
-			TO_CHAR( T_KEEP.CREATE_TIME, 'iw' ) as time,
+			date_format( T_KEEP.CREATE_TIME, '%Y-%m-%d' ) as time,
 		</if>
 		<if test="time == 'month'">
-			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM' ) as time,
+			date_format( T_KEEP.CREATE_TIME, '%Y-%m' ) as time,
 		</if>
 		<if test="time == 'year'">
-			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY' ) as time,
+			date_format( T_KEEP.CREATE_TIME, '%Y' ) as time,
 		</if>
 			T_KEEP.KEEP_TYPE
 		FROM
 			T_KEEP
 		<if test="time == 'day'">
-			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'YYYY-MM-DD')=TO_CHAR(SYSDATE,'YYYY-MM-DD')
+			WHERE date_format(T_KEEP.CREATE_TIME,'%Y-%m-%d')=date_format(now(),'%Y-%m-%d')
 		</if>
 		<if test="time == 'week'">
-			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'iw')=TO_CHAR(SYSDATE,'iw')
+			WHERE yearweek(date_format(T_KEEP.CREATE_TIME,'%Y-%m-%d'))=yearweek(now())
 		</if>
 		<if test="time == 'month'">
-			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'YYYY-MM')=TO_CHAR(SYSDATE,'YYYY-MM')
+			WHERE date_format(T_KEEP.CREATE_TIME,'%Y-%m')=date_format(now(),'%Y-%m')
 		</if>
 		<if test="time == 'year'">
-			WHERE TO_CHAR(T_KEEP.CREATE_TIME,'YYYY')=TO_CHAR(SYSDATE,'YYYY')
+			WHERE date_format(T_KEEP.CREATE_TIME,'%Y')=date_format(now(),'%Y')
 		</if>
 		GROUP BY
 		<if test="time == 'day'">
-			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM-DD' ),
+			date_format( T_KEEP.CREATE_TIME, '%Y-%m-%d' ),
 		</if>
 		<if test="time == 'week'">
-			TO_CHAR( T_KEEP.CREATE_TIME, 'iw' ),
+			yearweek( T_KEEP.CREATE_TIME),
 		</if>
 		<if test="time == 'month'">
-			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY-MM' ),
+			date_format( T_KEEP.CREATE_TIME, '%Y-%m' ),
 		</if>
 		<if test="time == 'year'">
-			TO_CHAR( T_KEEP.CREATE_TIME, 'YYYY' ),
+			date_format( T_KEEP.CREATE_TIME, '%Y' ),
 		</if>
 			T_KEEP.KEEP_TYPE
     </select>

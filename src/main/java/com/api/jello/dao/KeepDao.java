@@ -23,5 +23,5 @@ public interface KeepDao extends BaseMapper<Keep> {
 
     List<Keep> getOutlay();
 
-    List<BillVO> listKeeps(@Param("time") String time,@Param("type") String type);
+    List<Keep> listKeeps();
 }

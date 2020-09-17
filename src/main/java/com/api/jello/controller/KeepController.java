@@ -36,7 +36,7 @@ public class KeepController {
      */
     @GetMapping("listKeeps")
     public Object listKeeps(String time,String type) {
-        return ResultUtil.success(keepDao.selectList(new QueryWrapper<Keep>().orderByDesc("CREATE_TIME")));
+        return ResultUtil.success(keepDao.listKeeps());
 //        return ResultUtil.success(keepDao.listKeeps("month","KEEP_2"));
     }
 
