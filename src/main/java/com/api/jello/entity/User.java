@@ -30,6 +30,8 @@ public class User extends BaseEntity {
      */
     @JSONField(serialize = false)
     private String password;
+
+    private String nickName;
     /**
      * openid
      */
