@@ -15,10 +15,20 @@ public class MenuController {
 
     @PostMapping("saveMenu")
     public Object saveMenu(@RequestBody Menu menu) {
-        return ResultUtil.success(menuDao.insert(menu));
+        if (menu.getId() != null) {
+            return ResultUtil.success(menuDao.updateById(menu));
+        } else {
+            return ResultUtil.success(menuDao.insert(menu));
+        }
     }
+
     @GetMapping("getMenus")
     public Object getMenus() {
         return ResultUtil.success(menuDao.selectList(null));
+    }
+
+    @GetMapping("getMenuById")
+    public Object getMenuById(String id) {
+        return ResultUtil.success(menuDao.selectById(id));
     }
 }
