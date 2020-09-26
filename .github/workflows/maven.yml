@@ -26,13 +26,13 @@ jobs:
         run: clean package -Dmaven.test.skip=true
 
       - name: DockerBuild
-          run: docker build . -t "registry.cn-shanghai.aliyuncs.com/zzf2001/jello:latest"
+        run: docker build . -t "registry.cn-shanghai.aliyuncs.com/zzf2001/jello:latest"
 
       - name: Login
-          run: docker login --username=${{ secrets.username }} --password=${{ secrets.password }} registry.cn-shanghai.aliyuncs.com
+        run: docker login --username=${{ secrets.username }} --password=${{ secrets.password }} registry.cn-shanghai.aliyuncs.com
 
       - name: Push
-          run: docker push registry.cn-shanghai.aliyuncs.com/zzf2001/jello
+        run: docker push registry.cn-shanghai.aliyuncs.com/zzf2001/jello
 
       - name: Deploy
         uses: fifsky/ssh-action@master
