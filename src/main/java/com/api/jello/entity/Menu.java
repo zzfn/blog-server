@@ -9,4 +9,5 @@ public class Menu extends BaseEntity {
     private String path;
     private String component;
     private String icon;
+    private Integer isShow;
 }
