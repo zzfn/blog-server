@@ -23,7 +23,7 @@ jobs:
           java-version: 1.8
 
       - name: Build with Maven
-        run: clean package -Dmaven.test.skip=true
+        run: mvn clean package -Dmaven.test.skip=true
 
       - name: DockerBuild
         run: docker build . -t "registry.cn-shanghai.aliyuncs.com/zzf2001/jello:latest"
