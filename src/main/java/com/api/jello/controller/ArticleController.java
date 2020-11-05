@@ -42,9 +42,9 @@ public class ArticleController {
     }
 
     @GetMapping("listArticles")
-    public Object listArticles(PageVO pageVo) {
+    public Object listArticles(PageVO pageVo,String title) {
         IPage<Article> page = new Page<>(pageVo.getPageNumber(), pageVo.getPageSize());
-        IPage<Article> pageList = articleDao.listArticle(page);
+        IPage<Article> pageList = articleDao.listArticle(page,title);
         return ResultUtil.success(pageList);
     }
 

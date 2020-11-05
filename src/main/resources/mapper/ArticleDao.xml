@@ -13,6 +13,8 @@
                T_ARTICLE.ORDER_NUM
         FROM T_ARTICLE
         WHERE T_ARTICLE.IS_DELETE = 0
+        <bind name="title" value="'%' + title + '%'" />
+        AND  T_ARTICLE.title LIKE #{title}
         ORDER BY T_ARTICLE.ORDER_NUM DESC,
                  T_ARTICLE.create_time DESC
     </select>
