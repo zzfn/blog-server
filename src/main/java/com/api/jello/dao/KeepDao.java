@@ -1,11 +1,8 @@
 package com.api.jello.dao;
 
-import com.api.jello.entity.Article;
 import com.api.jello.entity.Keep;
 import com.api.jello.vo.BillVO;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
