@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class Swagger2Config {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("api")
+                .title("学习api")
                 .description("api")
                 .contact(new Contact("", "", ""))
                 .termsOfServiceUrl("")
