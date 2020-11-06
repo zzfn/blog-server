@@ -40,7 +40,12 @@ public class ArticleController {
             return ResultUtil.success(articleDao.updateById(article));
         }
     }
-
+    @GetMapping("test")
+    public Object test(PageVO pageVo,String title) {
+        IPage<Article> page = new Page<>(pageVo.getPageNumber(), pageVo.getPageSize());
+        IPage<Article> pageList = articleDao.listArticle(page,title);
+        return ResultUtil.success(pageList);
+    }
     @GetMapping("listArticles")
     public Object listArticles(PageVO pageVo,String title) {
         IPage<Article> page = new Page<>(pageVo.getPageNumber(), pageVo.getPageSize());
