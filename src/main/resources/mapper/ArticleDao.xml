@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.api.jello.dao.ArticleDao">
+    <select id="countArticle" resultType="integer">
+        select COUNT(*) as count from T_ARTICLE where IS_DELETE=0
+    </select>
     <select id="listArticle" resultType="com.api.jello.entity.Article">
         SELECT T_ARTICLE.id,
                T_ARTICLE.title,

@@ -47,7 +47,10 @@ public class ArticleController {
         IPage<Article> pageList = articleDao.listArticle(page,title);
         return ResultUtil.success(pageList);
     }
-
+    @GetMapping("countArticles")
+    public Object countArticles() {
+        return ResultUtil.success(articleDao.selectCount(null));
+    }
     @GetMapping("listTags")
     public Object listTags() {
         return ResultUtil.success(articleDao.getTags());
