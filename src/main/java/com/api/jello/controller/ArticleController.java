@@ -5,16 +5,14 @@ import com.api.jello.dao.CommentDao;
 import com.api.jello.entity.Article;
 import com.api.jello.util.ResultUtil;
 import com.api.jello.vo.PageVO;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author cc
@@ -23,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("article")
 @Slf4j
+@Api(tags = "文章管理")
 public class ArticleController {
     @Autowired
     ArticleDao articleDao;
@@ -31,6 +30,7 @@ public class ArticleController {
 
     @PostMapping("saveArticle")
     @PreAuthorize("hasRole('ADMIN')")
+    @ApiOperation("保存或修改文章")
     public Object saveArticle(@RequestBody Article article) {
         article.setUpdateTime(null);
         if(null==article.getId()||null == articleDao.selectById(article.getId())){
