@@ -51,6 +51,11 @@ public class ArticleController {
     public Object countArticles() {
         return ResultUtil.success(articleDao.selectCount(null));
     }
+    @PostMapping("countView")
+    public Object countView() {
+
+        return ResultUtil.success(articleDao.selectCount(null));
+    }
     @GetMapping("listTags")
     public Object listTags() {
         return ResultUtil.success(articleDao.getTags());
