@@ -43,10 +43,11 @@
                ARTICLE.TITLE,
                ARTICLE.CONTENT,
                ARTICLE.UPDATE_TIME,
-               DICT.CODE AS TAG,
-               DICT.NAME AS TAGDESC
+               DICT.CODE                AS TAG,
+               ifnull(T_VIEWS.COUNT, 0) as view_count
         FROM T_ARTICLE ARTICLE
                  LEFT JOIN SYS_DICT DICT ON ARTICLE.TAG = DICT.CODE
+                 LEFT JOIN T_VIEWS ON ARTICLE.id = T_VIEWS.ARTICLE_ID
         WHERE ARTICLE.IS_DELETE = 0
           AND ARTICLE.ID = #{id}
     </select>
