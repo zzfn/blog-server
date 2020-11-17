@@ -21,11 +21,6 @@ public class Article extends BaseEntity {
      */
     private String content;
 
-    /**
-     * view_count
-     */
-    private Integer viewCount;
-
     private Integer orderNum;
 
     @Dict(target = "tagDesc",codeType = "TAG")
