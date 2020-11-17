@@ -42,13 +42,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         //放行swagger
         web.ignoring().antMatchers(HttpMethod.GET,
-                "/v2/api-docs",
+                "/v3/api-docs",
                 "/swagger-resources",
                 "/swagger-resources/**",
                 "/configuration/ui",
                 "/configuration/security",
-                "/swagger-ui/**",
-                "/**/**",
+                "/swagger-ui",
+                "/swagger-ui/index.html",
                 "/webjars/**");
     }
 
