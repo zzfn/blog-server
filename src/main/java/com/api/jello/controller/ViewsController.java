@@ -35,6 +35,7 @@ public class ViewsController {
             viewsDao.update(views,new UpdateWrapper<Views>().setSql("COUNT=COUNT+1").eq("ARTICLE_ID",requestVO.getId()));
         }else {
             Views views1=new Views();
+            views1.setId(null);
             views1.setCount(0);
             views1.setArticleId(requestVO.getId());
             viewsDao.insert(views1);

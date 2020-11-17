@@ -7,7 +7,6 @@ import lombok.Data;
  */
 @Data
 public class Views extends BaseEntity {
-    private String id;
 
     private String articleId;
 
