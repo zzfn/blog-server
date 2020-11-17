@@ -69,7 +69,7 @@ public class ArticleController {
     @ApiOperation("根据id查询文章详情")
     @GetMapping("getArticle")
     public Object getArticle(String id) {
-        return ResultUtil.success(articleDao.selectById(id));
+        return ResultUtil.success(articleDao.getArticle(id));
     }
 
     @ApiOperation("根据id删除文章")
