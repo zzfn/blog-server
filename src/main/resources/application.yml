@@ -4,7 +4,7 @@ spring:
     port: 6397
     password: chen
   datasource:
-    url: jdbc:mysql://47.100.47.169:3306/zzf?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://47.100.47.169:3306/zzf?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=CTT
     username: zzf
     password: IMdLaWz6NZzkmrM05QDtcd7E1MpCaLdKOwLUKoMRjFe9N+XnbuB6EJD3oM4uudECPCPf/XadOGCDMMr88h2XIw==
     driver-class-name: com.mysql.cj.jdbc.Driver
