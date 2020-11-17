@@ -68,9 +68,6 @@ public class ArticleController {
 
     @GetMapping("getArticle")
     public Object getArticle(String id) {
-        Article article=new Article();
-        article.setId(id);
-        articleDao.update(article,new UpdateWrapper<Article>().setSql("view_count=view_count+1").eq("id",id));
         return ResultUtil.success(articleDao.selectById(id));
     }
 
