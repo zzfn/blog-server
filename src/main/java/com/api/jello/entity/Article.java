@@ -21,6 +21,11 @@ public class Article extends BaseEntity {
      */
     private String content;
 
+
+    @TableField(exist = false)
+    private Integer viewCount;
+
+
     private Integer orderNum;
 
     @Dict(target = "tagDesc",codeType = "TAG")
@@ -29,6 +34,4 @@ public class Article extends BaseEntity {
     @TableField(exist = false)
     private String tagDesc;
 
-    @TableField(exist = false)
-    private Integer countComments;
 }
