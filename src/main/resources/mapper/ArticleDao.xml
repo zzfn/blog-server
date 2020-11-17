@@ -43,7 +43,7 @@
                ARTICLE.TITLE,
                ARTICLE.CONTENT,
                ARTICLE.UPDATE_TIME,
-               DICT.CODE                AS TAG,
+               DICT.CODE AS TAG,
                ifnull(T_VIEWS.COUNT, 0) as view_count
         FROM T_ARTICLE ARTICLE
                  LEFT JOIN SYS_DICT DICT ON ARTICLE.TAG = DICT.CODE
