@@ -32,9 +32,7 @@ public class ViewsController {
     public Object updateViews(@RequestBody RequestVO requestVO) {
         Views views=viewsDao.selectOne(new QueryWrapper<Views>().eq("ARTICLE_ID",requestVO.getId()));
         if(views!=null){
-            Views views1=new Views();
-            views.setArticleId(requestVO.getId());
-            viewsDao.update(views1,new UpdateWrapper<Views>().setSql("COUNT=COUNT+1").eq("ARTICLE_ID",requestVO.getId()));
+            viewsDao.update(views,new UpdateWrapper<Views>().setSql("COUNT=COUNT+1").eq("ARTICLE_ID",requestVO.getId()));
         }else {
             Views views1=new Views();
             views1.setCount(0);
