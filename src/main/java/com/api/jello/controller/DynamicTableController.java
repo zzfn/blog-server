@@ -6,13 +6,9 @@ import com.api.jello.util.ResultUtil;
 import com.api.jello.vo.RequestVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.transform.Result;
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.security.PermitAll;
 
 /**
  * @author chenchen
@@ -25,6 +21,7 @@ public class DynamicTableController {
     DynamicTableDao dynamicTableDao;
 
     @GetMapping("getAllTable")
+    @PermitAll
     public Object getAllTable() {
         return ResultUtil.success(dynamicTableDao.selectList(null));
     }

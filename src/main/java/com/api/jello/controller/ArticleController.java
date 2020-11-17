@@ -15,8 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author cc
- * @date 2020/3/22 17:22
+ * @author zzf
  */
 @RestController
 @RequestMapping("article")
@@ -41,36 +40,39 @@ public class ArticleController {
         }
     }
 
+    @ApiOperation("文章分页列表")
     @GetMapping("listArticles")
     public Object listArticles(PageVO pageVo,String title) {
         IPage<Article> page = new Page<>(pageVo.getPageNumber(), pageVo.getPageSize());
         IPage<Article> pageList = articleDao.listArticle(page,title);
         return ResultUtil.success(pageList);
     }
+
+    @ApiOperation("文章总数")
     @GetMapping("countArticles")
     public Object countArticles() {
         return ResultUtil.success(articleDao.selectCount(null));
     }
-    @PostMapping("countView")
-    public Object countView() {
 
-        return ResultUtil.success(articleDao.selectCount(null));
-    }
+    @ApiOperation("文章分类")
     @GetMapping("listTags")
     public Object listTags() {
         return ResultUtil.success(articleDao.getTags());
     }
 
+    @ApiOperation("文章列表不分页")
     @GetMapping("listArchives")
     public Object listArchives(String code) {
         return ResultUtil.success(articleDao.getArchives(code));
     }
 
+    @ApiOperation("根据id查询文章详情")
     @GetMapping("getArticle")
     public Object getArticle(String id) {
         return ResultUtil.success(articleDao.selectById(id));
     }
 
+    @ApiOperation("根据id删除文章")
     @DeleteMapping("removeArticle")
     public Object removeArticle(@RequestBody Article article) {
         return ResultUtil.success(articleDao.deleteById(article.getId()));

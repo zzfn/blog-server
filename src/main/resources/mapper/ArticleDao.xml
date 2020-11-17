@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.api.jello.dao.ArticleDao">
-    <select id="countArticle" resultType="integer">
-        select COUNT(*) as count from T_ARTICLE where IS_DELETE=0
-    </select>
     <select id="listArticle" resultType="com.api.jello.entity.Article">
         SELECT T_ARTICLE.id,
-               T_ARTICLE.title,
-               T_ARTICLE.view_count,
-               T_ARTICLE.tag,
-               T_ARTICLE.create_by,
-               T_ARTICLE.update_by,
-               T_ARTICLE.create_time,
-               T_ARTICLE.update_time,
-               T_ARTICLE.ORDER_NUM
+            T_ARTICLE.title,
+            T_ARTICLE.tag,
+            T_ARTICLE.create_by,
+            T_ARTICLE.update_by,
+            T_ARTICLE.create_time,
+            T_ARTICLE.update_time,
+            T_ARTICLE.ORDER_NUM,
+            ifnull(T_VIEWS.COUNT,0) as VIEW_COUNT
         FROM T_ARTICLE
+            left join T_VIEWS on T_VIEWS.ARTICLE_ID = T_ARTICLE.ID
         WHERE T_ARTICLE.IS_DELETE = 0
         <if test="title != null and title != ''">
-        <bind name="title" value="'%' + title + '%'" />
-        AND  T_ARTICLE.title LIKE #{title}
+            <bind name="title" value="'%' + title + '%'"/>
+            AND T_ARTICLE.title LIKE #{title}
         </if>
         ORDER BY T_ARTICLE.ORDER_NUM DESC,
-                 T_ARTICLE.create_time DESC
+        T_ARTICLE.create_time DESC
     </select>
     <select id="getTags" resultType="com.api.jello.vo.Tags">
         SELECT count(TAG)    AS count,
