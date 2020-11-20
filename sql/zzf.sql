@@ -1,3 +1,19 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : 47.100.47.169_3306
+ Source Server Type    : MySQL
+ Source Server Version : 50730
+ Source Host           : 47.100.47.169:3306
+ Source Schema         : zzf
+
+ Target Server Type    : MySQL
+ Target Server Version : 50730
+ File Encoding         : 65001
+
+ Date: 17/11/2020 21:06:32
+*/
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -104,13 +120,12 @@ CREATE TABLE `T_ARTICLE`  (
   `ID` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
   `TITLE` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标题',
   `CONTENT` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '内容',
-  `VIEW_COUNT` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '浏览量',
   `TAG` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标签',
+  `ORDER_NUM` tinyint(32) NULL DEFAULT NULL COMMENT '排序号',
   `CREATE_BY` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `CREATE_TIME` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `UPDATE_BY` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `UPDATE_TIME` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `ORDER_NUM` tinyint(32) NULL DEFAULT NULL COMMENT '排序号',
   `IS_DELETE` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '删除标识',
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'ARTICLE' ROW_FORMAT = Dynamic;
@@ -144,11 +159,12 @@ CREATE TABLE `T_MENU`  (
   `PATH` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '路径',
   `COMPONENT` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '组件路径',
   `ICON` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
+  `IS_SHOW` tinyint(1) NULL DEFAULT NULL,
   `CREATE_TIME` datetime(0) NULL DEFAULT NULL,
-  `UPDATED_BY` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `UPDATED_TIME` datetime(0) NULL DEFAULT NULL,
-  `IS_DELETE` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `CREATED_BY` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `UPDATE_TIME` datetime(0) NULL DEFAULT NULL,
+  `UPDATED_BY` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `IS_DELETE` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -210,5 +226,20 @@ CREATE TABLE `T_USER_ROLE`  (
   `IS_DELETE` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for T_VIEWS
+-- ----------------------------
+DROP TABLE IF EXISTS `T_VIEWS`;
+CREATE TABLE `T_VIEWS`  (
+  `ID` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `ARTICLE_ID` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `COUNT` int(11) NULL DEFAULT NULL,
+  `CREATE_BY` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `CREATE_TIME` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_BY` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '更新人',
+  `UPDATE_TIME` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `IS_DELETE` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '删除标识'
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '浏览量' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -33,7 +33,6 @@ public class ArticleController {
     public Object saveArticle(@RequestBody Article article) {
         article.setUpdateTime(null);
         if(null==article.getId()||null == articleDao.selectById(article.getId())){
-            article.setViewCount(0);
             return ResultUtil.success(articleDao.insert(article));
         }else {
             return ResultUtil.success(articleDao.updateById(article));

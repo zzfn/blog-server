@@ -21,10 +21,10 @@ public class Article extends BaseEntity {
      */
     private String content;
 
-    /**
-     * view_count
-     */
+
+    @TableField(exist = false)
     private Integer viewCount;
+
 
     private Integer orderNum;
 
@@ -34,6 +34,4 @@ public class Article extends BaseEntity {
     @TableField(exist = false)
     private String tagDesc;
 
-    @TableField(exist = false)
-    private Integer countComments;
 }
