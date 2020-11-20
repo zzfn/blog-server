@@ -3,12 +3,14 @@ package com.api.jello.controller;
 import com.api.jello.dao.MenuDao;
 import com.api.jello.entity.Menu;
 import com.api.jello.util.ResultUtil;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("menu")
+@Api(tags = "菜单管理")
 public class MenuController {
     @Autowired
     MenuDao menuDao;

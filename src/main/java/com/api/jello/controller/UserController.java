@@ -9,6 +9,7 @@ import com.api.jello.util.ResultUtil;
 import com.api.jello.vo.LoginVO;
 import com.api.jello.vo.TokenVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -35,6 +36,7 @@ import java.util.*;
 @RestController
 @RequestMapping("user")
 @Slf4j
+@Api(tags = "用户管理")
 public class UserController {
     /**
      * 服务对象

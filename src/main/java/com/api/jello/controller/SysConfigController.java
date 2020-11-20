@@ -5,6 +5,7 @@ import com.api.jello.entity.SysConfig;
 import com.api.jello.util.ResultUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("sysConfig")
+@Api(tags = "系统管理")
 public class SysConfigController {
     @Autowired
     SysConfigDao sysConfigDao;

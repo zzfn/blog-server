@@ -9,6 +9,7 @@ import com.api.jello.service.SysConfigService;
 import com.api.jello.util.RedisUtil;
 import com.api.jello.util.ResultUtil;
 import com.api.jello.vo.RequestVO;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("oss")
 @Slf4j
+@Api(tags = "文件管理")
 public class FileController {
     @Autowired
     private SysConfigService sysConfigService;
