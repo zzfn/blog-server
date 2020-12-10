@@ -1,4 +1,7 @@
 spring:
+  elasticsearch:
+    rest:
+      uris: 192.168.174.128:9200
   redis:
     host: 47.100.47.169
     port: 6397

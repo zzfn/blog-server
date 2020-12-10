@@ -62,12 +62,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,
                         "/keep/**",
                         "/article/**",
+                        "/es/**",
                         "/sysDict/getDict",
                         "/sysConfig/selectSysConfig"
                 )
                 .permitAll()
                 .antMatchers(HttpMethod.POST,
                         "/keep/**",
+                        "/es/**",
                         "/user/register",
                         "/views/**",
                         "/user/login"
