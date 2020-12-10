@@ -24,7 +24,8 @@ public class ArticleESController {
         return ResultUtil.success(articleESDao.save(articleES));
     }
     @GetMapping("list")
-    public Object listTags() {
-        return ResultUtil.success(articleESDao.findAll());
+    public Object getList(ArticleES articleES) {
+//        return ResultUtil.success(articleESDao.findAll());
+        return ResultUtil.success(articleESDao.findAllByTitleAndContent(articleES.getTitle(),articleES.getContent()));
     }
 }
