@@ -34,6 +34,7 @@ public class ArticleES {
     @Field(index = false, type = FieldType.Keyword)
     private String tag;
     @Field(index = false, type = FieldType.Keyword)
+    @JsonProperty("tag_desc")
     private String tagDesc;
     @Field(index = false, type = FieldType.Date,pattern = "YYYY-MM-DD",format = DateFormat.custom)
     @JsonProperty("create_time")

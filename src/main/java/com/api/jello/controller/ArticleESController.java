@@ -28,13 +28,19 @@ public class ArticleESController {
     public Object listTags(@RequestBody ArticleES articleES) {
         return ResultUtil.success(articleESDao.save(articleES));
     }
-
+    @PostMapping("del")
+    public Object del() {
+        articleESDao.deleteAll();
+        elasticsearchRestTemplate.deleteIndex("article");
+        return ResultUtil.success(null);
+    }
     @GetMapping("list")
     public Object getList(String keyword) {
 //        Pageable pageable=PageRequest.of(page,size);
         BoolQueryBuilder queryBuilder= QueryBuilders.boolQuery();
         queryBuilder.should(QueryBuilders.matchPhraseQuery("title",keyword))
-                .should(QueryBuilders.matchPhraseQuery("content",keyword));
+                .should(QueryBuilders.matchPhraseQuery("content",keyword))
+                .should(QueryBuilders.matchPhraseQuery("tag_desc",keyword));
         Iterable<ArticleES> page1=articleESDao.search(queryBuilder);
         List<ArticleES> list=new ArrayList<>();
         page1.forEach(list::add);
