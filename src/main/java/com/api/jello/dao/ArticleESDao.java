@@ -12,5 +12,4 @@ import java.util.List;
  */
 @Repository
 public interface ArticleESDao extends ElasticsearchRepository<ArticleES,String> {
-        List<ArticleES> findDistinctByContentOrTitle(String key1,String key2);
 }
