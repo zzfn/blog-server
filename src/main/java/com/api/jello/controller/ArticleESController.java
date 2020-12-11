@@ -2,18 +2,11 @@ package com.api.jello.controller;
 
 import com.api.jello.dao.ArticleESDao;
 import com.api.jello.entity.ArticleES;
-import com.api.jello.entity.Pages;
 import com.api.jello.util.ResultUtil;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -37,7 +30,7 @@ public class ArticleESController {
     }
 
     @GetMapping("list")
-    public Object getList(String keyword, Integer page, Integer size) {
+    public Object getList(String keyword) {
 //        Pageable pageable=PageRequest.of(page,size);
         BoolQueryBuilder queryBuilder= QueryBuilders.boolQuery();
         queryBuilder.should(QueryBuilders.matchPhraseQuery("title",keyword))
