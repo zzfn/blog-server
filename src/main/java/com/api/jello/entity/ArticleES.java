@@ -1,5 +1,8 @@
 package com.api.jello.entity;
 
+import com.api.jello.config.Dict;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
@@ -23,13 +26,19 @@ public class ArticleES {
     @Field(type = FieldType.Text, analyzer = "ik_max_world")
     private String content;
     @Field(type = FieldType.Integer)
+    @JsonProperty("view_count")
     private Double viewCount;
     @Field(type = FieldType.Integer)
+    @JsonProperty("order_num")
     private Double orderNum;
     @Field(index = false, type = FieldType.Keyword)
     private String tag;
+    @Field(index = false, type = FieldType.Keyword)
+    private String tagDesc;
     @Field(index = false, type = FieldType.Date,pattern = "YYYY-MM-DD",format = DateFormat.custom)
+    @JsonProperty("create_time")
     private Date createTime;
     @Field(index = false, type = FieldType.Short)
+    @JsonProperty("is_delete")
     private Integer isDelete;
 }
