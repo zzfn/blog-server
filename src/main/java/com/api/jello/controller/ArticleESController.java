@@ -36,28 +36,13 @@ public class ArticleESController {
     }
     @GetMapping("list")
     public Object getList(String keyword) {
-//        Pageable pageable=PageRequest.of(page,size);
         BoolQueryBuilder queryBuilder= QueryBuilders.boolQuery();
         queryBuilder.should(QueryBuilders.matchPhraseQuery("title",keyword))
                 .should(QueryBuilders.matchPhraseQuery("content",keyword))
                 .should(QueryBuilders.matchPhraseQuery("tag_desc",keyword));
-        Iterable<ArticleES> page1=articleESDao.search(queryBuilder);
+        Iterable<ArticleES> pages=articleESDao.search(queryBuilder);
         List<ArticleES> list=new ArrayList<>();
-        page1.forEach(list::add);
-//        Pages<ArticleES> esPages=new Pages<>();
-//        esPages.setRecords(page1.getContent());
-//        esPages.setTotalPage(page1.getTotalPages());
-//        esPages.setSize(page1.getSize());
-//        esPages.setPage(page1.getNumber());
-//        esPages.setTotalSize(page1.getTotalElements());
-//        NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder().withQuery(new BoolQueryBuilder().should(new MatchQueryBuilder("title", keyword)).should(new MatchQueryBuilder("content", keyword))).withPageable(PageRequest.of(page, size)).build();
-//        Page<ArticleES> page1 = elasticsearchRestTemplate.queryForPage(nativeSearchQuery, ArticleES.class);
-//        Pages<ArticleES> esPages = new Pages<>();
-//        esPages.setRecords(page1.getContent());
-//        esPages.setTotalPage(page1.getTotalPages());
-//        esPages.setSize(page1.getSize());
-//        esPages.setPage(page1.getNumber());
-//        esPages.setTotalSize(page1.getTotalElements());
+        pages.forEach(list::add);
         return ResultUtil.success(list);
     }
 }
