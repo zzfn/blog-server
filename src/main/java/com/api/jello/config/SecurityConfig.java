@@ -41,7 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        //放行swagger
         web.ignoring().antMatchers(HttpMethod.GET,
                 "/v3/api-docs",
                 "/swagger-resources",

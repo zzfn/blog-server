@@ -64,7 +64,7 @@ public class FileController {
     }
 
     @PostMapping("upload")
-    public Object upload(MultipartFile file) throws IOException {
+    public Object upload(@RequestBody MultipartFile file) throws IOException {
         String endpoint=(String)redisUtil.get("endpoint");
         String accessKeyId=(String)redisUtil.get("accessKeyId");
         String accessKeySecret=(String)redisUtil.get("accessKeySecret");
