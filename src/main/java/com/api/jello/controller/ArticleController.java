@@ -1,6 +1,7 @@
 package com.api.jello.controller;
 
 import com.api.jello.dao.ArticleDao;
+import com.api.jello.dao.ArticleESDao;
 import com.api.jello.dao.CommentDao;
 import com.api.jello.entity.Article;
 import com.api.jello.util.ResultUtil;
@@ -26,6 +27,8 @@ public class ArticleController {
     ArticleDao articleDao;
     @Autowired
     CommentDao commentDao;
+    @Autowired
+    private ArticleESDao articleESDao;
 
     @PostMapping("saveArticle")
     @PreAuthorize("hasRole('ADMIN')")
@@ -74,6 +77,7 @@ public class ArticleController {
     @ApiOperation("根据id删除文章")
     @DeleteMapping("removeArticle")
     public Object removeArticle(@RequestBody Article article) {
+        articleESDao.deleteById(article.getId());
         return ResultUtil.success(articleDao.deleteById(article.getId()));
     }
 }

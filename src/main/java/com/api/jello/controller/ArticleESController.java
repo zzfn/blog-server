@@ -27,11 +27,6 @@ public class ArticleESController {
         BoolQueryBuilder queryBuilder= QueryBuilders.boolQuery();
         queryBuilder.should(QueryBuilders.matchPhraseQuery("title",keyword))
                 .should(QueryBuilders.matchPhraseQuery("content",keyword));
-        articleESDao.search(queryBuilder).iterator().forEachRemaining(ele->{
-            if(ele.getIsDelete()!=0){
-                articleESDao.deleteById(ele.getId());
-            }
-        });
         return ResultUtil.success(articleESDao.search(queryBuilder));
     }
 }
