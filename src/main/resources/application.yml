@@ -3,7 +3,7 @@ spring:
     rest:
       uris: 119.3.155.253:9200
   redis:
-    host: 47.100.47.169
+    host: 106.14.239.36
     port: 6397
     password: chen
   datasource:
