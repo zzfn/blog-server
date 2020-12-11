@@ -29,7 +29,7 @@ public class ArticleESController {
                 .should(QueryBuilders.matchPhraseQuery("content",keyword));
         articleESDao.search(queryBuilder).iterator().forEachRemaining(ele->{
             if(ele.getIsDelete()!=0){
-//                ele.
+                articleESDao.deleteById(ele.getId());
             }
         });
         return ResultUtil.success(articleESDao.search(queryBuilder));
