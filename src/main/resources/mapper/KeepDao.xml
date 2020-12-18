@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.api.jello.dao.KeepDao">
-	<select id="listKeeps" resultType="com.api.jello.entity.Keep">
+<mapper namespace="org.owoto.dao.KeepDao">
+	<select id="listKeeps" resultType="org.owoto.entity.Keep">
 		SELECT id, KEEP_TYPE, AMOUNT, REMARK, CREATE_TIME
 		FROM T_KEEP
 		WHERE IS_DELETE = 0
@@ -20,7 +20,7 @@ FROM (SELECT -T_KEEP.amount AS AMOUNT
       WHERE T_KEEP.KEEP_type = 'KEEP_1') AS T
     </select>
 
-	<select id="getOutlay" resultType="com.api.jello.entity.Keep">
+	<select id="getOutlay" resultType="org.owoto.entity.Keep">
 		SELECT
 			SUM( T_KEEP.AMOUNT ) as value,
 			date_format( T_KEEP.CREATE_TIME, '%Y-%m-%d' ) as day
@@ -31,7 +31,7 @@ FROM (SELECT -T_KEEP.amount AS AMOUNT
 			date_format( T_KEEP.CREATE_TIME, '%Y-%m-%d' )
     </select>
 
-	<select id="getBillTime" resultType="com.api.jello.vo.BillVO">
+	<select id="getBillTime" resultType="org.owoto.vo.BillVO">
 		SELECT
 			SUM( T_KEEP.AMOUNT ) as value,
 		<if test="time == 'day'">

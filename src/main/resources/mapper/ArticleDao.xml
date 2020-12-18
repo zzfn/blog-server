@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.api.jello.dao.ArticleDao">
-    <select id="listArticle" resultType="com.api.jello.entity.Article">
+<mapper namespace="org.owoto.dao.ArticleDao">
+    <select id="listArticle" resultType="org.owoto.entity.Article">
         SELECT T_ARTICLE.id,
             T_ARTICLE.title,
             T_ARTICLE.tag,
@@ -21,7 +21,7 @@
         ORDER BY T_ARTICLE.ORDER_NUM DESC,
         T_ARTICLE.create_time DESC
     </select>
-    <select id="getTags" resultType="com.api.jello.vo.Tags">
+    <select id="getTags" resultType="org.owoto.vo.Tags">
         SELECT count(TAG)    AS count,
                SYS_DICT.CODE AS code,
                SYS_DICT.NAME AS tag
@@ -31,14 +31,14 @@
         GROUP BY SYS_DICT.NAME,
                  SYS_DICT.CODE
     </select>
-    <select id="getArchives" resultType="com.api.jello.entity.Article">
+    <select id="getArchives" resultType="org.owoto.entity.Article">
         select id,TITLE,CREATE_TIME,TAG from T_ARTICLE where IS_DELETE=0
         <if test="code != null and code != ''">
             and T_ARTICLE.tag=#{code}
         </if>
         ORDER BY CREATE_TIME DESC
     </select>
-    <select id="getArticle" parameterType="string" resultType="com.api.jello.entity.Article">
+    <select id="getArticle" parameterType="string" resultType="org.owoto.entity.Article">
         SELECT ARTICLE.ID,
                ARTICLE.TITLE,
                ARTICLE.CONTENT,
