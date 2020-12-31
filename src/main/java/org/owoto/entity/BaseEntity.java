@@ -27,7 +27,7 @@ public class BaseEntity {
     @TableField(fill = FieldFill.INSERT,jdbcType= JdbcType.TIMESTAMP)
     private Date createTime;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE,jdbcType= JdbcType.TIMESTAMP,select = false)
+    @TableField(fill = FieldFill.INSERT_UPDATE,jdbcType= JdbcType.TIMESTAMP,update = "now()")
     private Date updateTime;
 
     @TableField(fill = FieldFill.INSERT,select = false)

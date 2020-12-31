@@ -4,6 +4,7 @@ import org.owoto.dao.ArticleDao;
 import org.owoto.dao.ArticleESDao;
 import org.owoto.dao.CommentDao;
 import org.owoto.entity.Article;
+import org.owoto.service.ArticleService;
 import org.owoto.util.ResultUtil;
 import org.owoto.vo.PageVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -26,6 +27,8 @@ public class ArticleController {
     @Autowired
     ArticleDao articleDao;
     @Autowired
+    ArticleService articleService;
+    @Autowired
     CommentDao commentDao;
     @Autowired
     private ArticleESDao articleESDao;
@@ -34,12 +37,7 @@ public class ArticleController {
     @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation("保存或修改文章")
     public Object saveArticle(@RequestBody Article article) {
-        article.setUpdateTime(null);
-        if(null==article.getId()||null == articleDao.selectById(article.getId())){
-            return ResultUtil.success(articleDao.insert(article));
-        }else {
-            return ResultUtil.success(articleDao.updateById(article));
-        }
+        return ResultUtil.success(articleService.saveOrUpdate(article));
     }
 
     @ApiOperation("文章分页列表")
