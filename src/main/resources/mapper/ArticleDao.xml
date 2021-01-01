@@ -9,10 +9,8 @@
             T_ARTICLE.update_by,
             T_ARTICLE.create_time,
             T_ARTICLE.update_time,
-            T_ARTICLE.ORDER_NUM,
-            ifnull(T_VIEWS.COUNT,0) as VIEW_COUNT
+            T_ARTICLE.ORDER_NUM
         FROM T_ARTICLE
-            left join T_VIEWS on T_VIEWS.ARTICLE_ID = T_ARTICLE.ID
         WHERE T_ARTICLE.IS_DELETE = 0
         <if test="title != null and title != ''">
             <bind name="title" value="'%' + title + '%'"/>
@@ -45,11 +43,9 @@
                ARTICLE.UPDATE_TIME,
                ARTICLE.CREATE_TIME,
                ARTICLE.ORDER_NUM,
-               DICT.CODE AS TAG,
-               ifnull(T_VIEWS.COUNT, 0) as VIEW_COUNT
+               DICT.CODE AS TAG
         FROM T_ARTICLE ARTICLE
                  LEFT JOIN SYS_DICT DICT ON ARTICLE.TAG = DICT.CODE
-                 LEFT JOIN T_VIEWS ON ARTICLE.id = T_VIEWS.ARTICLE_ID
         WHERE ARTICLE.IS_DELETE = 0
           AND ARTICLE.ID = #{id}
     </select>
