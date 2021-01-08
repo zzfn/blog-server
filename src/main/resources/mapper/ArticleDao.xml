@@ -7,6 +7,7 @@
             T_ARTICLE.tag,
             T_ARTICLE.create_by,
             T_ARTICLE.update_by,
+            T_ARTICLE.IS_RELEASE,
             T_ARTICLE.create_time,
             T_ARTICLE.update_time,
             T_ARTICLE.ORDER_NUM
@@ -40,6 +41,7 @@
         SELECT ARTICLE.ID,
                ARTICLE.TITLE,
                ARTICLE.CONTENT,
+               ARTICLE.IS_RELEASE,
                ARTICLE.UPDATE_TIME,
                ARTICLE.CREATE_TIME,
                ARTICLE.ORDER_NUM,

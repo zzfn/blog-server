@@ -28,6 +28,8 @@ public class Article extends BaseEntity {
 
     private Integer orderNum;
 
+    private Integer isRelease;
+
     @Dict(target = "tagDesc",codeType = "TAG")
     private String tag;
 
