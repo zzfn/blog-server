@@ -1,23 +1,22 @@
 package org.owoto.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.owoto.entity.ArticleEs;
-import org.owoto.mapper.ArticleDao;
-import org.owoto.mapper.ArticleESDao;
-import org.owoto.entity.Article;
-import org.owoto.service.ArticleService;
-import org.owoto.util.RedisUtil;
-import org.owoto.util.ResultUtil;
-import org.owoto.vo.PageVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.owoto.entity.Article;
+import org.owoto.entity.ArticleEs;
+import org.owoto.mapper.ArticleDao;
+import org.owoto.service.ArticleService;
+import org.owoto.util.RedisUtil;
+import org.owoto.util.ResultUtil;
+import org.owoto.vo.PageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -37,20 +36,20 @@ import java.util.List;
 @Slf4j
 @Api(tags = "文章管理")
 public class ArticleController {
+    static final String TAG_DESC = "tagDesc";
+    static final String TITLE = "title";
+    static final String CONTENT = "content";
+
     @Autowired
     ArticleDao articleMapper;
     @Autowired
     ArticleService articleService;
     @Autowired
-    private ArticleESDao articleESDao;
-    @Autowired
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
-
     @Autowired
     RedisUtil redisUtil;
 
     @PostMapping("saveArticle")
-    @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation("保存或修改文章")
     public Object saveArticle(@RequestBody Article article) {
         return ResultUtil.success(articleService.saveOrUpdate(article));
@@ -60,7 +59,7 @@ public class ArticleController {
     @GetMapping("non/page")
     public Object listArticles(PageVO pageVo) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("IS_RELEASE",0).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
+        queryWrapper.eq("IS_RELEASE", 0).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
         IPage<Article> page = new Page<>(pageVo.getPageNumber(), pageVo.getPageSize());
         IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
         pageList.getRecords().forEach(article -> {
@@ -107,29 +106,30 @@ public class ArticleController {
     @ApiOperation("根据id删除文章")
     @DeleteMapping("removeArticle")
     public Object removeArticle(@RequestBody Article article) {
-        articleESDao.deleteById(article.getId());
+        elasticsearchRestTemplate.delete(article.getId(), Article.class);
         return ResultUtil.success(articleMapper.deleteById(article.getId()));
     }
 
+    @ApiOperation("es搜索")
     @GetMapping("non/search")
     public Object getList(String keyword) {
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
-        queryBuilder.should(QueryBuilders.matchPhraseQuery("title", keyword))
-                .should(QueryBuilders.matchPhraseQuery("content", keyword))
+        queryBuilder.should(QueryBuilders.matchPhraseQuery(TITLE, keyword))
+                .should(QueryBuilders.matchPhraseQuery(CONTENT, keyword))
                 .should(QueryBuilders.matchPhraseQuery("tag_desc", keyword));
-        NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder).withHighlightBuilder(new HighlightBuilder().field("title").field("content").field("tag_desc")).build();
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder).withHighlightBuilder(new HighlightBuilder().field(TITLE).field(CONTENT).field("tag_desc")).build();
         List<ArticleEs> list = new ArrayList<>();
-        SearchHits<ArticleEs> articleES = elasticsearchRestTemplate.search(nativeSearchQuery, ArticleEs.class);
-        articleES.getSearchHits().forEach(searchHit -> {
-            ArticleEs articleES1 = searchHit.getContent();
-            articleES1.setContent(StringUtils.join(searchHit.getHighlightField("content"), " "));
-            if (searchHit.getHighlightField("tagDesc").size() != 0) {
-                articleES1.setTagDesc(StringUtils.join(searchHit.getHighlightField("tagDesc"), " "));
+        SearchHits<ArticleEs> esSearchHits = elasticsearchRestTemplate.search(nativeSearchQuery, ArticleEs.class);
+        esSearchHits.getSearchHits().forEach(searchHit -> {
+            ArticleEs articleEs = searchHit.getContent();
+            articleEs.setContent(StringUtils.join(searchHit.getHighlightField(CONTENT), " "));
+            if (searchHit.getHighlightField(TAG_DESC).size() != 0) {
+                articleEs.setTagDesc(StringUtils.join(searchHit.getHighlightField(TAG_DESC), " "));
             }
-            if (searchHit.getHighlightField("title").size() != 0) {
-                articleES1.setTitle(StringUtils.join(searchHit.getHighlightField("title"), " "));
+            if (searchHit.getHighlightField(TITLE).size() != 0) {
+                articleEs.setTitle(StringUtils.join(searchHit.getHighlightField(TITLE), " "));
             }
-            list.add(articleES1);
+            list.add(articleEs);
         });
         return ResultUtil.success(list);
     }

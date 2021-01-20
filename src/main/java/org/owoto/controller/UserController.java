@@ -51,7 +51,7 @@ public class UserController {
      * @param loginVO 用户实体
      * @return 登录结果
      */
-    @PostMapping("login")
+    @PostMapping("non/login")
     @PreAuthorize("hasRole('ANONYMOUS')")
     public Object login(@RequestBody LoginVO loginVO) {
         User user = userDao.selectOne(new QueryWrapper<User>().eq("USERNAME", loginVO.getUsername()));
