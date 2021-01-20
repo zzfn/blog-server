@@ -1,6 +1,6 @@
 package org.owoto.controller;
 
-import org.owoto.dao.MenuDao;
+import org.owoto.mapper.MenuDao;
 import org.owoto.entity.Menu;
 import org.owoto.util.ResultUtil;
 import io.swagger.annotations.Api;

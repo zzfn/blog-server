@@ -59,19 +59,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
                 .antMatchers(HttpMethod.GET,
-                        "/keep/**",
-                        "/article/**",
-                        "/es/**",
-                        "/sysDict/getDict",
-                        "/sysConfig/selectSysConfig"
+                        "/**/non/**"
                 )
                 .permitAll()
                 .antMatchers(HttpMethod.POST,
-                        "/keep/**",
-                        "/es/**",
-                        "/user/register",
-                        "/views/**",
-                        "/user/login"
+                        "/**/non/**"
                 )
                 .permitAll()
                 .anyRequest().authenticated()

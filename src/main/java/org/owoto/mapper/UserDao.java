@@ -1,6 +1,6 @@
-package org.owoto.dao;
+package org.owoto.mapper;
 
-import org.owoto.entity.Role;
+import org.owoto.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
  * @since 2020-04-11 22:40:47
  */
 @Repository
-public interface RoleDao extends BaseMapper<Role> {
+public interface UserDao extends BaseMapper<User> {
+
 
 }

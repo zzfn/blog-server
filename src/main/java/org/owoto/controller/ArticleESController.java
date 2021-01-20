@@ -1,7 +1,7 @@
 package org.owoto.controller;
 
-import org.owoto.dao.ArticleESDao;
-import org.owoto.entity.ArticleES;
+import org.owoto.mapper.ArticleESDao;
+import org.owoto.entity.ArticleEs;
 import org.owoto.util.ResultUtil;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -25,7 +25,7 @@ public class ArticleESController {
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     @PostMapping("test")
-    public Object listTags(@RequestBody ArticleES articleES) {
+    public Object listTags(@RequestBody ArticleEs articleES) {
         return ResultUtil.success(articleESDao.save(articleES));
     }
     @PostMapping("del")
@@ -40,8 +40,8 @@ public class ArticleESController {
         queryBuilder.should(QueryBuilders.matchPhraseQuery("title",keyword))
                 .should(QueryBuilders.matchPhraseQuery("content",keyword))
                 .should(QueryBuilders.matchPhraseQuery("tag_desc",keyword));
-        Iterable<ArticleES> pages=articleESDao.search(queryBuilder);
-        List<ArticleES> list=new ArrayList<>();
+        Iterable<ArticleEs> pages=articleESDao.search(queryBuilder);
+        List<ArticleEs> list=new ArrayList<>();
         pages.forEach(list::add);
         return ResultUtil.success(list);
     }

@@ -1,4 +1,4 @@
-package org.owoto.dao;
+package org.owoto.mapper;
 
 import org.owoto.entity.Article;
 import org.owoto.vo.Tags;

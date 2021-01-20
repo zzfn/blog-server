@@ -1,6 +1,6 @@
-package org.owoto.dao;
+package org.owoto.mapper;
 
-import org.owoto.entity.ArticleES;
+import org.owoto.entity.ArticleEs;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  * @date 2020-12-10 14:53
  */
 @Repository
-public interface ArticleESDao extends ElasticsearchRepository<ArticleES,String> {
+public interface ArticleESDao extends ElasticsearchRepository<ArticleEs,String> {
 }

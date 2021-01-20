@@ -1,6 +1,6 @@
 package org.owoto.controller;
 
-import org.owoto.dao.SysConfigDao;
+import org.owoto.mapper.SysConfigDao;
 import org.owoto.entity.SysConfig;
 import org.owoto.util.ResultUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

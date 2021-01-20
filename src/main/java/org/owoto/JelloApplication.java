@@ -12,7 +12,7 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
  * @author cach1e
  */
 @SpringBootApplication
-@MapperScan("org.owoto.dao")
+@MapperScan("org.owoto.mapper")
 @EnableAsync
 @EnableScheduling
 @EnableCaching

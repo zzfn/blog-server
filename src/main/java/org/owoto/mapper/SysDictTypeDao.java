@@ -1,4 +1,4 @@
-package org.owoto.dao;
+package org.owoto.mapper;
 
 import org.owoto.entity.SysDictType;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

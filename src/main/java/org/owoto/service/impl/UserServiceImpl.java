@@ -1,7 +1,7 @@
 package org.owoto.service.impl;
 
-import org.owoto.dao.UserDao;
-import org.owoto.dao.UserRoleDao;
+import org.owoto.mapper.UserDao;
+import org.owoto.mapper.UserRoleDao;
 import org.owoto.entity.JwtUser;
 import org.owoto.entity.Role;
 import org.owoto.entity.User;

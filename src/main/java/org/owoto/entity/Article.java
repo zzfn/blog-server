@@ -5,8 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 
+
 /**
- * @author cc
+ * @author zzf
  */
 @Data
 public class Article extends BaseEntity {
@@ -23,12 +24,12 @@ public class Article extends BaseEntity {
 
 
     @TableField(exist = false)
-    private Integer viewCount;
+    private Long viewCount;
 
 
     private Integer orderNum;
 
-    private Integer isRelease;
+    private char isRelease;
 
     @Dict(target = "tagDesc",codeType = "TAG")
     private String tag;

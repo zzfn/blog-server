@@ -1,7 +1,7 @@
 package org.owoto.controller;
 
 import com.alibaba.fastjson.JSON;
-import org.owoto.dao.UserDao;
+import org.owoto.mapper.UserDao;
 import org.owoto.entity.User;
 import org.owoto.util.JwtTokenUtil;
 import org.owoto.util.RedisUtil;

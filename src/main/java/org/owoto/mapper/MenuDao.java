@@ -1,4 +1,4 @@
-package org.owoto.dao;
+package org.owoto.mapper;
 
 import org.owoto.entity.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

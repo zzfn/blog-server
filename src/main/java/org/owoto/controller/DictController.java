@@ -1,6 +1,6 @@
 package org.owoto.controller;
 
-import org.owoto.dao.SysDictDao;
+import org.owoto.mapper.SysDictDao;
 import org.owoto.entity.SysDict;
 import org.owoto.service.SysDictService;
 import org.owoto.util.ResultUtil;

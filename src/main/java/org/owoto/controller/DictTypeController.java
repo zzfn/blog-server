@@ -1,6 +1,6 @@
 package org.owoto.controller;
 
-import org.owoto.dao.SysDictTypeDao;
+import org.owoto.mapper.SysDictTypeDao;
 import org.owoto.entity.SysDictType;
 import org.owoto.util.ResultUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

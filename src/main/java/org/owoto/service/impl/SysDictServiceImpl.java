@@ -2,7 +2,7 @@ package org.owoto.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import org.owoto.entity.SysDict;
-import org.owoto.dao.SysDictDao;
+import org.owoto.mapper.SysDictDao;
 import org.owoto.service.SysDictService;
 import org.owoto.util.RedisUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
