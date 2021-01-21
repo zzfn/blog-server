@@ -104,10 +104,10 @@ public class ArticleController {
     }
 
     @ApiOperation("根据id删除文章")
-    @DeleteMapping("removeArticle")
-    public Object removeArticle(@RequestBody Article article) {
-        elasticsearchRestTemplate.delete(article.getId(), Article.class);
-        return ResultUtil.success(articleMapper.deleteById(article.getId()));
+    @DeleteMapping("non/{id}")
+    public Object removeArticle(@PathVariable String id) {
+        elasticsearchRestTemplate.delete(id, ArticleEs.class);
+        return ResultUtil.success(articleMapper.deleteById(id));
     }
 
     @ApiOperation("es搜索")
