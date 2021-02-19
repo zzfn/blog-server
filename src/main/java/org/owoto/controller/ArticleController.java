@@ -59,7 +59,7 @@ public class ArticleController {
     @GetMapping("non/page")
     public Object listArticles(PageVO pageVo,String title) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("TITLE",title).eq("IS_RELEASE", 0).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
+        queryWrapper.like(title!=null,"TITLE",title).eq("IS_RELEASE", 0).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
         IPage<Article> page = new Page<>(pageVo.getPageNumber(), pageVo.getPageSize());
         IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
         pageList.getRecords().forEach(article -> {
