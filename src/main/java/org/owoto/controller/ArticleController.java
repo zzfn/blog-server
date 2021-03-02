@@ -57,9 +57,9 @@ public class ArticleController {
 
     @ApiOperation("文章分页列表")
     @GetMapping("non/page")
-    public Object listArticles(PageVO pageVo,String title) {
+    public Object listArticles(PageVO pageVo, String title, String field) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(title!=null,"TITLE",title).eq("IS_RELEASE", 0).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
+        queryWrapper.like(title != null, "TITLE", title).eq("IS_RELEASE", 0).orderByDesc(field == null, "ORDER_NUM").orderByDesc(field == null, "CREATE_TIME").orderByDesc(field != null, field);
         IPage<Article> page = new Page<>(pageVo.getPageNumber(), pageVo.getPageSize());
         IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
         pageList.getRecords().forEach(article -> {
