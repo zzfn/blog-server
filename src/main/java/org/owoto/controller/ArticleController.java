@@ -62,17 +62,14 @@ public class ArticleController {
         queryWrapper.like(title != null, "TITLE", title).eq("IS_RELEASE", 0).orderByDesc(field == null, "ORDER_NUM").orderByDesc(field == null, "CREATE_TIME").orderByDesc(field != null, field);
         IPage<Article> page = new Page<>(pageVo.getPageNumber(), pageVo.getPageSize());
         IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
-        pageList.getRecords().forEach(article -> {
-            if (redisUtil.get(article.getId()) == null) {
-                redisUtil.incr(article.getId(), 1);
-                article.setViewCount(0L);
-            } else {
-                article.setViewCount(((Number) redisUtil.get(article.getId())).longValue());
-            }
-        });
         return ResultUtil.success(pageList);
     }
 
+    @ApiOperation("排行榜")
+    @GetMapping("non/hot")
+    public Object listHotArticles() {
+        return ResultUtil.success(redisUtil.getZSetRank("views",0,-1));
+    }
     @ApiOperation("文章总数")
     @GetMapping("countArticles")
     public Object countArticles() {
@@ -96,7 +93,7 @@ public class ArticleController {
     public Object getArticle(@PathVariable("id") String id) {
         Article article = articleMapper.selectById(id);
         if (article != null) {
-            article.setViewCount(redisUtil.incr(id, 1));
+            article.setViewCount(redisUtil.incZSetValue("views",id, 1L).longValue());
             return ResultUtil.success(article);
         } else {
             return ResultUtil.error("未找到结果");

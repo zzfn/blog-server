@@ -1,5 +1,6 @@
 package org.owoto.util;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -373,7 +374,7 @@ public class RedisUtil {
     public long sSetAndTime(String key, long time, Object... values) {
         try {
             Long count = redisTemplate.opsForSet().add(key, values);
-            if (time > 0){
+            if (time > 0) {
                 expire(key, time);
             }
             return count;
@@ -574,4 +575,29 @@ public class RedisUtil {
             return 0;
         }
     }
+
+    public boolean addZSetValue(String key, Object member, long score) {
+        try {
+            return redisTemplate.opsForZSet().add(key, member, score);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Object getZSetRank(String key, long start, long end) {
+        try {
+            return redisTemplate.opsForZSet().reverseRange(key, start, end);
+        } catch (Exception e) {
+            log.error("",e);
+            return false;
+        }
+    }
+    public Double zScore(String key, Object value) {
+        return redisTemplate.opsForZSet().score(key, value);
+    }
+
+    public Double incZSetValue(String key, String value, Long delta){
+        return redisTemplate.opsForZSet().incrementScore(key, value, delta);
+    }
+
 }
