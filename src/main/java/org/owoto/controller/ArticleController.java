@@ -52,6 +52,7 @@ public class ArticleController {
     @PostMapping("saveArticle")
     @ApiOperation("保存或修改文章")
     public Object saveArticle(@RequestBody Article article) {
+        redisUtil.set("ALL_ARTICLE",articleMapper.getArchives(""));
         return ResultUtil.success(articleService.saveOrUpdate(article));
     }
 
@@ -85,7 +86,7 @@ public class ArticleController {
     @ApiOperation("文章列表不分页")
     @GetMapping("non/list")
     public Object listArchives(String code) {
-        return ResultUtil.success(articleMapper.getArchives(code));
+        return ResultUtil.success(articleService.listArticle(code));
     }
 
     @ApiOperation("根据id查询文章详情")

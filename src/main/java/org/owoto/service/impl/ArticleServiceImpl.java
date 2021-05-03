@@ -6,7 +6,10 @@ import org.owoto.mapper.ArticleDao;
 import org.owoto.service.ArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> implements ArticleService {
@@ -15,5 +18,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
     @Override
     public Article getArticle(String id) {
         return articleDao.getArticle(id);
+    }
+
+    @Override
+    @Cacheable(value = "ALL_ARTICLE")
+    public List<Article> listArticle(String code) {
+        return articleDao.getArchives(code);
     }
 }
