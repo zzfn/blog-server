@@ -30,7 +30,7 @@ public class ArticleEs {
     @Field(type = FieldType.Integer, name = "order_num")
     private Double orderNum;
     @Field(type = FieldType.Integer, name = "is_release")
-    private Integer isRelease;
+    private Boolean isRelease;
     @Field(index = false, type = FieldType.Keyword)
     private String tag;
     @Field(index = false, type = FieldType.Keyword, name = "tag_desc")

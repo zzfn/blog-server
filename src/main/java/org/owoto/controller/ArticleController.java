@@ -22,7 +22,6 @@ import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -52,15 +51,33 @@ public class ArticleController {
     @PostMapping("saveArticle")
     @ApiOperation("保存或修改文章")
     public Object saveArticle(@RequestBody Article article) {
-        redisUtil.set("ALL_ARTICLE",articleMapper.getArchives(""));
-        return ResultUtil.success(articleService.saveOrUpdate(article));
+        // 执行保存逻辑
+        articleService.saveOrUpdate(article);
+        /**
+         * 刷新文章缓存,如果发布了就刷新
+         * 刷新列表缓存的逻辑
+         * 是否发布状态改变
+         * 标题改变
+         * 以及删除
+         */
+        String ak = "ARTICLE_DETAIL::" + article.getId();
+        boolean b2 = redisUtil.hasKey(ak);
+        Article article0 = articleService.getByCache(article.getId());
+        Article article1 = articleService.getByDb(article.getId());
+        boolean b0 = article0.getTitle().equals(article1.getTitle());
+        boolean b1 = article0.getIsRelease().equals(article1.getIsRelease());
+        if (!b0 || !b1 || !b2) {
+            articleService.listByDb("");
+            articleService.listByDb(article1.getTag());
+        }
+        return ResultUtil.success(article.getId());
     }
 
     @ApiOperation("文章分页列表")
     @GetMapping("non/page")
-    public Object listArticles(PageVO pageVo, String title, String field) {
+    public Object listArticles(PageVO pageVo, @RequestParam(defaultValue = "true") Boolean isOnlyRelease) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(title != null, "TITLE", title).eq("IS_RELEASE", 0).orderByDesc(field == null, "ORDER_NUM").orderByDesc(field == null, "CREATE_TIME").orderByDesc(field != null, field);
+        queryWrapper.eq(isOnlyRelease, "IS_RELEASE", 1).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
         IPage<Article> page = new Page<>(pageVo.getPageNumber(), pageVo.getPageSize());
         IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
         return ResultUtil.success(pageList);
@@ -69,8 +86,9 @@ public class ArticleController {
     @ApiOperation("排行榜")
     @GetMapping("non/hot")
     public Object listHotArticles() {
-        return ResultUtil.success(redisUtil.getZSetRank("views",0,-1));
+        return ResultUtil.success(redisUtil.getZSetRank("views", 0, -1));
     }
+
     @ApiOperation("文章总数")
     @GetMapping("countArticles")
     public Object countArticles() {
@@ -85,25 +103,36 @@ public class ArticleController {
 
     @ApiOperation("文章列表不分页")
     @GetMapping("non/list")
-    public Object listArchives(String code) {
-        return ResultUtil.success(articleService.listArticle(code));
+    public Object listArchives(@RequestParam(defaultValue = "") String code) {
+        return ResultUtil.success(articleService.listByCache(code));
     }
 
-    @ApiOperation("根据id查询文章详情")
+    @ApiOperation("根据id查询文章详情-前台")
     @GetMapping("non/{id}")
     public Object getArticle(@PathVariable("id") String id) {
-        Article article = articleMapper.selectById(id);
-        if (article != null) {
-            article.setViewCount(redisUtil.incZSetValue("views",id, 1L).longValue());
-            return ResultUtil.success(article);
-        } else {
-            return ResultUtil.error("未找到结果");
+        if (StringUtils.isBlank(id)) {
+            return ResultUtil.error("请传文章id");
         }
+        Article article = articleService.getByCache(id);
+        if (!article.getIsRelease()) {
+            return ResultUtil.error("文章已下线");
+        }
+        article.setViewCount(redisUtil.incZSetValue("views", id, 1L).longValue());
+        return ResultUtil.success(article);
+    }
+
+    @ApiOperation("根据id查询文章详情-后台")
+    @GetMapping("{id}")
+    public Object getArticleAdmin(@PathVariable("id") String id) {
+        Article article = articleService.getByDb(id);
+        return ResultUtil.success(article);
     }
 
     @ApiOperation("根据id删除文章")
-    @DeleteMapping("non/{id}")
-    public Object removeArticle(@PathVariable String id) {
+    @DeleteMapping("non/{id}/{code}")
+    public Object removeArticle(@PathVariable String id, @PathVariable String code) {
+        articleService.listByDb("");
+        articleService.listByDb(code);
         elasticsearchRestTemplate.delete(id, ArticleEs.class);
         return ResultUtil.success(articleMapper.deleteById(id));
     }
@@ -127,7 +156,9 @@ public class ArticleController {
             if (searchHit.getHighlightField(TITLE).size() != 0) {
                 articleEs.setTitle(StringUtils.join(searchHit.getHighlightField(TITLE), " "));
             }
-            list.add(articleEs);
+            if (articleEs.getIsRelease()) {
+                list.add(articleEs);
+            }
         });
         return ResultUtil.success(list);
     }
