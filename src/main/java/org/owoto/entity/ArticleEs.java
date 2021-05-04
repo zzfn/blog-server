@@ -29,6 +29,8 @@ public class ArticleEs {
     private Double viewCount;
     @Field(type = FieldType.Integer, name = "order_num")
     private Double orderNum;
+    @Field(type = FieldType.Integer, name = "is_release")
+    private Integer isRelease;
     @Field(index = false, type = FieldType.Keyword)
     private String tag;
     @Field(index = false, type = FieldType.Keyword, name = "tag_desc")
