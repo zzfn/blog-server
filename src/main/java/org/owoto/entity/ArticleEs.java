@@ -3,6 +3,7 @@ package org.owoto.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
+import org.owoto.config.Dict;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -32,6 +33,7 @@ public class ArticleEs {
     @Field(type = FieldType.Integer, name = "is_release")
     private Boolean isRelease;
     @Field(index = false, type = FieldType.Keyword)
+    @Dict(target = "tagDesc",codeType = "TAG")
     private String tag;
     @Field(index = false, type = FieldType.Keyword, name = "tag_desc")
     private String tagDesc;
