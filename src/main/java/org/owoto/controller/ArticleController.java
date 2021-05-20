@@ -114,7 +114,7 @@ public class ArticleController {
             return ResultUtil.error("请传文章id");
         }
         Article article = articleService.getByCache(id);
-        if (!article.getIsRelease()) {
+        if (null==article||!article.getIsRelease()) {
             return ResultUtil.error("文章已下线");
         }
         article.setViewCount(redisUtil.incZSetValue("views", id, 1L).longValue());
