@@ -25,6 +25,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -78,7 +79,7 @@ public class ArticleController {
     public Object listArticles(PageVO pageVo, @RequestParam(defaultValue = "true") Boolean isOnlyRelease) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(isOnlyRelease, "IS_RELEASE", 1).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
-        IPage<Article> page = new Page<>(pageVo.getPageNumber(), pageVo.getPageSize());
+        IPage<Article> page = new Page<>(pageVo.getCurrent(), pageVo.getPageSize());
         IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
         return ResultUtil.success(pageList);
     }
@@ -114,7 +115,7 @@ public class ArticleController {
             return ResultUtil.error("请传文章id");
         }
         Article article = articleService.getByCache(id);
-        if (null==article||!article.getIsRelease()) {
+        if (null == article || !article.getIsRelease()) {
             return ResultUtil.error("文章已下线");
         }
         article.setViewCount(redisUtil.incZSetValue("views", id, 1L).longValue());
