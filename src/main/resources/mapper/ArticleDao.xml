@@ -30,8 +30,8 @@
         GROUP BY SYS_DICT.NAME,
                  SYS_DICT.CODE
     </select>
-    <select id="getArchives" resultType="org.owoto.entity.ArticleMini">
-        select id,TITLE,CREATE_TIME from T_ARTICLE where IS_DELETE=0
+    <select id="getArchives" resultType="org.owoto.entity.Article">
+        select id,TITLE,CREATE_TIME,TAG from T_ARTICLE where IS_DELETE=0
                                                          and IS_RELEASE=1
         <if test="code != null and code != ''">
             and T_ARTICLE.tag=#{code}
