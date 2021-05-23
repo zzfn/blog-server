@@ -15,12 +15,7 @@ import org.owoto.config.Dict;
  */
 @TableName(value ="T_FAVORITE")
 @Data
-public class Favorite implements Serializable {
-    /**
-     * 主键
-     */
-    @TableId
-    private String id;
+public class Favorite extends BaseEntity {
 
     /**
      * 标题
@@ -45,7 +40,7 @@ public class Favorite implements Serializable {
     /**
      * 是否发布
      */
-    private String isRelease;
+    private Boolean isRelease;
 
     /**
      * 排序号
@@ -58,32 +53,6 @@ public class Favorite implements Serializable {
     @Dict(target = "categoryDesc",codeType = "FAVORITE")
     private String category;
 
-    private String categoryDesc;
-    /**
-     * 创建人
-     */
-    private String createBy;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新人
-     */
-    private String updateBy;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 删除标识
-     */
-    private String isDelete;
-
     @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+    private String categoryDesc;
 }
