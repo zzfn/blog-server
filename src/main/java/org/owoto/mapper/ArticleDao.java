@@ -1,6 +1,7 @@
 package org.owoto.mapper;
 
 import org.owoto.entity.Article;
+import org.owoto.entity.ArticleMini;
 import org.owoto.vo.Tags;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -20,5 +21,5 @@ public interface ArticleDao extends BaseMapper<Article> {
 
     List<Tags> getTags();
 
-    List<Article> getArchives(String code);
+    List<ArticleMini> getArchives(String code);
 }

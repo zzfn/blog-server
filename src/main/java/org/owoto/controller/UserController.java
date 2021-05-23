@@ -89,6 +89,14 @@ public class UserController {
     }
 
     /**
+     * 注销
+     * @return
+     */
+    @PostMapping("logout")
+    public Object logout() {
+        return ResultUtil.success(null);
+    }
+    /**
      * 微信登录
      *
      * @param code

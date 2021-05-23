@@ -1,0 +1,47 @@
+spring:
+  elasticsearch:
+    rest:
+      uris: 47.100.47.169:9200
+  redis:
+    host: 106.14.239.36
+    port: 6397
+    password: chen
+  datasource:
+    url: jdbc:mysql://106.14.239.36:3306/zzf?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false
+    username: zzf
+    password: IMdLaWz6NZzkmrM05QDtcd7E1MpCaLdKOwLUKoMRjFe9N+XnbuB6EJD3oM4uudECPCPf/XadOGCDMMr88h2XIw==
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      connection-properties: config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALCvLBZS5Qmbi1I0vMHZ9O2tcGx/NSbXMuwZ9CHkpIjeVWCGkr9rG1KX07UR0vZ/dpj1QKg4LNFaxfmPkr3/fgMCAwEAAQ==
+      filters: config,stat,wall
+      stat-view-servlet:
+        enabled: true
+      filter:
+        config:
+          enabled: true
+        stat:
+          log-slow-sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:/mapper/*.xml
+  global-config:
+    db-config:
+      table-prefix: T_
+      logic-delete-field: isDelete
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      capital-mode: true
+
+server:
+  port: 8060
+
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: true

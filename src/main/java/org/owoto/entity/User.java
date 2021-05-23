@@ -36,7 +36,10 @@ public class User extends BaseEntity {
      * openid
      */
     private String openid;
-
+    /**
+     * 头像
+     */
+    private String avatar;
     @TableField(exist = false)
     private List<Role> roleList;
 

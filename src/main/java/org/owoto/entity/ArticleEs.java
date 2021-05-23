@@ -30,6 +30,8 @@ public class ArticleEs {
     private Double viewCount;
     @Field(type = FieldType.Integer, name = "order_num")
     private Double orderNum;
+    @Field(type = FieldType.Integer, name = "is_release")
+    private Boolean isRelease;
     @Field(index = false, type = FieldType.Keyword)
     @Dict(target = "tagDesc",codeType = "TAG")
     private String tag;
