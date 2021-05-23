@@ -28,10 +28,13 @@ public class FavoriteController {
      */
     @Resource
     private FavoriteService favoriteService;
-
+    @GetMapping("non/list")
+    public Object selectAll() {
+        return ResultUtil.success(favoriteService.list());
+    }
 
     @GetMapping("non/page")
-    public Object selectAll(PageVO pageVo) {
+    public Object selectPage(PageVO pageVo) {
         QueryWrapper<Favorite> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
         IPage<Favorite> page = new Page<>(pageVo.getCurrent(), pageVo.getPageSize());
