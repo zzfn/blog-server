@@ -22,6 +22,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class ArticleController {
     @Autowired
     RedisUtil redisUtil;
 
+    @PreAuthorize("hasRole('admin')")
     @PostMapping("saveArticle")
     @ApiOperation("保存或修改文章")
     public Object saveArticle(@RequestBody Article article) {
@@ -134,6 +136,7 @@ public class ArticleController {
 
     @ApiOperation("根据id删除文章")
     @DeleteMapping("non/{id}/{code}")
+    @PreAuthorize("hasRole('admin')")
     public Object removeArticle(@PathVariable String id, @PathVariable String code) {
         articleService.listByDb("");
         articleService.listByDb(code);
