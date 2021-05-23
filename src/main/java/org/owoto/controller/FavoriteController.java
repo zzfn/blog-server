@@ -43,6 +43,10 @@ public class FavoriteController {
     public Object selectAll(@RequestParam String id) {
         return ResultUtil.success(favoriteService.getById(id));
     }
+    @DeleteMapping("")
+    public Object removeById(@RequestParam String id) {
+        return ResultUtil.success(favoriteService.removeById(id));
+    }
     @PostMapping("save")
     public Object saveOne(@RequestBody Favorite favorite) {
         this.favoriteService.saveOrUpdate(favorite);
