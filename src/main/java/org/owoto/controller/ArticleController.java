@@ -78,7 +78,7 @@ public class ArticleController {
 
     @ApiOperation("文章分页列表")
     @GetMapping("non/page")
-    public Object listArticles(PageVO pageVo, @RequestParam(defaultValue = "true") Boolean isOnlyRelease,@RequestParam String title) {
+    public Object listArticles(PageVO pageVo, @RequestParam(defaultValue = "true") Boolean isOnlyRelease,@RequestParam(defaultValue = "") String title) {
         HashMap<String,String> map=new HashMap<>();
         map.put("updateTime","UPDATE_TIME");
         map.put("createTime","CREATE_TIME");
