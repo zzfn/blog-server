@@ -78,12 +78,12 @@ public class ArticleController {
 
     @ApiOperation("文章分页列表")
     @GetMapping("non/page")
-    public Object listArticles(PageVO pageVo, @RequestParam(defaultValue = "true") Boolean isOnlyRelease) {
+    public Object listArticles(PageVO pageVo, @RequestParam(defaultValue = "true") Boolean isOnlyRelease,@RequestParam String title) {
         HashMap<String,String> map=new HashMap<>();
         map.put("updateTime","UPDATE_TIME");
         map.put("createTime","CREATE_TIME");
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(isOnlyRelease, "IS_RELEASE", 1).orderBy(null!=pageVo.getField(), "ascend".equals(pageVo.getOrder()),map.get(pageVo.getField())).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
+        queryWrapper.like(StringUtils.isNoneEmpty(title),"TITLE",title).eq(isOnlyRelease, "IS_RELEASE", 1).orderBy(null!=pageVo.getField(), "ascend".equals(pageVo.getOrder()),map.get(pageVo.getField())).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
         IPage<Article> page = new Page<>(pageVo.getCurrent(), pageVo.getPageSize());
         IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
         return ResultUtil.success(pageList);
