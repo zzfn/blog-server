@@ -50,7 +50,7 @@ public class ArticleController {
     @Autowired
     RedisUtil redisUtil;
 
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("saveArticle")
     @ApiOperation("保存或修改文章")
     public Object saveArticle(@RequestBody Article article) {
@@ -136,7 +136,7 @@ public class ArticleController {
 
     @ApiOperation("根据id删除文章")
     @DeleteMapping("non/{id}/{code}")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object removeArticle(@PathVariable String id, @PathVariable String code) {
         articleService.listByDb("");
         articleService.listByDb(code);

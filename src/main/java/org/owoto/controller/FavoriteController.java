@@ -48,12 +48,12 @@ public class FavoriteController {
         return ResultUtil.success(favoriteService.getById(id));
     }
     @DeleteMapping("")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object removeById(@RequestParam String id) {
         return ResultUtil.success(favoriteService.removeById(id));
     }
     @PostMapping("save")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object saveOne(@RequestBody Favorite favorite) {
         this.favoriteService.saveOrUpdate(favorite);
         return ResultUtil.success(favorite.getId());
