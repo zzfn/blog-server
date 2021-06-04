@@ -112,7 +112,11 @@ public class ArticleController {
     public Object listArchives(@RequestParam(defaultValue = "") String code) {
         return ResultUtil.success(articleService.listByCache(code));
     }
-
+    @ApiOperation("最近更新")
+    @GetMapping("non/lastUpdated")
+    public Object lastUpdated() {
+        return ResultUtil.success(articleMapper.listLastUpdated());
+    }
     @ApiOperation("根据id查询文章详情-前台")
     @GetMapping("non/{id}")
     public Object getArticle(@PathVariable("id") String id) {
