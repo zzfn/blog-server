@@ -17,9 +17,11 @@ import java.util.List;
 public interface ArticleDao extends BaseMapper<Article> {
     Article getArticle(String id);
 
-    IPage<Article> listArticle(IPage<Article> page,@Param("title") String title);
+    IPage<Article> listArticle(IPage<Article> page, @Param("title") String title);
 
     List<Tags> getTags();
 
     List<ArticleMini> getArchives(String code);
+
+    List<ArticleMini> listLastUpdated();
 }
