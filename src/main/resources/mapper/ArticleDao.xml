@@ -74,7 +74,10 @@
     <select id="listLastUpdated" resultType="org.owoto.entity.ArticleMini">
         select TITLE, ID, UPDATE_TIME
         from T_ARTICLE
-        order by UPDATE_TIME desc limit 5
+        where IS_DELETE = 0
+          and IS_RELEASE = 1
+        order by UPDATE_TIME desc
+            limit 5
     </select>
     <select id="getArticle" parameterType="string" resultType="org.owoto.entity.Article">
         SELECT ARTICLE.ID,
