@@ -1,16 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.owoto.mapper.ArticleDao">
+    <select id="overviewTags" resultType="org.owoto.vo.Tags">
+        select count(*) as count, tag as code
+        from T_ARTICLE
+        where IS_DELETE = 0
+          and IS_RELEASE = 1
+        group by TAG
+        order by count desc
+    </select>
+    <select id="overviewCount" resultType="org.owoto.vo.LabelValueVO">
+        select count(*) as value, '总数' as label
+        from T_ARTICLE
+        where IS_RELEASE = 1
+          and IS_DELETE = 0
+        union
+        select count(*) as value, '本日' as label
+        from T_ARTICLE
+        where to_days(UPDATE_TIME) = to_days(now())
+          and IS_RELEASE = 1
+          and IS_DELETE = 0
+        union
+        select count(*) as value, '本周' as label
+        from T_ARTICLE
+        where YEARWEEK(date_format(UPDATE_TIME, '%Y-%m-%d') - INTERVAL 1 DAY) = YEARWEEK(now() - INTERVAL 1 DAY)
+          and IS_RELEASE = 1
+          and IS_DELETE = 0
+        union
+        select count(*) as value, '本月' as label
+        from T_ARTICLE
+        where DATE_FORMAT(UPDATE_TIME, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
+          and IS_RELEASE = 1
+          and IS_DELETE = 0
+    </select>
     <select id="listArticle" resultType="org.owoto.entity.Article">
         SELECT T_ARTICLE.id,
-            T_ARTICLE.title,
-            T_ARTICLE.tag,
-            T_ARTICLE.create_by,
-            T_ARTICLE.update_by,
-            T_ARTICLE.IS_RELEASE,
-            T_ARTICLE.create_time,
-            T_ARTICLE.update_time,
-            T_ARTICLE.ORDER_NUM
+        T_ARTICLE.title,
+        T_ARTICLE.tag,
+        T_ARTICLE.create_by,
+        T_ARTICLE.update_by,
+        T_ARTICLE.IS_RELEASE,
+        T_ARTICLE.create_time,
+        T_ARTICLE.update_time,
+        T_ARTICLE.ORDER_NUM
         FROM T_ARTICLE
         WHERE T_ARTICLE.IS_DELETE = 0
         <if test="title != null and title != ''">
@@ -21,25 +53,28 @@
         T_ARTICLE.create_time DESC
     </select>
     <select id="getTags" resultType="org.owoto.vo.Tags">
-        SELECT count(TAG)    AS count,
+        SELECT count(TAG) AS count,
                SYS_DICT.CODE AS code,
                SYS_DICT.NAME AS tag
         FROM T_ARTICLE
-                 LEFT JOIN SYS_DICT ON tag = SYS_DICT.CODE
+            LEFT JOIN SYS_DICT
+        ON tag = SYS_DICT.CODE
         WHERE T_ARTICLE.IS_DELETE = 0
         GROUP BY SYS_DICT.NAME,
-                 SYS_DICT.CODE
+            SYS_DICT.CODE
     </select>
     <select id="getArchives" resultType="org.owoto.entity.ArticleMini">
         select id,TITLE,CREATE_TIME,TAG from T_ARTICLE where IS_DELETE=0
-                                                         and IS_RELEASE=1
+        and IS_RELEASE=1
         <if test="code != null and code != ''">
             and T_ARTICLE.tag=#{code}
         </if>
         ORDER BY CREATE_TIME DESC
     </select>
     <select id="listLastUpdated" resultType="org.owoto.entity.ArticleMini">
-        select TITLE,ID,UPDATE_TIME from T_ARTICLE order by UPDATE_TIME desc limit 5
+        select TITLE, ID, UPDATE_TIME
+        from T_ARTICLE
+        order by UPDATE_TIME desc limit 5
     </select>
     <select id="getArticle" parameterType="string" resultType="org.owoto.entity.Article">
         SELECT ARTICLE.ID,

@@ -2,6 +2,7 @@ package org.owoto.mapper;
 
 import org.owoto.entity.Article;
 import org.owoto.entity.ArticleMini;
+import org.owoto.vo.LabelValueVO;
 import org.owoto.vo.Tags;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,6 +10,7 @@ import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author cc
@@ -24,4 +26,8 @@ public interface ArticleDao extends BaseMapper<Article> {
     List<ArticleMini> getArchives(String code);
 
     List<ArticleMini> listLastUpdated();
+
+    List<Tags> overviewTags();
+
+    List<LabelValueVO> overviewCount();
 }
