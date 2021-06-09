@@ -18,10 +18,10 @@ public class BaseEntity {
     @TableId(value = "id",type= IdType.ASSIGN_UUID)
     private String id;
 
-    @TableField(select = false)
+    @TableField(fill = FieldFill.INSERT,select = false)
     private String createBy;
 
-    @TableField(select = false)
+    @TableField(fill = FieldFill.INSERT_UPDATE,select = false)
     private String updateBy;
 
     @TableField(fill = FieldFill.INSERT,jdbcType= JdbcType.TIMESTAMP)
