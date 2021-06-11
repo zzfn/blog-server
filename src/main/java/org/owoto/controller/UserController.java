@@ -156,7 +156,7 @@ public class UserController {
         String token = authorization.substring(JwtTokenUtil.TOKEN_PREFIX.length());
         String uid = JwtTokenUtil.getUserIdFromToken(token);
         if (null != uid) {
-            return ResultUtil.success(userDao.selectById(uid));
+            return ResultUtil.success(userDao.getUser(uid));
         } else {
             return ResultUtil.success(false);
         }
