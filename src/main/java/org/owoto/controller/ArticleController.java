@@ -78,12 +78,12 @@ public class ArticleController {
 
     @ApiOperation("文章分页列表")
     @GetMapping("non/page")
-    public Object listArticles(PageVO pageVo, @RequestParam(defaultValue = "true") Boolean isOnlyRelease,@RequestParam(defaultValue = "") String title) {
-        HashMap<String,String> map=new HashMap<>();
-        map.put("updateTime","UPDATE_TIME");
-        map.put("createTime","CREATE_TIME");
+    public Object listArticles(PageVO pageVo, @RequestParam(defaultValue = "true") Boolean isOnlyRelease, @RequestParam(defaultValue = "") String title) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("updateTime", "UPDATE_TIME");
+        map.put("createTime", "CREATE_TIME");
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNoneEmpty(title),"TITLE",title).eq(isOnlyRelease, "IS_RELEASE", 1).orderBy(null!=pageVo.getField(), "ascend".equals(pageVo.getOrder()),map.get(pageVo.getField())).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
+        queryWrapper.like(StringUtils.isNoneEmpty(title), "TITLE", title).eq(isOnlyRelease, "IS_RELEASE", 1).orderBy(null != pageVo.getField(), "ascend".equals(pageVo.getOrder()), map.get(pageVo.getField())).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
         IPage<Article> page = new Page<>(pageVo.getCurrent(), pageVo.getPageSize());
         IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
         return ResultUtil.success(pageList);
@@ -112,11 +112,13 @@ public class ArticleController {
     public Object listArchives(@RequestParam(defaultValue = "") String code) {
         return ResultUtil.success(articleService.listByCache(code));
     }
+
     @ApiOperation("最近更新")
     @GetMapping("non/lastUpdated")
     public Object lastUpdated() {
         return ResultUtil.success(articleMapper.listLastUpdated());
     }
+
     @ApiOperation("根据id查询文章详情-前台")
     @GetMapping("non/{id}")
     public Object getArticle(@PathVariable("id") String id) {
@@ -167,7 +169,7 @@ public class ArticleController {
             if (searchHit.getHighlightField(TITLE).size() != 0) {
                 articleEs.setTitle(StringUtils.join(searchHit.getHighlightField(TITLE), " "));
             }
-            if (articleEs.getIsRelease()) {
+            if (null != articleEs.getIsRelease()) {
                 list.add(articleEs);
             }
         });
