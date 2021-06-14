@@ -13,6 +13,7 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.owoto.entity.Article;
 import org.owoto.entity.ArticleEs;
 import org.owoto.mapper.ArticleDao;
+import org.owoto.mapper.ArticleESDao;
 import org.owoto.service.ArticleService;
 import org.owoto.util.RedisUtil;
 import org.owoto.util.ResultUtil;
@@ -47,6 +48,8 @@ public class ArticleController {
     ArticleService articleService;
     @Autowired
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
+    @Autowired
+    private ArticleESDao articleESDao;
     @Autowired
     RedisUtil redisUtil;
 
@@ -174,5 +177,10 @@ public class ArticleController {
             }
         });
         return ResultUtil.success(list);
+    }
+    @GetMapping("es/reset")
+    public Object reset(){
+        articleESDao.deleteAll();
+        return null;
     }
 }
