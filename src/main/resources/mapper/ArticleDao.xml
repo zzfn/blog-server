@@ -59,7 +59,7 @@
         FROM T_ARTICLE
             LEFT JOIN SYS_DICT
         ON tag = SYS_DICT.CODE
-        WHERE T_ARTICLE.IS_DELETE = 0
+        WHERE T_ARTICLE.IS_DELETE = 0 AND T_ARTICLE.IS_RELEASE = 1
         GROUP BY SYS_DICT.NAME,
             SYS_DICT.CODE
     </select>
