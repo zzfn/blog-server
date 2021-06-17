@@ -17,6 +17,7 @@ import org.owoto.mapper.ArticleESDao;
 import org.owoto.service.ArticleService;
 import org.owoto.util.RedisUtil;
 import org.owoto.util.ResultUtil;
+import org.owoto.vo.ArticleVO;
 import org.owoto.vo.PageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -81,13 +82,13 @@ public class ArticleController {
 
     @ApiOperation("文章分页列表")
     @GetMapping("non/page")
-    public Object listArticles(PageVO pageVo, @RequestParam(defaultValue = "true") Boolean isOnlyRelease, @RequestParam(defaultValue = "") String title) {
+    public Object listArticles(ArticleVO articleVO) {
         HashMap<String, String> map = new HashMap<>();
         map.put("updateTime", "UPDATE_TIME");
         map.put("createTime", "CREATE_TIME");
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNoneEmpty(title), "TITLE", title).eq(isOnlyRelease, "IS_RELEASE", 1).orderBy(null != pageVo.getField(), "ascend".equals(pageVo.getOrder()), map.get(pageVo.getField())).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
-        IPage<Article> page = new Page<>(pageVo.getCurrent(), pageVo.getPageSize());
+        queryWrapper.eq(null != articleVO.getTag(), "TAG", articleVO.getTag()).eq(null != articleVO.getIsRelease(), "IS_RELEASE", articleVO.getIsRelease()).like(StringUtils.isNoneEmpty(articleVO.getTitle()), "TITLE", articleVO.getTitle()).eq(articleVO.getIsOnlyRelease(), "IS_RELEASE", 1).orderBy(null != articleVO.getField(), "ascend".equals(articleVO.getOrder()), map.get(articleVO.getField())).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
+        IPage<Article> page = new Page<>(articleVO.getCurrent(), articleVO.getPageSize());
         IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
         return ResultUtil.success(pageList);
     }
@@ -178,8 +179,9 @@ public class ArticleController {
         });
         return ResultUtil.success(list);
     }
+
     @GetMapping("es/reset")
-    public Object reset(){
+    public Object reset() {
         articleESDao.deleteAll();
         return null;
     }
