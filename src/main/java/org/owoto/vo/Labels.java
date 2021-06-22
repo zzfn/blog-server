@@ -8,6 +8,6 @@ public class Labels {
     private String categoryDesc;
 
     @Dict(target = "categoryDesc",codeType = "FAVORITE")
-    private String CATEGORY;
+    private String category;
     private Integer count;
 }
