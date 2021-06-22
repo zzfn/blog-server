@@ -32,4 +32,9 @@
         <include refid="Base_Column_List"></include>
         from T_FAVORITE
     </select>
+    <select id="selectTags" resultType="org.owoto.vo.Labels">
+        select count(1) as count, CATEGORY
+        from T_FAVORITE
+        group by CATEGORY
+    </select>
 </mapper>

@@ -29,9 +29,17 @@ public class FavoriteController {
      */
     @Resource
     private FavoriteService favoriteService;
+
     @GetMapping("non/list")
-    public Object selectAll() {
-        return ResultUtil.success(favoriteService.list());
+    public Object selectAllList(String category) {
+        QueryWrapper<Favorite> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq(category!=null,"CATEGORY",category);
+        return ResultUtil.success(favoriteService.list(queryWrapper));
+    }
+
+    @GetMapping("non/allTag")
+    public Object selectAllTag() {
+        return ResultUtil.success(favoriteService.selectTags());
     }
 
     @GetMapping("non/page")
@@ -47,11 +55,13 @@ public class FavoriteController {
     public Object selectAll(@RequestParam String id) {
         return ResultUtil.success(favoriteService.getById(id));
     }
+
     @DeleteMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public Object removeById(@RequestParam String id) {
         return ResultUtil.success(favoriteService.removeById(id));
     }
+
     @PostMapping("save")
     @PreAuthorize("hasRole('ADMIN')")
     public Object saveOne(@RequestBody Favorite favorite) {
