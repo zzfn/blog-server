@@ -33,7 +33,7 @@
         from T_FAVORITE
     </select>
     <select id="selectTags" resultType="org.owoto.vo.Labels">
-        select count(1) as count, CATEGORY
+        select count(1) as count, CATEGORY as category
         from T_FAVORITE
         group by CATEGORY
     </select>
