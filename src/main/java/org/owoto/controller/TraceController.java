@@ -1,11 +1,13 @@
 package org.owoto.controller;
 
+import com.alibaba.druid.util.DruidWebUtils;
 import org.owoto.entity.Trace;
 import org.owoto.service.TraceService;
 import org.owoto.util.ResultUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * TRACE(Trace)表控制层
@@ -24,8 +26,11 @@ public class TraceController {
 
 
     @PostMapping("non/save")
-    public Object selectOne(@RequestBody Trace trace) {
+    public Object selectOne(@RequestBody Trace trace, HttpServletRequest request) {
         return ResultUtil.success(this.traceService.save(trace));
     }
-
+    @GetMapping("non/ip")
+    public Object selectOne(HttpServletRequest request) {
+        return ResultUtil.success(DruidWebUtils.getRemoteAddr(request));
+    }
 }
