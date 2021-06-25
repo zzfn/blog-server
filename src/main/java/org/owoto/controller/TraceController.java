@@ -3,6 +3,7 @@ package org.owoto.controller;
 import com.alibaba.druid.util.DruidWebUtils;
 import org.owoto.entity.Trace;
 import org.owoto.service.TraceService;
+import org.owoto.util.HttpUtil;
 import org.owoto.util.ResultUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,5 +33,9 @@ public class TraceController {
     @GetMapping("non/ip")
     public Object selectOne(HttpServletRequest request) {
         return ResultUtil.success(DruidWebUtils.getRemoteAddr(request));
+    }
+    @GetMapping("non/ips")
+    public Object selectOne() {
+        return ResultUtil.success(HttpUtil.getIp());
     }
 }

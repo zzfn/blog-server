@@ -1,5 +1,6 @@
 package org.owoto.util;
 
+import com.alibaba.druid.util.DruidWebUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -25,5 +26,11 @@ public class HttpUtil {
         } else {
             return null;
         }
+    }
+
+    public static String getIp() {
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
+                .getRequest();
+        return DruidWebUtils.getRemoteAddr(request);
     }
 }
