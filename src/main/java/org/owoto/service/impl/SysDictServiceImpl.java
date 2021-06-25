@@ -52,7 +52,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDict> impleme
     @Override
     @Cacheable(value = "dict", key = "#code")
     public List<SysDict> getDict(String code) {
-        return sysDictDao.selectList(new QueryWrapper<SysDict>().eq("TYPE_CODE", code));
+        return sysDictDao.selectList(new QueryWrapper<SysDict>().eq("TYPE_CODE", code).orderByDesc("ORDER_NUM"));
     }
 
     @Override

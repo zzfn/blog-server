@@ -20,6 +20,10 @@ public class SysDict extends BaseEntity{
     */
     private String name;
     /**
+     * 排序号
+     */
+    private Integer orderNum;
+    /**
     * 类型code
     */
     private String typeCode;
