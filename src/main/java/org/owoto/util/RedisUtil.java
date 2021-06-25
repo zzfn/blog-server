@@ -1,9 +1,8 @@
 package org.owoto.util;
 
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -599,7 +598,7 @@ public class RedisUtil {
     public Double incZSetValue(String key, String value, Long delta){
         return redisTemplate.opsForZSet().incrementScore(key, value, delta);
     }
-    public Object reverseRangeWithScores(String key, Long start, Long end){
+    public Set<ZSetOperations.TypedTuple<Object>> reverseRangeWithScores(String key, Long start, Long end){
         return redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
     }
 }

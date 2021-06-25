@@ -19,18 +19,16 @@ import org.owoto.util.HttpUtil;
 import org.owoto.util.RedisUtil;
 import org.owoto.util.ResultUtil;
 import org.owoto.vo.ArticleVO;
-import org.owoto.vo.PageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author zzf
@@ -97,7 +95,18 @@ public class ArticleController {
     @ApiOperation("排行榜")
     @GetMapping("non/hot")
     public Object listHotArticles() {
-        return ResultUtil.success(redisUtil.reverseRangeWithScores("views",0L,9L));
+        Collection ids=new ArrayList();
+        List<Double> num=new ArrayList();
+        Set<ZSetOperations.TypedTuple<Object>> typedTuple1 = redisUtil.reverseRangeWithScores("views", 0L, 9L);
+        typedTuple1.forEach(objectTypedTuple -> {
+            ids.add(objectTypedTuple.getValue());
+            num.add(objectTypedTuple.getScore());
+        });
+        List<Article> articles=articleService.listByIds(ids);
+        for (int i = 0; i < articles.size(); i++) {
+            articles.get(i).setViewCount(num.get(i).longValue());
+        }
+        return ResultUtil.success(articles);
     }
 
     @ApiOperation("文章总数")
