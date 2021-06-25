@@ -5,6 +5,7 @@ import org.owoto.entity.SysDictType;
 import org.owoto.util.ResultUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -48,6 +49,7 @@ public class DictTypeController {
      * @return
      */
     @PostMapping("saveDictType")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object saveDictType(@RequestBody SysDictType sysDictType) {
         sysDictType.setUpdateTime(null);
         if (null == sysDictType.getId() || null == sysDictTypeDao.selectById(sysDictType.getId())) {
@@ -63,6 +65,7 @@ public class DictTypeController {
      * @return
      */
     @DeleteMapping("removeDictType")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object removeDictType(@RequestBody SysDictType sysDictType) {
         return ResultUtil.success(sysDictTypeDao.deleteById(sysDictType.getId()));
     }

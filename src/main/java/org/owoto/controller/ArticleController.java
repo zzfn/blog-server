@@ -181,6 +181,7 @@ public class ArticleController {
     }
 
     @GetMapping("es/reset")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object reset() {
         articleESDao.deleteAll();
         return null;

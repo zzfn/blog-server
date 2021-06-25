@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,16 +25,19 @@ public class TalkController {
     TalkBotMapper talkBotMapper;
 
     @GetMapping("all")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object all() {
         return ResultUtil.success(talkBotMapper.selectList(null));
     }
 
     @PostMapping("save")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object add(@RequestBody TalkBot talkBot) {
         return ResultUtil.success(talkBotMapper.insert(talkBot));
     }
 
     @PostMapping("send")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object send(@RequestBody String msg, @RequestParam String id) {
         TalkBot talkBot = talkBotMapper.selectById(id);
         long timestamp = System.currentTimeMillis();

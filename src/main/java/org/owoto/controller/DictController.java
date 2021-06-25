@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -32,6 +33,7 @@ public class DictController {
      * @return null
      */
     @GetMapping("clearCache")
+    @PreAuthorize("hasRole('ADMIN')")
     @CacheEvict(value = "dict", allEntries = true)
     public Object clearCache() {
         return ResultUtil.success("成功");
@@ -79,6 +81,7 @@ public class DictController {
      * @return
      */
     @DeleteMapping("removeDict")
+    @PreAuthorize("hasRole('ADMIN')")
     @CacheEvict(value = "dict", allEntries = true)
     public Object removeDictType(@RequestBody RequestVO requestVo) {
         return ResultUtil.success(sysDictDao.deleteById(requestVo.getId()));
