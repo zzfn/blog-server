@@ -97,7 +97,7 @@ public class ArticleController {
     @ApiOperation("排行榜")
     @GetMapping("non/hot")
     public Object listHotArticles() {
-        return ResultUtil.success(redisUtil.getZSetRank("views", 0, -1));
+        return ResultUtil.success(redisUtil.reverseRangeWithScores("views",0L,9L));
     }
 
     @ApiOperation("文章总数")

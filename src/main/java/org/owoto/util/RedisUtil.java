@@ -599,5 +599,7 @@ public class RedisUtil {
     public Double incZSetValue(String key, String value, Long delta){
         return redisTemplate.opsForZSet().incrementScore(key, value, delta);
     }
-
+    public Object reverseRangeWithScores(String key, Long start, Long end){
+        return redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
+    }
 }
