@@ -15,6 +15,7 @@ import org.owoto.entity.ArticleEs;
 import org.owoto.mapper.ArticleDao;
 import org.owoto.mapper.ArticleESDao;
 import org.owoto.service.ArticleService;
+import org.owoto.util.HttpUtil;
 import org.owoto.util.RedisUtil;
 import org.owoto.util.ResultUtil;
 import org.owoto.vo.ArticleVO;
@@ -133,7 +134,11 @@ public class ArticleController {
         if (null == article || !article.getIsRelease()) {
             return ResultUtil.error("文章已下线");
         }
-        article.setViewCount(redisUtil.incZSetValue("views", id, 1L).longValue());
+
+        if(!redisUtil.hasKey("IP:"+ HttpUtil.getIp())){
+            redisUtil.set("IP:"+ HttpUtil.getIp(),1,3600);
+            article.setViewCount(redisUtil.incZSetValue("views", id, 1L).longValue());
+        }
         return ResultUtil.success(article);
     }
 
