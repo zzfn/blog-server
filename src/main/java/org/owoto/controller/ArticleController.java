@@ -135,7 +135,10 @@ public class ArticleController {
             return ResultUtil.error("文章已下线");
         }
 
-        if(!redisUtil.hasKey("IP:"+ HttpUtil.getIp())){
+        if(redisUtil.hasKey("IP:"+ HttpUtil.getIp())){
+            redisUtil.incr("IP:"+ HttpUtil.getIp(),1);
+            article.setViewCount(redisUtil.zScore("views",id).longValue());
+        }else {
             redisUtil.set("IP:"+ HttpUtil.getIp(),1,3600);
             article.setViewCount(redisUtil.incZSetValue("views", id, 1L).longValue());
         }
