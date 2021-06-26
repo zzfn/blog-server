@@ -1,10 +1,12 @@
 package org.owoto.controller;
 
 import com.alibaba.druid.util.DruidWebUtils;
+import org.owoto.component.Send;
 import org.owoto.entity.Trace;
 import org.owoto.service.TraceService;
 import org.owoto.util.HttpUtil;
 import org.owoto.util.ResultUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,7 +26,8 @@ public class TraceController {
      */
     @Resource
     private TraceService traceService;
-
+    @Autowired
+    private Send send;
 
     @PostMapping("non/save")
     public Object selectOne(@RequestBody Trace trace, HttpServletRequest request) {
@@ -37,5 +40,10 @@ public class TraceController {
     @GetMapping("non/ips")
     public Object selectOne() {
         return ResultUtil.success(HttpUtil.getIp());
+    }
+    @GetMapping("non/send")
+    public Object send(String request) {
+        send.post();
+        return ResultUtil.success(null);
     }
 }
