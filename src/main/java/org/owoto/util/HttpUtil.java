@@ -20,7 +20,7 @@ public class HttpUtil {
 
     public static String getUserId() {
         String token = getRequestHeader("authorization");
-        if (null != token) {
+        if (null != token&&token.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
             token = token.substring(JwtTokenUtil.TOKEN_PREFIX.length());
             return JwtTokenUtil.getUserIdFromToken(token);
         } else {
