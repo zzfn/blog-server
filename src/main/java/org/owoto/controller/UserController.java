@@ -1,8 +1,11 @@
 package org.owoto.controller;
 
 import com.alibaba.fastjson.JSON;
+import org.owoto.entity.LoginLog;
 import org.owoto.mapper.UserDao;
 import org.owoto.entity.User;
+import org.owoto.service.LoginLogService;
+import org.owoto.util.HttpUtil;
 import org.owoto.util.JwtTokenUtil;
 import org.owoto.util.RedisUtil;
 import org.owoto.util.ResultUtil;
@@ -42,6 +45,8 @@ public class UserController {
      */
     @Resource
     private UserDao userDao;
+    @Resource
+    private LoginLogService loginLogService;
     @Autowired
     private RedisUtil redisUtil;
 
@@ -52,7 +57,6 @@ public class UserController {
      * @return 登录结果
      */
     @PostMapping("non/login")
-    @PreAuthorize("hasRole('ANONYMOUS')")
     public Object login(@RequestBody LoginVO loginVO) {
         User user = userDao.selectOne(new QueryWrapper<User>().eq("USERNAME", loginVO.getUsername()));
         if (null != user) {
@@ -67,6 +71,10 @@ public class UserController {
                 tokenVO.setToken(token);
                 tokenVO.setRefreshToken(JwtTokenUtil.generateRefreshToken(map));
                 tokenVO.setExpired(JwtTokenUtil.EXPIRATION);
+                LoginLog loginLog=new LoginLog();
+                loginLog.setIp(HttpUtil.getIp());
+                loginLog.setUserId(user.getId());
+                loginLogService.save(loginLog);
                 return ResultUtil.success(tokenVO);
             }else {
                 return ResultUtil.error("密码错误");
