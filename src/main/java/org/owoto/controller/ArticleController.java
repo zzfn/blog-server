@@ -76,6 +76,9 @@ public class ArticleController {
             articleService.listByDb("");
             articleService.listByDb(article1.getTag());
         }
+        if(!article.getIsRelease()){
+            elasticsearchRestTemplate.delete(article.getId(), ArticleEs.class);
+        }
         return ResultUtil.success(article.getId());
     }
 
