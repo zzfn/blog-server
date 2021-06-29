@@ -193,7 +193,7 @@ public class ArticleController {
             if (searchHit.getHighlightField(TITLE).size() != 0) {
                 articleEs.setTitle(StringUtils.join(searchHit.getHighlightField(TITLE), " "));
             }
-            if (null != articleEs.getIsRelease()) {
+            if (articleEs.getIsRelease()) {
                 list.add(articleEs);
             }
         });
