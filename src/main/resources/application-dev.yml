@@ -1,4 +1,9 @@
 spring:
+  rabbitmq:
+    host: 113.31.126.209
+    port: 5672
+    username: guest
+    password: guest
   elasticsearch:
     rest:
       uris: 47.100.47.169:9200
