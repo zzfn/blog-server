@@ -76,9 +76,6 @@ public class ArticleController {
             articleService.listByDb("");
             articleService.listByDb(article1.getTag());
         }
-        if(!article.getIsRelease()){
-            elasticsearchRestTemplate.delete(article.getId(), ArticleEs.class);
-        }
         return ResultUtil.success(article.getId());
     }
 
@@ -170,7 +167,6 @@ public class ArticleController {
     public Object removeArticle(@PathVariable String id, @PathVariable String code) {
         articleService.listByDb("");
         articleService.listByDb(code);
-        elasticsearchRestTemplate.delete(id, ArticleEs.class);
         return ResultUtil.success(articleMapper.deleteById(id));
     }
 
@@ -206,4 +202,5 @@ public class ArticleController {
         articleESDao.deleteAll();
         return null;
     }
+
 }
