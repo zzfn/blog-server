@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 public class BaseEntity {
 
-    @TableId(value = "id",type= IdType.ASSIGN_UUID)
+    @TableId(value = "id",type= IdType.ASSIGN_ID)
     private String id;
 
     @TableField(fill = FieldFill.INSERT,select = false)
