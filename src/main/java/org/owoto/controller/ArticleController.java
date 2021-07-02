@@ -146,7 +146,13 @@ public class ArticleController {
 
         if(redisUtil.hasKey("IP:"+ HttpUtil.getIp())){
             redisUtil.incr("IP:"+ HttpUtil.getIp(),1);
-            article.setViewCount(redisUtil.zScore("views",id).longValue());
+            Double num=redisUtil.zScore("views",id);
+            if(null==num){
+                article.setViewCount(redisUtil.incZSetValue("views", id, 1L).longValue());
+            }else {
+                article.setViewCount(num.longValue());
+            }
+
         }else {
             redisUtil.set("IP:"+ HttpUtil.getIp(),1,3600);
             article.setViewCount(redisUtil.incZSetValue("views", id, 1L).longValue());
