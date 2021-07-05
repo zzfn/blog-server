@@ -195,7 +195,7 @@ public class ArticleController {
             if (searchHit.getHighlightField(TITLE).size() != 0) {
                 articleEs.setTitle(StringUtils.join(searchHit.getHighlightField(TITLE), " "));
             }
-            if (articleEs.getIsRelease()) {
+            if (articleEs.getIsRelease()&&articleEs.getIsDelete()==0) {
                 list.add(articleEs);
             }
         });
