@@ -18,10 +18,10 @@ public class BaseEntity {
     @TableId(value = "id",type= IdType.ASSIGN_ID)
     private String id;
 
-    @TableField(fill = FieldFill.INSERT,select = false)
+    @TableField(fill = FieldFill.INSERT)
     private String createBy;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE,select = false)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
 
     @TableField(fill = FieldFill.INSERT,jdbcType= JdbcType.TIMESTAMP)
@@ -30,7 +30,7 @@ public class BaseEntity {
     @TableField(fill = FieldFill.INSERT_UPDATE,jdbcType= JdbcType.TIMESTAMP,update = "now()")
     private Date updateTime;
 
-    @TableField(fill = FieldFill.INSERT,select = false)
+    @TableField(fill = FieldFill.INSERT)
     @TableLogic
     private Integer isDelete;
 }

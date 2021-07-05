@@ -195,7 +195,7 @@ public class ArticleController {
             if (searchHit.getHighlightField(TITLE).size() != 0) {
                 articleEs.setTitle(StringUtils.join(searchHit.getHighlightField(TITLE), " "));
             }
-            if (articleEs.getIsRelease()&&articleEs.getIsDelete()==0) {
+            if (articleEs.getIsRelease()==1&&articleEs.getIsDelete()==0) {
                 list.add(articleEs);
             }
         });
@@ -203,7 +203,7 @@ public class ArticleController {
     }
     @GetMapping("es/non/reset")
     public Object reset() {
-//        elasticsearchRestTemplate.createIndex(ArticleEs.class);
+        elasticsearchRestTemplate.createIndex(ArticleEs.class);
         elasticsearchRestTemplate.putMapping(ArticleEs.class);
         return null;
     }

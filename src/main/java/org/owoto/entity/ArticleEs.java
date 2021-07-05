@@ -1,16 +1,11 @@
 package org.owoto.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
-import org.owoto.config.Dict;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
-import java.util.Date;
 
 /**
  * @author zzfn
@@ -22,19 +17,19 @@ import java.util.Date;
 public class ArticleEs {
     @Id
     private String id;
-    @Field(type = FieldType.Text, analyzer = "ik_max_world")
+
+    @Field(type = FieldType.Text, analyzer = "ik_max_world", searchAnalyzer = "ik_smart")
     private String title;
-    @Field(type = FieldType.Text, analyzer = "ik_max_world")
+
+    @Field(type = FieldType.Text, analyzer = "ik_max_world", searchAnalyzer = "ik_smart")
     private String content;
-    @Field(type = FieldType.Integer, name = "is_release")
-    private Boolean isRelease;
-    @Field(index = false, type = FieldType.Keyword)
-    @Dict(target = "tagDesc", codeType = "TAG")
-    private String tag;
-    @Field(type = FieldType.Text, name = "tag_desc", analyzer = "ik_max_world")
+
+    @Field(type = FieldType.Text, name = "tag_desc", analyzer = "ik_max_world", searchAnalyzer = "ik_smart")
     private String tagDesc;
-    @Field(index = false, type = FieldType.Date, pattern = "YYYY-MM-DD", format = DateFormat.custom)
-    private Date createTime;
+
+    @Field(index = false, type = FieldType.Short, name = "is_release")
+    private Short isRelease;
+
     @Field(index = false, type = FieldType.Short, name = "is_delete")
-    private Integer isDelete;
+    private Short isDelete;
 }
