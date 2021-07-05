@@ -201,12 +201,22 @@ public class ArticleController {
         });
         return ResultUtil.success(list);
     }
-
-    @GetMapping("es/reset")
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("es/non/reset")
     public Object reset() {
-        articleESDao.deleteAll();
+//        elasticsearchRestTemplate.createIndex(ArticleEs.class);
+        elasticsearchRestTemplate.putMapping(ArticleEs.class);
         return null;
     }
+    @GetMapping("es/non/del")
+    public Object del() {
+        elasticsearchRestTemplate.deleteIndex(ArticleEs.class);
+        return null;
+    }
+//    @GetMapping("es/reset")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public Object reset() {
+//        articleESDao.deleteAll();
+//        return null;
+//    }
 
 }

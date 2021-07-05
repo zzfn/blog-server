@@ -26,16 +26,12 @@ public class ArticleEs {
     private String title;
     @Field(type = FieldType.Text, analyzer = "ik_max_world")
     private String content;
-    @Field(type = FieldType.Integer, name = "view_count")
-    private Double viewCount;
-    @Field(type = FieldType.Integer, name = "order_num")
-    private Double orderNum;
     @Field(type = FieldType.Integer, name = "is_release")
     private Boolean isRelease;
     @Field(index = false, type = FieldType.Keyword)
-    @Dict(target = "tagDesc",codeType = "TAG")
+    @Dict(target = "tagDesc", codeType = "TAG")
     private String tag;
-    @Field(index = false, type = FieldType.Keyword, name = "tag_desc")
+    @Field(type = FieldType.Text, name = "tag_desc", analyzer = "ik_max_world")
     private String tagDesc;
     @Field(index = false, type = FieldType.Date, pattern = "YYYY-MM-DD", format = DateFormat.custom)
     private Date createTime;
