@@ -34,6 +34,7 @@ public class TraceController {
 
     @PostMapping("non/save")
     public Object selectOne(@RequestBody Trace trace, HttpServletRequest request) {
+        trace.setIp(DruidWebUtils.getRemoteAddr(request));
         return ResultUtil.success(this.traceService.save(trace));
     }
     @GetMapping("non/ip")

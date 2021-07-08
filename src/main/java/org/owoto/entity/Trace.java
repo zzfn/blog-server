@@ -25,4 +25,10 @@ public class Trace extends BaseEntity {
      */
     private String type;
 
+    /**
+     * ip地址
+     */
+    private String ip;
+
+    private String userAgent;
 }
