@@ -1,7 +1,6 @@
 package org.owoto.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 
@@ -15,7 +14,7 @@ import java.util.Date;
 @Data
 public class BaseEntity {
 
-    @TableId(value = "id",type= IdType.ASSIGN_ID)
+    @TableId(value = "ID",type= IdType.ASSIGN_ID)
     private String id;
 
     @TableField(fill = FieldFill.INSERT)
