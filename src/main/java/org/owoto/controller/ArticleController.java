@@ -156,19 +156,11 @@ public class ArticleController {
         if (null == article || !article.getIsRelease()) {
             return ResultUtil.error("文章已下线");
         }
-
-        if (redisUtil.hasKey("IP:" + HttpUtil.getIp())) {
-            redisUtil.incr("IP:" + HttpUtil.getIp(), 1);
-            Double num = redisUtil.zScore("views", id);
-            if (null == num) {
-                article.setViewCount(redisUtil.incZSetValue("views", id, 1L).longValue());
-            } else {
-                article.setViewCount(num.longValue());
-            }
-
-        } else {
-            redisUtil.set("IP:" + HttpUtil.getIp(), 1, 3600);
-            article.setViewCount(redisUtil.incZSetValue("views", id, 1L).longValue());
+        Double num = redisUtil.zScore("views", id);
+        if(null==num){
+            article.setViewCount(1L);
+        }else {
+            article.setViewCount(num.longValue());
         }
         return ResultUtil.success(article);
     }
