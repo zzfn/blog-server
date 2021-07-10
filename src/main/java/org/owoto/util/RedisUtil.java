@@ -598,6 +598,10 @@ public class RedisUtil {
     public Double incZSetValue(String key, String value, Long delta){
         return redisTemplate.opsForZSet().incrementScore(key, value, delta);
     }
+
+    public Long zRemove(String key, Object... values) {
+        return redisTemplate.opsForZSet().remove(key, values);
+    }
     public Set<ZSetOperations.TypedTuple<Object>> reverseRangeWithScores(String key, Long start, Long end){
         return redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
     }

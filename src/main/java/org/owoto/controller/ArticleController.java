@@ -173,6 +173,7 @@ public class ArticleController {
     public Object removeArticle(@PathVariable String id, @PathVariable String code) {
         articleService.listByDb("");
         articleService.listByDb(code);
+        redisUtil.zRemove(id);
         return ResultUtil.success(articleMapper.deleteById(id));
     }
 
