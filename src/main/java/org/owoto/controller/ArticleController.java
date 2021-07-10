@@ -95,14 +95,14 @@ public class ArticleController {
     @ApiOperation("排行榜")
     @GetMapping("non/hot")
     public Object listHotArticles() {
-        Collection ids=new ArrayList();
-        List<Double> num=new ArrayList();
+        Collection ids = new ArrayList();
+        List<Double> num = new ArrayList();
         Set<ZSetOperations.TypedTuple<Object>> typedTuple1 = redisUtil.reverseRangeWithScores("views", 0L, 9L);
         typedTuple1.forEach(objectTypedTuple -> {
             ids.add(objectTypedTuple.getValue());
             num.add(objectTypedTuple.getScore());
         });
-        List<Article> articles=articleService.listByIds(ids);
+        List<Article> articles = articleService.listByIds(ids);
         for (int i = 0; i < articles.size(); i++) {
             articles.get(i).setViewCount(num.get(i).longValue());
         }
@@ -133,6 +133,19 @@ public class ArticleController {
         return ResultUtil.success(articleMapper.listLastUpdated());
     }
 
+    @ApiOperation("更新浏览量")
+    @GetMapping("non/updateViewed")
+    public Object updateViewed(@RequestParam String id) {
+        String isViewed = "isViewed:" + id + ":" + HttpUtil.getIp();
+        if (redisUtil.hasKey(isViewed)) {
+            return ResultUtil.success(false);
+        } else {
+            redisUtil.set(isViewed, 1, 3600L);
+            redisUtil.incZSetValue("viewCount", id, 1L);
+            return ResultUtil.success(true);
+        }
+    }
+
     @ApiOperation("根据id查询文章详情-前台")
     @GetMapping("non/{id}")
     public Object getArticle(@PathVariable("id") String id) {
@@ -144,17 +157,17 @@ public class ArticleController {
             return ResultUtil.error("文章已下线");
         }
 
-        if(redisUtil.hasKey("IP:"+ HttpUtil.getIp())){
-            redisUtil.incr("IP:"+ HttpUtil.getIp(),1);
-            Double num=redisUtil.zScore("views",id);
-            if(null==num){
+        if (redisUtil.hasKey("IP:" + HttpUtil.getIp())) {
+            redisUtil.incr("IP:" + HttpUtil.getIp(), 1);
+            Double num = redisUtil.zScore("views", id);
+            if (null == num) {
                 article.setViewCount(redisUtil.incZSetValue("views", id, 1L).longValue());
-            }else {
+            } else {
                 article.setViewCount(num.longValue());
             }
 
-        }else {
-            redisUtil.set("IP:"+ HttpUtil.getIp(),1,3600);
+        } else {
+            redisUtil.set("IP:" + HttpUtil.getIp(), 1, 3600);
             article.setViewCount(redisUtil.incZSetValue("views", id, 1L).longValue());
         }
         return ResultUtil.success(article);
@@ -196,18 +209,20 @@ public class ArticleController {
             if (searchHit.getHighlightField(TITLE).size() != 0) {
                 articleEs.setTitle(StringUtils.join(searchHit.getHighlightField(TITLE), " "));
             }
-            if (articleEs.getIsRelease()==1&&articleEs.getIsDelete()==0) {
+            if (articleEs.getIsRelease() == 1 && articleEs.getIsDelete() == 0) {
                 list.add(articleEs);
             }
         });
         return ResultUtil.success(list);
     }
+
     @GetMapping("es/non/reset")
     public Object reset() {
         elasticsearchRestTemplate.createIndex(ArticleEs.class);
         elasticsearchRestTemplate.putMapping(ArticleEs.class);
         return null;
     }
+
     @GetMapping("es/non/del")
     public Object del() {
         elasticsearchRestTemplate.deleteIndex(ArticleEs.class);
