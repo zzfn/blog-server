@@ -99,10 +99,13 @@ public class ArticleController {
         List<Double> num = new ArrayList();
         Set<ZSetOperations.TypedTuple<Object>> typedTuple1 = redisUtil.reverseRangeWithScores("viewCount", 0L, 9L);
         typedTuple1.forEach(objectTypedTuple -> {
-            ids.add(objectTypedTuple.getValue());
+            ids.add(objectTypedTuple.getValue().toString());
             num.add(objectTypedTuple.getScore());
         });
-        List<Article> articles = articleService.listByIds(ids);
+        List<Article> articles=new ArrayList<>();
+        ids.forEach(id->{
+            articles.add(articleService.getByCache(id.toString()));
+        });
         for (int i = 0; i < articles.size(); i++) {
             articles.get(i).setViewCount(num.get(i).longValue());
         }
@@ -156,7 +159,7 @@ public class ArticleController {
         if (null == article || !article.getIsRelease()) {
             return ResultUtil.error("文章已下线");
         }
-        Double num = redisUtil.zScore("views", id);
+        Double num = redisUtil.zScore("viewCount", id);
         if (null == num) {
             article.setViewCount(1L);
         } else {
