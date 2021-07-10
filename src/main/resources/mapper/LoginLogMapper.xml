@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.owoto.mapper.LoginLogMapper">
+<mapper namespace="com.zzf.mapper.LoginLogMapper">
 
     <resultMap id="BaseResultMap" type="com.zzf.entity.LoginLog">
             <id property="id" column="ID" jdbcType="VARCHAR"/>
