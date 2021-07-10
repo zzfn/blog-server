@@ -97,7 +97,7 @@ public class ArticleController {
     public Object listHotArticles() {
         Collection ids = new ArrayList();
         List<Double> num = new ArrayList();
-        Set<ZSetOperations.TypedTuple<Object>> typedTuple1 = redisUtil.reverseRangeWithScores("views", 0L, 9L);
+        Set<ZSetOperations.TypedTuple<Object>> typedTuple1 = redisUtil.reverseRangeWithScores("viewCount", 0L, 9L);
         typedTuple1.forEach(objectTypedTuple -> {
             ids.add(objectTypedTuple.getValue());
             num.add(objectTypedTuple.getScore());
