@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.zzf</groupId>
-    <artifactId>blog</artifactId>
+    <artifactId>blog-server</artifactId>
     <version>1.0.0</version>
     <name>blog-server</name>
     <description>Demo project for Spring Boot</description>
