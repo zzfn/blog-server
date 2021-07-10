@@ -16,6 +16,6 @@ public class Send {
     private RabbitTemplate rabbitTemplate;
 
     public void post() {
-        this.rabbitTemplate.convertAndSend("hello","hello"+new Date());
+        this.rabbitTemplate.convertAndSend("blog","hello"+new Date());
     }
 }

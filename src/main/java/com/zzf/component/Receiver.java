@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @date 2021-06-27 1:06 上午
  */
 @Component
-@RabbitListener(queues = "hello")
+@RabbitListener(queues = "blog")
 @Slf4j
 public class Receiver {
     @RabbitHandler
