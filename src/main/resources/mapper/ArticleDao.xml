@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.owoto.mapper.ArticleDao">
-    <select id="overviewTags" resultType="org.owoto.vo.Tags">
+    <select id="overviewTags" resultType="com.zzf.vo.Tags">
         select count(*) as count, tag as code
         from T_ARTICLE
         where IS_DELETE = 0
@@ -9,7 +9,7 @@
         group by TAG
         order by count desc
     </select>
-    <select id="overviewCount" resultType="org.owoto.vo.LabelValueVO">
+    <select id="overviewCount" resultType="com.zzf.vo.LabelValueVO">
         select count(*) as value, '总数' as label
         from T_ARTICLE
         where IS_RELEASE = 1
@@ -33,7 +33,7 @@
           and IS_RELEASE = 1
           and IS_DELETE = 0
     </select>
-    <select id="listArticle" resultType="org.owoto.entity.Article">
+    <select id="listArticle" resultType="com.zzf.entity.Article">
         SELECT T_ARTICLE.id,
         T_ARTICLE.title,
         T_ARTICLE.tag,
@@ -52,7 +52,7 @@
         ORDER BY T_ARTICLE.ORDER_NUM DESC,
         T_ARTICLE.create_time DESC
     </select>
-    <select id="getTags" resultType="org.owoto.vo.Tags">
+    <select id="getTags" resultType="com.zzf.vo.Tags">
         SELECT count(TAG) AS count,
                SYS_DICT.CODE AS code,
                SYS_DICT.NAME AS tag
@@ -63,7 +63,7 @@
         GROUP BY SYS_DICT.NAME,
             SYS_DICT.CODE
     </select>
-    <select id="getArchives" resultType="org.owoto.entity.ArticleMini">
+    <select id="getArchives" resultType="com.zzf.entity.ArticleMini">
         select id,TITLE,CREATE_TIME,TAG from T_ARTICLE where IS_DELETE=0
         and IS_RELEASE=1
         <if test="code != null and code != ''">
@@ -71,7 +71,7 @@
         </if>
         ORDER BY CREATE_TIME DESC
     </select>
-    <select id="listLastUpdated" resultType="org.owoto.entity.ArticleMini">
+    <select id="listLastUpdated" resultType="com.zzf.entity.ArticleMini">
         select TITLE, ID, UPDATE_TIME
         from T_ARTICLE
         where IS_DELETE = 0
@@ -79,7 +79,7 @@
         order by UPDATE_TIME desc
             limit 5
     </select>
-    <select id="getArticle" parameterType="string" resultType="org.owoto.entity.Article">
+    <select id="getArticle" parameterType="string" resultType="com.zzf.entity.Article">
         SELECT ARTICLE.ID,
                ARTICLE.TITLE,
                ARTICLE.CONTENT,

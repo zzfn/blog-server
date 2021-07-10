@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.owoto.mapper.UserDao">
-    <select id="getUser" resultType="org.owoto.entity.User">
+    <select id="getUser" resultType="com.zzf.entity.User">
         select u.ID as id,
                u.USERNAME as username,
                u.AVATAR as avatar,
