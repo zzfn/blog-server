@@ -136,7 +136,7 @@ public class ArticleController {
     @ApiOperation("更新浏览量")
     @GetMapping("non/updateViewed")
     public Object updateViewed(@RequestParam String id) {
-        String isViewed = "isViewed:" + id + ":" + HttpUtil.getIp();
+        String isViewed = "isViewed::" + HttpUtil.getIp() + "::" + id;
         if (redisUtil.hasKey(isViewed)) {
             return ResultUtil.success(false);
         } else {
@@ -157,9 +157,9 @@ public class ArticleController {
             return ResultUtil.error("文章已下线");
         }
         Double num = redisUtil.zScore("views", id);
-        if(null==num){
+        if (null == num) {
             article.setViewCount(1L);
-        }else {
+        } else {
             article.setViewCount(num.longValue());
         }
         return ResultUtil.success(article);
