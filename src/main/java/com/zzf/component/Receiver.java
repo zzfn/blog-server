@@ -12,8 +12,9 @@ import org.springframework.stereotype.Component;
  * @author zzfn
  * @date 2021-06-27 1:06 上午
  */
+
 @Component
-@RabbitListener(queues = "blog")
+@RabbitListener(queues = "${queue}")
 @Slf4j
 public class Receiver {
     @Autowired
