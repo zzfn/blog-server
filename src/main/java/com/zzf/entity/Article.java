@@ -4,13 +4,14 @@ import com.zzf.config.Dict;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
+import java.io.Serializable;
 
 
 /**
  * @author zzf
  */
 @Data
-public class Article extends BaseEntity {
+public class Article extends BaseEntity implements Serializable {
 
     /**
      * title

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import java.util.Date;
  * @create: 2020/03/23 16:50
  */
 @Data
-public class BaseEntity {
+public class BaseEntity implements Serializable {
 
     @TableId(value = "ID",type= IdType.ASSIGN_ID)
     private String id;

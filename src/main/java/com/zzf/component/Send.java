@@ -1,5 +1,6 @@
 package com.zzf.component;
 
+import com.zzf.entity.Article;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ public class Send {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void post() {
-        this.rabbitTemplate.convertAndSend("blog","hello"+new Date());
+    public void post(Article article) {
+        this.rabbitTemplate.convertAndSend("blog",article);
     }
 }

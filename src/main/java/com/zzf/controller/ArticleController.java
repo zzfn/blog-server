@@ -3,6 +3,7 @@ package com.zzf.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zzf.component.Send;
 import com.zzf.entity.Article;
 import com.zzf.entity.ArticleEs;
 import com.zzf.mapper.ArticleESDao;
@@ -52,6 +53,8 @@ public class ArticleController {
     private ArticleESDao articleESDao;
     @Autowired
     RedisUtil redisUtil;
+    @Autowired
+    private Send send;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("saveArticle")
@@ -59,6 +62,9 @@ public class ArticleController {
     public Object saveArticle(@RequestBody Article article) {
         // 执行保存逻辑
         articleService.saveOrUpdate(article);
+        if(article.getIsRelease()){
+            send.post(article);
+        }
         /**
          * 刷新文章缓存,如果发布了就刷新
          * 刷新列表缓存的逻辑
@@ -66,16 +72,16 @@ public class ArticleController {
          * 标题改变
          * 以及删除
          */
-        String ak = "ARTICLE_DETAIL::" + article.getId();
-        boolean b2 = redisUtil.hasKey(ak);
-        Article article0 = articleService.getByCache(article.getId());
-        Article article1 = articleService.getByDb(article.getId());
-        boolean b0 = article0.getTitle().equals(article1.getTitle());
-        boolean b1 = article0.getIsRelease().equals(article1.getIsRelease());
-        if (!b0 || !b1 || !b2) {
-            articleService.listByDb("");
-            articleService.listByDb(article1.getTag());
-        }
+//        String ak = "ARTICLE_DETAIL::" + article.getId();
+//        boolean b2 = redisUtil.hasKey(ak);
+//        Article article0 = articleService.getByCache(article.getId());
+//        Article article1 = articleService.getByDb(article.getId());
+//        boolean b0 = article0.getTitle().equals(article1.getTitle());
+//        boolean b1 = article0.getIsRelease().equals(article1.getIsRelease());
+//        if (!b0 || !b1 || !b2) {
+//            articleService.listByDb("");
+//            articleService.listByDb(article1.getTag());
+//        }
         return ResultUtil.success(article.getId());
     }
 

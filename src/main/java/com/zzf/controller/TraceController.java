@@ -46,7 +46,7 @@ public class TraceController {
     }
     @GetMapping("non/send")
     public Object send(String request) {
-        send.post();
+//        send.post();
         return ResultUtil.success(null);
     }
     @GetMapping("server/info")

@@ -1,8 +1,11 @@
 package com.zzf.component;
 
+import com.zzf.entity.Article;
+import com.zzf.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,8 +16,15 @@ import org.springframework.stereotype.Component;
 @RabbitListener(queues = "blog")
 @Slf4j
 public class Receiver {
+    @Autowired
+    ArticleService articleService;
+
     @RabbitHandler
-    public void receiveMessage(String hello) {
-        log.info(hello);
+    public void receiveMessage(Article article) {
+        log.info("开始刷新id-{}有关的缓存", article.getId());
+        articleService.getByDb(article.getId());
+        articleService.listByDb("");
+        articleService.listByDb(article.getTag());
+        log.info("结束刷新id-{}有关的缓存", article.getId());
     }
 }
