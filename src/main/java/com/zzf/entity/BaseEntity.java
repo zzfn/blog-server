@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -24,10 +25,10 @@ public class BaseEntity {
     private String updateBy;
 
     @TableField(fill = FieldFill.INSERT,jdbcType= JdbcType.TIMESTAMP)
-    private Date createTime;
+    private LocalDateTime createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE,jdbcType= JdbcType.TIMESTAMP,update = "now()")
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     @TableField(fill = FieldFill.INSERT)
     @TableLogic
