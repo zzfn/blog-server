@@ -131,7 +131,7 @@ public class ArticleController {
     }
 
     @ApiOperation("点赞")
-    @GetMapping("non/star")
+    @PostMapping("non/star")
     public Object star(@RequestParam String id) {
         String isStared = "isStared::" + HttpUtil.getIp() + "::" + id;
         if (redisUtil.hasKey(isStared)) {
@@ -158,6 +158,12 @@ public class ArticleController {
             article.setViewCount(1L);
         } else {
             article.setViewCount(num.longValue());
+        }
+        Double num1 = redisUtil.zScore("starCount", id);
+        if (null == num1) {
+            article.setStarCount(0L);
+        } else {
+            article.setStarCount(num1.longValue());
         }
         return ResultUtil.success(article);
     }
