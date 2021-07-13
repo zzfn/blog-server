@@ -1,14 +1,15 @@
 package com.zzf.controller;
 
-import com.alibaba.druid.util.DruidWebUtils;
 import com.alibaba.fastjson.JSON;
-import com.zzf.component.Send;
 import com.zzf.entity.Trace;
 import com.zzf.util.HttpUtil;
-import com.zzf.service.TraceService;
 import com.zzf.util.ResultUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
@@ -21,38 +22,31 @@ import javax.servlet.http.HttpServletRequest;
  * @since 2021-06-25 16:22:10
  */
 @RestController
+@Slf4j
 @RequestMapping("trace")
 public class TraceController {
     /**
      * 服务对象
      */
     @Resource
-    private TraceService traceService;
-    @Autowired
-    private Send send;
+    private MongoTemplate mongoTemplate;
 
-    @PostMapping("non/save")
-    public Object selectOne(@RequestBody Trace trace, HttpServletRequest request) {
-        trace.setIp(DruidWebUtils.getRemoteAddr(request));
-        return ResultUtil.success(this.traceService.save(trace));
-    }
+    @ApiOperation("ip查询")
     @GetMapping("non/ip")
     public Object selectOne(HttpServletRequest request) {
-        return ResultUtil.success(DruidWebUtils.getRemoteAddr(request));
-    }
-    @GetMapping("non/ips")
-    public Object selectOne() {
         return ResultUtil.success(HttpUtil.getIp());
     }
-    @GetMapping("non/send")
-    public Object send(String request) {
-//        send.post();
-        return ResultUtil.success(null);
+
+    @GetMapping("non/list")
+    public Object send() {
+        return ResultUtil.success(mongoTemplate.findAll(Trace.class, "logs"));
     }
+
+    @ApiOperation("服务器信息")
     @GetMapping("server/info")
-    public Object sys(){
+    public Object sys() {
         RestTemplate restTemplate = new RestTemplate();
-        String res=restTemplate.getForObject("http://47.100.47.169/json/stats.json",String.class);
+        String res = restTemplate.getForObject("http://47.100.47.169/json/stats.json", String.class);
         return ResultUtil.success(JSON.parse(res));
     }
 }
