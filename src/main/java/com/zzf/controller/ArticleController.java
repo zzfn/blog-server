@@ -130,6 +130,19 @@ public class ArticleController {
         }
     }
 
+    @ApiOperation("点赞")
+    @GetMapping("non/star")
+    public Object star(@RequestParam String id) {
+        String isStared = "isStared::" + HttpUtil.getIp() + "::" + id;
+        if (redisUtil.hasKey(isStared)) {
+            return ResultUtil.success(false);
+        } else {
+            redisUtil.set(isViewed, 1);
+            redisUtil.incZSetValue("starCount", id, 1L);
+            return ResultUtil.success(true);
+        }
+    }
+
     @ApiOperation("根据id查询文章详情-前台")
     @GetMapping("non/{id}")
     public Object getArticle(@PathVariable("id") String id) {
