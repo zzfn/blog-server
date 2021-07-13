@@ -137,7 +137,7 @@ public class ArticleController {
         if (redisUtil.hasKey(isStared)) {
             return ResultUtil.success(false);
         } else {
-            redisUtil.set(isViewed, 1);
+            redisUtil.set(isStared, 1);
             redisUtil.incZSetValue("starCount", id, 1L);
             return ResultUtil.success(true);
         }
