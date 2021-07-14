@@ -1,6 +1,7 @@
 package com.zzf.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.zzf.component.IgnoreAuth;
 import com.zzf.entity.Trace;
 import com.zzf.util.HttpUtil;
 import com.zzf.util.ResultUtil;
@@ -32,7 +33,8 @@ public class TraceController {
     private MongoTemplate mongoTemplate;
 
     @ApiOperation("ip查询")
-    @GetMapping("non/ip")
+    @GetMapping("ip")
+    @IgnoreAuth
     public Object selectOne(HttpServletRequest request) {
         return ResultUtil.success(HttpUtil.getIp());
     }
