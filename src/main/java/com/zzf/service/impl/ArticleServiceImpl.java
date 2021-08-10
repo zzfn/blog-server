@@ -7,6 +7,7 @@ import com.zzf.mapper.ArticleDao;
 import com.zzf.service.ArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
     }
 
     @Override
-    @Cacheable(value = "ARTICLE_DETAIL", key = "#id")
+    @CacheEvict(value = "ARTICLE_DETAIL", key = "#id")
     public Object delByDb(String id) {
         return articleDao.deleteById(id);
     }
