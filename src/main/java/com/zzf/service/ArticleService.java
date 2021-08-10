@@ -18,6 +18,12 @@ public interface ArticleService extends IService<Article> {
     Article getByCache(String id);
 
     /**
+     * 数据库和redis删除缓存
+     * @param id 文章id
+     * @return 数据库和redis删除缓存
+     */
+    Object delByDb(String id);
+    /**
      * 从数据库查找文章并缓存
      * @param id 文章id
      * @return 返回文章详情

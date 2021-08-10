@@ -28,6 +28,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
     }
 
     @Override
+    @Cacheable(value = "ARTICLE_DETAIL", key = "#id")
+    public Object delByDb(String id) {
+        return articleDao.deleteById(id);
+    }
+
+    @Override
     @CachePut(value = "ARTICLE_DETAIL", key = "#id")
     public Article getByDb(String id) {
         return articleDao.selectById(id);
