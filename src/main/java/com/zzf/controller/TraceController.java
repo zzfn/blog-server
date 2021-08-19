@@ -39,7 +39,8 @@ public class TraceController {
         return ResultUtil.success(HttpUtil.getIp());
     }
 
-    @GetMapping("non/list")
+    @GetMapping("list")
+    @IgnoreAuth
     public Object send() {
         return ResultUtil.success(mongoTemplate.findAll(Trace.class, "logs"));
     }
