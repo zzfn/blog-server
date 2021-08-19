@@ -7,7 +7,9 @@ import com.zzf.util.HttpUtil;
 import com.zzf.util.ResultUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +44,9 @@ public class TraceController {
     @GetMapping("list")
     @IgnoreAuth
     public Object send() {
-        return ResultUtil.success(mongoTemplate.findAll(Trace.class, "logs"));
+        Query query=new Query();
+        query.with(Sort.by("time").descending());
+        return ResultUtil.success(mongoTemplate.find(query,Trace.class, "logs"));
     }
 
     @ApiOperation("服务器信息")
