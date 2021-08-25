@@ -170,6 +170,7 @@ public class ArticleController {
 
     @ApiOperation("根据id查询文章详情-后台")
     @GetMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object getArticleAdmin(@PathVariable("id") String id) {
         Article article = articleService.getByDb(id);
         return ResultUtil.success(article);
