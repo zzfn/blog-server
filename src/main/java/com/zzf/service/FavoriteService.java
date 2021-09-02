@@ -10,6 +10,6 @@ import java.util.List;
  *
  */
 public interface FavoriteService extends IService<Favorite> {
-    List<Favorite> selectFavorites();
+    List<Favorite> getAllFavorite();
     List<Labels> selectTags();
 }

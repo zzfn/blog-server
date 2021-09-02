@@ -4,6 +4,7 @@ package com.zzf.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zzf.component.IgnoreAuth;
 import com.zzf.entity.Favorite;
 import com.zzf.service.FavoriteService;
 import com.zzf.util.ResultUtil;
@@ -28,11 +29,10 @@ public class FavoriteController {
     @Resource
     private FavoriteService favoriteService;
 
-    @GetMapping("non/list")
-    public Object selectAllList(String category) {
-        QueryWrapper<Favorite> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq(category!=null,"CATEGORY",category);
-        return ResultUtil.success(favoriteService.list(queryWrapper));
+    @GetMapping("list")
+    @IgnoreAuth
+    public Object selectAllList() {
+        return ResultUtil.success(favoriteService.getAllFavorite());
     }
 
     @GetMapping("non/allTag")

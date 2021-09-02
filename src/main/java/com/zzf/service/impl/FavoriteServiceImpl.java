@@ -6,6 +6,7 @@ import com.zzf.service.FavoriteService;
 import com.zzf.mapper.FavoriteMapper;
 import com.zzf.vo.Labels;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +19,11 @@ public class FavoriteServiceImpl extends ServiceImpl<FavoriteMapper, Favorite>
 implements FavoriteService{
     @Autowired
     FavoriteMapper favoriteMapper;
+
     @Override
-    public List<Favorite> selectFavorites() {
-        return favoriteMapper.selectFavorites();
+    @Cacheable(value = "ALL_FAVORITE")
+    public List<Favorite> getAllFavorite() {
+        return favoriteMapper.selectList(null);
     }
 
     @Override
