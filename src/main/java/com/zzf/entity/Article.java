@@ -27,9 +27,6 @@ public class Article extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private Long viewCount;
 
-    @TableField(exist = false)
-    private Long starCount;
-
     private Integer orderNum;
 
     private Boolean isRelease;

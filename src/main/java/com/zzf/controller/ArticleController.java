@@ -54,9 +54,10 @@ public class ArticleController {
     @Autowired
     private Send send;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("saveArticle")
+
+    @PostMapping("admin/save")
     @ApiOperation("保存或修改文章")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object saveArticle(@RequestBody Article article) {
         articleService.saveOrUpdate(article);
         send.post(article);
@@ -158,12 +159,6 @@ public class ArticleController {
             article.setViewCount(1L);
         } else {
             article.setViewCount(num.longValue());
-        }
-        Double num1 = redisUtil.zScore("starCount", id);
-        if (null == num1) {
-            article.setStarCount(0L);
-        } else {
-            article.setStarCount(num1.longValue());
         }
         return ResultUtil.success(article);
     }

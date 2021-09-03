@@ -6,12 +6,10 @@ import org.apache.ibatis.type.JdbcType;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
+
 
 /**
- * @program: jello
- * @author: nanaouyang
- * @create: 2020/03/23 16:50
+ * @author chenchen
  */
 @Data
 public class BaseEntity implements Serializable {
