@@ -3,6 +3,7 @@ package com.zzf.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zzf.component.IgnoreAuth;
 import com.zzf.component.Send;
 import com.zzf.entity.Article;
 import com.zzf.entity.ArticleEs;
@@ -10,6 +11,7 @@ import com.zzf.mapper.ArticleESDao;
 import com.zzf.util.HttpUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.ArticleVO;
+import com.zzf.vo.PageVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -53,8 +55,18 @@ public class ArticleController {
     RedisUtil redisUtil;
     @Autowired
     private Send send;
+    @GetMapping("page")
+    @ApiOperation("文章分页列表")
+    @IgnoreAuth
+    public Object pageArticles(PageVO pageVO) {
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq( "IS_RELEASE", 1).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
+        IPage<Article> page = new Page<>(pageVO.getCurrent(), pageVO.getPageSize());
+        IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
+        return ResultUtil.success(pageList);
+    }
 
-
+    //后台
     @PostMapping("admin/save")
     @ApiOperation("保存或修改文章")
     @PreAuthorize("hasRole('ADMIN')")
@@ -63,6 +75,8 @@ public class ArticleController {
         send.post(article);
         return ResultUtil.success(article.getId());
     }
+
+
 
     @ApiOperation("文章分页列表")
     @GetMapping("non/page")
@@ -92,12 +106,6 @@ public class ArticleController {
             articles.get(i).setViewCount(num.get(i).longValue());
         }
         return ResultUtil.success(articles);
-    }
-
-    @ApiOperation("文章总数")
-    @GetMapping("countArticles")
-    public Object countArticles() {
-        return ResultUtil.success(articleMapper.selectCount(null));
     }
 
     @ApiOperation("文章分类")
