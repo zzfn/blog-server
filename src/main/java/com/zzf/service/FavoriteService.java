@@ -11,5 +11,6 @@ import java.util.List;
  */
 public interface FavoriteService extends IService<Favorite> {
     List<Favorite> getAllFavorite();
+    List<Favorite> refreshAllFavorite();
     List<Labels> selectTags();
 }

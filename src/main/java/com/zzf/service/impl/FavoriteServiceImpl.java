@@ -6,6 +6,7 @@ import com.zzf.service.FavoriteService;
 import com.zzf.mapper.FavoriteMapper;
 import com.zzf.vo.Labels;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,12 @@ implements FavoriteService{
     @Override
     @Cacheable(value = "ALL_FAVORITE")
     public List<Favorite> getAllFavorite() {
+        return favoriteMapper.selectList(null);
+    }
+
+    @Override
+    @CachePut(value = "ALL_FAVORITE")
+    public List<Favorite> refreshAllFavorite() {
         return favoriteMapper.selectList(null);
     }
 

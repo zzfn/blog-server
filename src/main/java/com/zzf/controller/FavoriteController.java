@@ -64,6 +64,7 @@ public class FavoriteController {
     @PreAuthorize("hasRole('ADMIN')")
     public Object saveOne(@RequestBody Favorite favorite) {
         this.favoriteService.saveOrUpdate(favorite);
+        this.favoriteService.refreshAllFavorite();
         return ResultUtil.success(favorite.getId());
     }
 }
