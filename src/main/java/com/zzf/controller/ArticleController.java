@@ -66,7 +66,6 @@ public class ArticleController {
         return ResultUtil.success(pageList);
     }
 
-    //后台
     @PostMapping("admin/save")
     @ApiOperation("保存或修改文章")
     @PreAuthorize("hasRole('ADMIN')")

@@ -79,6 +79,11 @@
         order by UPDATE_TIME desc
             limit 5
     </select>
+    <update id="refresh" parameterType="com.zzf.entity.Article">
+        update t_article
+        set id = #{id}
+        where title = #{title}
+    </update>
     <select id="getArticle" parameterType="string" resultType="com.zzf.entity.Article">
         SELECT ARTICLE.ID,
                ARTICLE.TITLE,
