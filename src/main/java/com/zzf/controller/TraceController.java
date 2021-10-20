@@ -1,6 +1,5 @@
 package com.zzf.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.zzf.component.IgnoreAuth;
 import com.zzf.entity.Trace;
 import com.zzf.util.HttpUtil;
@@ -19,7 +18,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
@@ -27,7 +25,6 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -85,7 +82,6 @@ public class TraceController {
     }
 
     @GetMapping("list")
-    @IgnoreAuth
     public Object list(PageVO pageVO) {
         Query query = new Query();
         long count=mongoTemplate.count(query, Trace.class,"logs");
