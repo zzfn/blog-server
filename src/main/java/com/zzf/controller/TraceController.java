@@ -5,6 +5,7 @@ import com.zzf.component.IgnoreAuth;
 import com.zzf.entity.Trace;
 import com.zzf.util.HttpUtil;
 import com.zzf.util.ResultUtil;
+import com.zzf.vo.PageVO;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import io.swagger.annotations.ApiOperation;
@@ -14,12 +15,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,7 +29,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -87,10 +87,16 @@ public class TraceController {
 
     @GetMapping("list")
     @IgnoreAuth
-    public Object send() {
+    public Object send(PageVO pageVO) {
         Query query = new Query();
+        query.limit(pageVO.getPageSize());
+        query.skip((long) (pageVO.getCurrent() - 1) * pageVO.getPageSize());
         query.with(Sort.by("time").descending());
-        return ResultUtil.success(mongoTemplate.find(query, Trace.class, "logs"));
+        long count=mongoTemplate.count(query, Trace.class,"logs");
+        Map<Object, Object> map=new HashMap<>();
+        map.put("count",count);
+        map.put("list",mongoTemplate.find(query, Trace.class, "logs"));
+        return ResultUtil.success(map);
     }
 
     @ApiOperation("服务器信息")
