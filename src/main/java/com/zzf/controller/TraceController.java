@@ -89,10 +89,10 @@ public class TraceController {
     @IgnoreAuth
     public Object send(PageVO pageVO) {
         Query query = new Query();
+        long count=mongoTemplate.count(query, Trace.class,"logs");
         query.limit(pageVO.getPageSize());
         query.skip((long) (pageVO.getCurrent() - 1) * pageVO.getPageSize());
         query.with(Sort.by("time").descending());
-        long count=mongoTemplate.count(query, Trace.class,"logs");
         Map<Object, Object> map=new HashMap<>();
         map.put("count",count);
         map.put("list",mongoTemplate.find(query, Trace.class, "logs"));
