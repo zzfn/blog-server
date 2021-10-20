@@ -18,10 +18,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
@@ -30,6 +27,8 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,7 +86,7 @@ public class TraceController {
 
     @GetMapping("list")
     @IgnoreAuth
-    public Object send(PageVO pageVO) {
+    public Object list(PageVO pageVO) {
         Query query = new Query();
         long count=mongoTemplate.count(query, Trace.class,"logs");
         query.limit(pageVO.getPageSize());
@@ -99,11 +98,11 @@ public class TraceController {
         return ResultUtil.success(map);
     }
 
-    @ApiOperation("服务器信息")
-    @GetMapping("server/info")
-    public Object sys() {
-        RestTemplate restTemplate = new RestTemplate();
-        String res = restTemplate.getForObject("http://47.100.47.169/json/stats.json", String.class);
-        return ResultUtil.success(JSON.parse(res));
+    @PostMapping("save")
+    @IgnoreAuth
+    public Object save(@RequestBody Trace trace) {
+        trace.setIp(HttpUtil.getIp());
+        trace.setTime(new Date());
+        return ResultUtil.success(mongoTemplate.insert(trace,"logs"));
     }
 }
