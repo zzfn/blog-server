@@ -9,6 +9,9 @@ import java.util.Date;
 @TableName(value ="T_TRACE")
 @Data
 public class Trace {
+    private String name;
+
+    private String value;
 
     private String browser;
 
@@ -27,4 +30,5 @@ public class Trace {
     private String visitorId;
 
     private String referrer;
+
 }
