@@ -9,11 +9,25 @@ import java.util.Date;
 @TableName(value ="T_TRACE")
 @Data
 public class Trace {
-
+    /**
+     * 埋点类型
+     */
+    private String name;
+    /**
+     * 值
+     */
+    private String value;
+    /**
+     * 浏览器类型
+     */
     private String browser;
-
+    /**
+     * 浏览器版本
+     */
     private String browserVersion;
-
+    /**
+     * ip地址
+     */
     private String ip;
 
     private String os;
@@ -27,4 +41,5 @@ public class Trace {
     private String visitorId;
 
     private String referrer;
+
 }
