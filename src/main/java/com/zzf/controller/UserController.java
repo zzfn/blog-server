@@ -59,23 +59,23 @@ public class UserController {
     public Object login(@RequestBody LoginVO loginVO) {
         User user = userDao.selectOne(new QueryWrapper<User>().eq("USERNAME", loginVO.getUsername()));
         if (null != user) {
-            BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
-            if(bCryptPasswordEncoder.matches(loginVO.getPassword(),user.getPassword())){
-                Map<String,Object> map=new HashMap<>();
-                map.put("username",user.getUsername());
-                map.put("uid",user.getId());
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            if (bCryptPasswordEncoder.matches(loginVO.getPassword(), user.getPassword())) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("username", user.getUsername());
+                map.put("uid", user.getId());
                 String token = JwtTokenUtil.generateToken(map);
                 redisUtil.set(user.getId(), token, JwtTokenUtil.EXPIRATION);
-                TokenVO tokenVO=new TokenVO();
+                TokenVO tokenVO = new TokenVO();
                 tokenVO.setToken(token);
                 tokenVO.setRefreshToken(JwtTokenUtil.generateRefreshToken(map));
                 tokenVO.setExpired(JwtTokenUtil.EXPIRATION);
-                LoginLog loginLog=new LoginLog();
+                LoginLog loginLog = new LoginLog();
                 loginLog.setIp(HttpUtil.getIp());
                 loginLog.setUserId(user.getId());
                 loginLogService.save(loginLog);
                 return ResultUtil.success(tokenVO);
-            }else {
+            } else {
                 return ResultUtil.error("密码错误");
             }
         } else {
@@ -85,8 +85,6 @@ public class UserController {
 
     /**
      * 注册
-     * @param user
-     * @return
      */
     @PostMapping("register")
     public Object register(@RequestBody User user) {
@@ -97,48 +95,14 @@ public class UserController {
 
     /**
      * 注销
-     * @return
      */
     @PostMapping("logout")
     public Object logout() {
         return ResultUtil.success(null);
     }
-    /**
-     * 微信登录
-     *
-     * @param code
-     * @return
-     */
-    @GetMapping("wxLogin")
-    public Object wxLogin(String code) {
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        HttpGet get = new HttpGet("https://api.weixin.qq.com/sns/jscode2session?appid=wx1f2446ebdbed4405&secret=efe6ebfccacd94cb2c2a83f14873ecac&grant_type=authorization_code&js_code=" + code);
-        try {
-            HttpResponse response = httpClient.execute(get);
-            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                String res = EntityUtils.toString(response.getEntity());
-                String openid = JSON.parseObject(res).get("openid").toString();
-                if (0 == userDao.selectCount(new QueryWrapper<User>().eq("OPENID", openid))) {
-                    User user = new User();
-                    user.setOpenid(openid);
-                    userDao.insert(user);
-                }
-                String uuid = UUID.randomUUID().toString();
-                redisUtil.set(uuid, userDao.selectOne(new QueryWrapper<User>().select("ID").eq("OPENID", openid)).getId(), -1);
-                return ResultUtil.success(uuid);
-            }
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-        return ResultUtil.success(null);
-    }
-
 
     /**
      * 验证token是否正确
-     *
-     * @param authorization
-     * @return
      */
     @GetMapping("getUserState")
     public Object getUserState(@RequestHeader String authorization) {
@@ -154,9 +118,6 @@ public class UserController {
 
     /**
      * 获取用户信息
-     *
-     * @param authorization
-     * @return
      */
     @GetMapping("getUserInfo")
     public Object getUserInfo(@RequestHeader String authorization) {
