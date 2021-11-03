@@ -23,6 +23,7 @@ import com.zzf.mapper.ArticleDao;
 import com.zzf.service.ArticleService;
 import com.zzf.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -31,6 +32,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -45,22 +47,25 @@ public class ArticleController {
     static final String TITLE = "title";
     static final String CONTENT = "content";
 
-    @Autowired
+    @Resource
     ArticleDao articleMapper;
-    @Autowired
+    @Resource
     ArticleService articleService;
-    @Autowired
+    @Resource
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
-    @Autowired
+    @Resource
     RedisUtil redisUtil;
-    @Autowired
+
+    @Resource
     private Send send;
+
     @GetMapping("page")
     @ApiOperation("文章分页列表")
     @IgnoreAuth
+    @Cacheable(value = "PAGE_ARTICLE",key="#pageVO.current")
     public Object pageArticles(PageVO pageVO) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq( "IS_RELEASE", 1).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
+        queryWrapper.eq("IS_RELEASE", 1).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
         IPage<Article> page = new Page<>(pageVO.getCurrent(), pageVO.getPageSize());
         IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
         return ResultUtil.success(pageList);
@@ -74,7 +79,6 @@ public class ArticleController {
         send.post(article);
         return ResultUtil.success(article.getId());
     }
-
 
 
     @ApiOperation("文章分页列表")
