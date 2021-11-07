@@ -2,6 +2,8 @@ package com.zzf.controller;
 
 import com.zzf.component.IgnoreAuth;
 import com.zzf.entity.Trace;
+import com.zzf.service.TraceService;
+import com.zzf.util.DateUtil;
 import com.zzf.util.HttpUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.PageVO;
@@ -50,6 +52,8 @@ public class TraceController {
      */
     @Resource
     private MongoTemplate mongoTemplate;
+    @Resource
+    private TraceService traceService;
     @Autowired
     private JavaMailSender javaMailSender;
     @Autowired
@@ -107,10 +111,17 @@ public class TraceController {
         Criteria criteria = Criteria.where("time").gte(getStartTime()).lte(getEndTime());
         AggregationOperation match = Aggregation.match(criteria);
         AggregationOperation group = Aggregation.group("visitorId").count().as("visitorIdCount");
-        AggregationOperation sort =Aggregation.sort(Sort.Direction.DESC,"visitorIdCount");
-        Aggregation aggregation = Aggregation.newAggregation(match, group,sort);
-       AggregationResults<Map> result= mongoTemplate.aggregate(aggregation, "logs", Map.class);
+        AggregationOperation sort = Aggregation.sort(Sort.Direction.DESC, "visitorIdCount");
+        Aggregation aggregation = Aggregation.newAggregation(match, group, sort);
+        log.error("{}",aggregation);
+        AggregationResults<Map> result = mongoTemplate.aggregate(aggregation, "logs", Map.class);
         return ResultUtil.success(result.getMappedResults());
+    }
+
+    @GetMapping("remove")
+    @IgnoreAuth
+    public Object remove() {
+        return ResultUtil.success(traceService.removeExpiredTrace());
     }
 
     private static Date getStartTime() {
