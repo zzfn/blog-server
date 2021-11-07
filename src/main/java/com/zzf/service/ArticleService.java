@@ -7,6 +7,7 @@ import com.zzf.entity.Article;
 import com.zzf.entity.ArticleMini;
 import com.zzf.vo.ArticleVO;
 import com.zzf.vo.PageVO;
+import com.zzf.vo.Tags;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,6 +25,13 @@ public interface ArticleService extends IService<Article> {
      */
     IPage<Article> pageList(@Param("pageVO") ArticleVO articleVO, @Param("isCache") boolean isCached);
 
+    /**
+     * 查询最近更新的5条记录
+     * @return  最近更新的5条记录
+     */
+    List<ArticleMini> listLastUpdated();
+
+    List<Tags> getTagsCount();
     /**
      * 从redis缓存查询文章
      *

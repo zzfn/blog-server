@@ -22,7 +22,7 @@ implements FavoriteService{
     FavoriteMapper favoriteMapper;
 
     @Override
-    @Cacheable(value = "FAVORITE_ALL")
+    @Cacheable(value = "FAVORITE_ALL",key="#root.target.hashCode()")
     public List<Favorite> getAllFavorite() {
         return favoriteMapper.selectList(null);
     }

@@ -101,9 +101,10 @@ public class ArticleController {
     }
 
     @ApiOperation("文章分类")
-    @GetMapping("/non/tags")
+    @GetMapping("/tags")
+    @IgnoreAuth
     public Object listTags() {
-        return ResultUtil.success(articleMapper.getTags());
+        return ResultUtil.success(articleService.getTagsCount());
     }
 
     @ApiOperation("文章列表不分页")
@@ -113,9 +114,10 @@ public class ArticleController {
     }
 
     @ApiOperation("最近更新")
-    @GetMapping("non/lastUpdated")
+    @GetMapping("lastUpdated")
+    @IgnoreAuth
     public Object lastUpdated() {
-        return ResultUtil.success(articleMapper.listLastUpdated());
+        return ResultUtil.success(articleService.listLastUpdated());
     }
 
     @ApiOperation("更新浏览量")

@@ -11,6 +11,7 @@ import com.zzf.service.ArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zzf.vo.ArticleVO;
 import com.zzf.vo.PageVO;
+import com.zzf.vo.Tags;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,18 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
         return articleMapper.selectPage(page, lambdaQueryWrapper);
     }
 
+    @Override
+    @Cacheable(value = "ARTICLE_LAST_UPDATED",key = "#root.target.hashCode()")
+    public List<ArticleMini> listLastUpdated() {
+        return articleMapper.listLastUpdated();
+    }
+
+    @Override
+    @Cacheable(value = "ARTICLE_TAGS_COUNT",key = "#root.target.hashCode()")
+    public List<Tags> getTagsCount() {
+        return articleMapper.getTags();
+    }
+
 
     @Override
     @Cacheable(value = "ARTICLE_DETAIL", key = "#id")
@@ -69,7 +82,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
     }
 
     @Override
-    @Cacheable(value = "ARTICLE_ALL", key = "#code")
+    @Cacheable(value = "ARTICLE_ALL",key = "#code")
     public List<ArticleMini> listByCache(String code) {
         return articleMapper.getArchives(code);
     }
