@@ -6,7 +6,10 @@ import lombok.Data;
 import java.util.Date;
 
 
-@TableName(value ="T_TRACE")
+
+/**
+ * @author cc
+ */
 @Data
 public class Trace {
     /**

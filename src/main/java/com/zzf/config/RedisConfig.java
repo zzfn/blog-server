@@ -26,7 +26,6 @@ import java.time.Duration;
 public class RedisConfig extends CachingConfigurerSupport {
     /**
      * 采用RedisCacheManager作为缓存管理器
-     * @param connectionFactory
      */
     @Bean
     @Primary
@@ -38,16 +37,15 @@ public class RedisConfig extends CachingConfigurerSupport {
         defaultCacheConfig = defaultCacheConfig.entryTtl(Duration.ofDays(30));
         RedisCacheManager cacheManager = new RedisCacheManager(redisCacheWriter, defaultCacheConfig);
         ParserConfig.getGlobalInstance().addAccept("com.zzf.entity.");
-        return  cacheManager;
+        return cacheManager;
     }
 
     @Bean(name = "redisTemplate")
-    @SuppressWarnings("unchecked")
     @ConditionalOnMissingBean(name = "redisTemplate")
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
         //使用fastjson序列化
-        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
+        FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
         ParserConfig.getGlobalInstance().addAccept("com.baomidou");
         // value值的序列化采用fastJsonRedisSerializer
         template.setValueSerializer(fastJsonRedisSerializer);

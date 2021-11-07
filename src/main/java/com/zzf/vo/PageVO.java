@@ -6,6 +6,6 @@ import lombok.Data;
 public class PageVO {
     private Integer current = 1;
     private Integer pageSize = 10;
-    private String field;
-    private String order;
+    private String field = "createTime";
+    private String order = "descend";
 }

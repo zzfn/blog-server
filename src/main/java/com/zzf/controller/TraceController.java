@@ -104,15 +104,13 @@ public class TraceController {
     @GetMapping("uv")
     @IgnoreAuth
     public Object getUv() {
-//        Query query = new Query();
         Criteria criteria = Criteria.where("time").gte(getStartTime()).lte(getEndTime());
-//        query.addCriteria(criteria);
         AggregationOperation match = Aggregation.match(criteria);
         AggregationOperation group = Aggregation.group("visitorId").count().as("visitorIdCount");
-//        AggregationOperation group = Aggregation.group("visitorId").sum("visitorId").as("visitorIdCount");
-        Aggregation aggregation = Aggregation.newAggregation(match, group);
-//        return ResultUtil.success(mongoTemplate.find(query, Trace.class,"logs"));
-        return ResultUtil.success(mongoTemplate.aggregate(aggregation, "logs", Map.class));
+        AggregationOperation sort =Aggregation.sort(Sort.Direction.DESC,"visitorIdCount");
+        Aggregation aggregation = Aggregation.newAggregation(match, group,sort);
+       AggregationResults<Map> result= mongoTemplate.aggregate(aggregation, "logs", Map.class);
+        return ResultUtil.success(result.getMappedResults());
     }
 
     private static Date getStartTime() {

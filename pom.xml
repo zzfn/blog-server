@@ -61,7 +61,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.3</version>
+            <version>3.4.3.4</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter -->
         <dependency>

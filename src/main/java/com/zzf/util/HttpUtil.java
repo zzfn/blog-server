@@ -27,7 +27,9 @@ public class HttpUtil {
             return null;
         }
     }
-
+    public static String getSystem() {
+        return getRequestHeader("System");
+    }
     public static String getIp() {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
                 .getRequest();
