@@ -1,6 +1,6 @@
 package com.zzf.util;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 
 public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     public FastJsonRedisSerializer(Class<T> clazz) {
         super();
@@ -22,7 +22,9 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
         if (t == null) {
             return new byte[0];
         }
-        return JSONArray.toJSONString(t, SerializerFeature.WriteClassName).getBytes(DEFAULT_CHARSET);
+        return JSON.toJSONString(t, SerializerFeature.WriteClassName,
+                SerializerFeature.WriteMapNullValue,
+                SerializerFeature.WriteNullListAsEmpty).getBytes(DEFAULT_CHARSET);
     }
 
     @Override
@@ -31,6 +33,6 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
             return null;
         }
         String str = new String(bytes, DEFAULT_CHARSET);
-        return (T) JSONArray.parseObject(str, clazz);
+        return JSON.parseObject(str, clazz);
     }
 }
