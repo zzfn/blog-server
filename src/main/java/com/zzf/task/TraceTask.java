@@ -1,12 +1,12 @@
 package com.zzf.task;
 
 import com.zzf.service.TraceService;
+import com.zzf.util.MailUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @author cc
@@ -16,8 +16,12 @@ import java.util.List;
 public class TraceTask {
     @Resource
     TraceService traceService;
+
+    @Resource
+    MailUtil mailUtil;
     @Scheduled(cron = "0 0 3 ? * *")
     public void run() {
         traceService.removeExpiredTrace();
+        mailUtil.sendEmail("admin@zzfzzf.com","定时任务执行成功","定时任务执行成功");
     }
 }
