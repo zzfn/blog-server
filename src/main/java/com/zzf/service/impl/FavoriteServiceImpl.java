@@ -22,13 +22,13 @@ implements FavoriteService{
     FavoriteMapper favoriteMapper;
 
     @Override
-    @Cacheable(value = "ALL_FAVORITE")
+    @Cacheable(value = "FAVORITE_ALL")
     public List<Favorite> getAllFavorite() {
         return favoriteMapper.selectList(null);
     }
 
     @Override
-    @CachePut(value = "ALL_FAVORITE")
+    @CachePut(value = "FAVORITE_ALL")
     public List<Favorite> refreshAllFavorite() {
         return favoriteMapper.selectList(null);
     }
