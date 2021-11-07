@@ -1,12 +1,17 @@
 package com.zzf.component;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.zzf.entity.Article;
 import com.zzf.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.util.Set;
 
 /**
  * @author zzfn
@@ -19,13 +24,19 @@ import org.springframework.stereotype.Component;
 public class Receiver {
     @Autowired
     ArticleService articleService;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @RabbitHandler
     public void receiveMessage(Article article) {
         log.info("开始刷新id-{}有关的缓存", article.getId());
-        articleService.getByDb(article.getId());
-        articleService.listByDb("");
-        articleService.listByDb(article.getTag());
+//        articleService.getByDb(article.getId());
+//        articleService.listByDb("");
+//        articleService.listByDb(article.getTag());
+        Set<String> keys = redisTemplate.keys("ARTICLE" + "*");
+        if (CollectionUtils.isNotEmpty(keys)) {
+            redisTemplate.delete(keys);
+        }
         log.info("结束刷新id-{}有关的缓存", article.getId());
     }
 }

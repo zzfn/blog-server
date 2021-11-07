@@ -167,29 +167,28 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <dependencies>
-                    <!-- The following enables the "thin jar" deployment option. -->
+                    <!-- https://mvnrepository.com/artifact/org.springframework.boot.experimental/spring-boot-thin-layout -->
                     <dependency>
                         <groupId>org.springframework.boot.experimental</groupId>
                         <artifactId>spring-boot-thin-layout</artifactId>
-                        <version>1.0.11.RELEASE</version>
+                        <version>1.0.28.RELEASE</version>
                     </dependency>
                 </dependencies>
             </plugin>
-            <plugin>
-            <groupId>org.springframework.boot.experimental</groupId>
-            <artifactId>spring-boot-thin-maven-plugin</artifactId>
-            <version>1.0.12.RELEASE</version>
-            <executions>
-                <execution>
-                    <!-- Download the dependencies at build time -->
-                    <id>resolve</id>
-                    <goals>
-                        <goal>resolve</goal>
-                    </goals>
-                    <inherited>false</inherited>
-                </execution>
-            </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot.experimental</groupId>-->
+<!--                <artifactId>spring-boot-thin-maven-plugin</artifactId>-->
+<!--                <version>1.0.28.RELEASE</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>resolve</id>-->
+<!--                        <goals>-->
+<!--                            <goal>resolve</goal>-->
+<!--                        </goals>-->
+<!--                        <inherited>false</inherited>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 
