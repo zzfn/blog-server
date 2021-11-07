@@ -69,13 +69,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
     }
 
     @Override
-    @Cacheable(value = "ALL_ARTICLE", key = "#code")
+    @Cacheable(value = "ARTICLE_ALL", key = "#code")
     public List<ArticleMini> listByCache(String code) {
         return articleMapper.getArchives(code);
     }
 
     @Override
-    @CachePut(value = "ALL_ARTICLE", key = "#code")
+    @CachePut(value = "ARTICLE_ALL", key = "#code")
     public List<ArticleMini> listByDb(String code) {
         return articleMapper.getArchives(code);
     }
