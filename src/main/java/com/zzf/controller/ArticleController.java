@@ -1,5 +1,6 @@
 package com.zzf.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -7,7 +8,6 @@ import com.zzf.component.IgnoreAuth;
 import com.zzf.component.Send;
 import com.zzf.entity.Article;
 import com.zzf.entity.ArticleEs;
-import com.zzf.mapper.ArticleESDao;
 import com.zzf.util.HttpUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.ArticleVO;
@@ -46,6 +46,7 @@ public class ArticleController {
     static final String TAG_DESC = "tagDesc";
     static final String TITLE = "title";
     static final String CONTENT = "content";
+    static final String ADMIN = "admin";
 
     @Resource
     ArticleDao articleMapper;
@@ -62,13 +63,13 @@ public class ArticleController {
     @GetMapping("page")
     @ApiOperation("文章分页列表")
     @IgnoreAuth
-    @Cacheable(value = "PAGE_ARTICLE",key="#pageVO.current")
-    public Object pageArticles(PageVO pageVO) {
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("IS_RELEASE", 1).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
-        IPage<Article> page = new Page<>(pageVO.getCurrent(), pageVO.getPageSize());
-        IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
-        return ResultUtil.success(pageList);
+    public Object pageArticles(ArticleVO articleVO) {
+        String system = HttpUtil.getSystem();
+        if (ADMIN.equals(system)) {
+            return ResultUtil.success(articleService.pageList(articleVO,false));
+        } else {
+            return ResultUtil.success(articleService.pageList(articleVO,true));
+        }
     }
 
     @PostMapping("admin/save")
@@ -78,20 +79,6 @@ public class ArticleController {
         articleService.saveOrUpdate(article);
         send.post(article);
         return ResultUtil.success(article.getId());
-    }
-
-
-    @ApiOperation("文章分页列表")
-    @GetMapping("non/page")
-    public Object listArticles(ArticleVO articleVO) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("updateTime", "UPDATE_TIME");
-        map.put("createTime", "CREATE_TIME");
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(null != articleVO.getTag(), "TAG", articleVO.getTag()).eq(null != articleVO.getIsRelease(), "IS_RELEASE", articleVO.getIsRelease()).like(StringUtils.isNoneEmpty(articleVO.getTitle()), "TITLE", articleVO.getTitle()).eq(articleVO.getIsOnlyRelease(), "IS_RELEASE", 1).orderBy(null != articleVO.getField(), "ascend".equals(articleVO.getOrder()), map.get(articleVO.getField())).orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
-        IPage<Article> page = new Page<>(articleVO.getCurrent(), articleVO.getPageSize());
-        IPage<Article> pageList = articleMapper.selectPage(page, queryWrapper);
-        return ResultUtil.success(pageList);
     }
 
     @ApiOperation("排行榜")
