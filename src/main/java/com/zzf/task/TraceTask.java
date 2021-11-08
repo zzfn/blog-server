@@ -21,7 +21,7 @@ public class TraceTask {
     MailUtil mailUtil;
     @Scheduled(cron = "0 0 3 ? * *")
     public void run() {
-        traceService.removeExpiredTrace();
-        mailUtil.sendEmail("admin@zzfzzf.com","定时任务执行成功","定时任务执行成功");
+        Object num=traceService.removeExpiredTrace();
+        mailUtil.sendEmail("admin@zzfzzf.com","定时任务执行成功","定时任务执行成功,删除"+num+"条日志");
     }
 }
