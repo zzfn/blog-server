@@ -1,12 +1,11 @@
 package com.zzf.config;
 
-import com.zzf.component.IgnoreAuth;
+import com.zzf.annotation.IgnoreAuth;
 import com.zzf.component.ResultAccessDeniedHandler;
 import com.zzf.component.ResultAuthenticationEntryPoint;
 import com.zzf.filter.JwtAuthorizationFilter;
 import com.zzf.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.protocol.HttpRequestHandlerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

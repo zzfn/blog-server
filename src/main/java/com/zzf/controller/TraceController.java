@@ -1,6 +1,6 @@
 package com.zzf.controller;
 
-import com.zzf.component.IgnoreAuth;
+import com.zzf.annotation.IgnoreAuth;
 import com.zzf.entity.Trace;
 import com.zzf.service.TraceService;
 import com.zzf.util.HttpUtil;

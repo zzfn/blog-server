@@ -1,6 +1,6 @@
 package com.zzf.vo;
 
-import com.zzf.config.Dict;
+import com.zzf.annotation.Dict;
 import lombok.Data;
 
 @Data

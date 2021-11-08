@@ -4,7 +4,7 @@ package com.zzf.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zzf.component.IgnoreAuth;
+import com.zzf.annotation.IgnoreAuth;
 import com.zzf.entity.Favorite;
 import com.zzf.service.FavoriteService;
 import com.zzf.util.ResultUtil;

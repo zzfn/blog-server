@@ -2,7 +2,7 @@ package com.zzf.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.zzf.config.Dict;
+import com.zzf.annotation.Dict;
 import lombok.Data;
 
 /**

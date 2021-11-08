@@ -1,6 +1,6 @@
 package com.zzf.entity;
 
-import com.zzf.config.Dict;
+import com.zzf.annotation.Dict;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 

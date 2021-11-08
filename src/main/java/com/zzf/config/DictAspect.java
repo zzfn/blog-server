@@ -1,5 +1,6 @@
 package com.zzf.config;
 
+import com.zzf.annotation.Dict;
 import com.zzf.entity.BaseEntity;
 import com.zzf.service.SysDictService;
 import com.zzf.util.RedisUtil;

@@ -1,4 +1,4 @@
-package com.zzf.config;
+package com.zzf.annotation;
 
 import java.lang.annotation.*;
 

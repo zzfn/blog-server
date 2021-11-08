@@ -1,17 +1,12 @@
 package com.zzf.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zzf.component.IgnoreAuth;
+import com.zzf.annotation.IgnoreAuth;
 import com.zzf.component.Send;
 import com.zzf.entity.Article;
 import com.zzf.entity.ArticleEs;
 import com.zzf.util.HttpUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.ArticleVO;
-import com.zzf.vo.PageVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +17,6 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import com.zzf.mapper.ArticleDao;
 import com.zzf.service.ArticleService;
 import com.zzf.util.RedisUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
