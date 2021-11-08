@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="log_path" value="${log}"/>
+
+    <property name="log_pattern" value="%d [%thread] %-5level %logger{50} - %msg %n"/>
+    <property name="console_pattern" value="%d [%thread] %highlight(%-5level) %cyan(%logger{50}) - %msg %n"/>
+    <!--控制台-->
+    <appender name="log_debug" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${console_pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="log_file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_path}/%d{yyyyMMdd}/info.%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>2MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <append>true</append>
+        <encoder>
+            <pattern>${log_pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${log_pattern}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${log_path}/%d{yyyyMMdd}/error.%i.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>2MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+        <append>true</append>
+        <layout>
+            <Pattern>%d [%thread] [%level] %caller{1}%msg%n</Pattern>
+        </layout>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="log_debug"/>
+        <appender-ref ref="log_file"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+
+</configuration>
