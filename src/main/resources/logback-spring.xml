@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration name="prod">
+<configuration>
     <property name="log_path" value="${log}"/>
 
     <property name="log_pattern" value="%d [%thread] %-5level %logger{50} - %msg %n"/>
     <property name="console_pattern" value="%d [%thread] %highlight(%-5level) %cyan(%logger{50}) - %msg %n"/>
-    <!--控制台-->
+
     <appender name="log_debug" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${console_pattern}</pattern>
@@ -18,7 +18,7 @@
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>2MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
-            <totalSizeCap>1GB</totalSizeCap>
+            <totalSizeCap>20GB</totalSizeCap>
         </rollingPolicy>
         <append>true</append>
         <encoder>
@@ -41,7 +41,7 @@
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>2MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
-            <totalSizeCap>20GB</totalSizeCap>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <append>true</append>
         <layout>

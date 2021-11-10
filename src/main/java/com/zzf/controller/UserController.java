@@ -70,6 +70,7 @@ public class UserController {
                 tokenVO.setToken(token);
                 tokenVO.setRefreshToken(JwtTokenUtil.generateRefreshToken(map));
                 tokenVO.setExpired(JwtTokenUtil.EXPIRATION);
+                log.info("用户{}登录成功",loginVO.getUsername());
                 LoginLog loginLog = new LoginLog();
                 loginLog.setIp(HttpUtil.getIp());
                 loginLog.setUserId(user.getId());
