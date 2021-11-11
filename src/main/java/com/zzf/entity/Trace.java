@@ -19,7 +19,7 @@ public class Trace {
     /**
      * 值
      */
-    private String value;
+    private Double value;
     /**
      * 浏览器类型
      */

@@ -63,6 +63,15 @@ public class TraceController {
         return ResultUtil.success(map);
     }
 
+    @GetMapping("fcp")
+    @IgnoreAuth
+    public Object fcp() {
+        Query query = new Query();
+        AggregationOperation group = Aggregation.group("name").max("value").as("nameMax");
+        Aggregation aggregation = Aggregation.newAggregation(group);
+        return ResultUtil.success(mongoTemplate.aggregate(aggregation, "logs", Map.class));
+    }
+
     @GetMapping("uv")
     @IgnoreAuth
     public Object getUv() {
