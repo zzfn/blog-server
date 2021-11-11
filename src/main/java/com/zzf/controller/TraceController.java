@@ -63,13 +63,11 @@ public class TraceController {
         return ResultUtil.success(map);
     }
 
-    @GetMapping("fcp")
-    @IgnoreAuth
-    public Object fcp() {
-        Query query = new Query();
-        AggregationOperation group = Aggregation.group("name").max("value").as("nameMax");
+    @GetMapping("getPerformance")
+    public Object getPerformance() {
+        AggregationOperation group = Aggregation.group("name").max("value").as("max").min("value").as("min").avg("value").as("avg");
         Aggregation aggregation = Aggregation.newAggregation(group);
-        return ResultUtil.success(mongoTemplate.aggregate(aggregation, "logs", Map.class));
+        return ResultUtil.success(mongoTemplate.aggregate(aggregation, "logs", Map.class).getMappedResults());
     }
 
     @GetMapping("uv")
@@ -80,9 +78,7 @@ public class TraceController {
         AggregationOperation group = Aggregation.group("visitorId").count().as("visitorIdCount");
         AggregationOperation sort = Aggregation.sort(Sort.Direction.DESC, "visitorIdCount");
         Aggregation aggregation = Aggregation.newAggregation(match, group, sort);
-        log.error("{}",aggregation);
-        AggregationResults<Map> result = mongoTemplate.aggregate(aggregation, "logs", Map.class);
-        return ResultUtil.success(result.getMappedResults());
+        return ResultUtil.success(mongoTemplate.aggregate(aggregation, "logs", Map.class).getMappedResults());
     }
 
     @GetMapping("remove")
