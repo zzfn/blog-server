@@ -13,6 +13,10 @@ import java.util.Date;
 @Data
 public class Trace {
     /**
+     * 主键
+     */
+    private String id;
+    /**
      * 埋点类型
      */
     private String name;
