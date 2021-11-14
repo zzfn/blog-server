@@ -26,7 +26,5 @@ public interface ArticleDao extends BaseMapper<Article> {
 
     List<ArticleMini> listLastUpdated();
 
-    List<Tags> overviewTags();
-
     List<LabelValueVO> overviewCount();
 }

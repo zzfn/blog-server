@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zzf.mapper.ArticleDao">
-    <select id="overviewTags" resultType="com.zzf.vo.Tags">
-        select count(*) as count, tag as code
-        from T_ARTICLE
-        where IS_DELETE = 0
-          and IS_RELEASE = 1
-        group by TAG
-        order by count desc
-    </select>
     <select id="overviewCount" resultType="com.zzf.vo.LabelValueVO">
         select count(*) as value, '总数' as label
         from T_ARTICLE
