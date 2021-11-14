@@ -176,6 +176,7 @@ public class ArticleController {
     @GetMapping("search")
     @IgnoreAuth
     public Object getList(String keyword) {
+        redisUtil.incZSetValue("searchKeywords", keyword, 1L);
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         queryBuilder.should(QueryBuilders.matchPhraseQuery(TITLE, keyword))
                 .should(QueryBuilders.matchPhraseQuery(CONTENT, keyword))

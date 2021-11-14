@@ -12,4 +12,5 @@ import java.util.List;
 public interface TraceService extends IService<Trace> {
     Object removeExpiredTrace();
 
+    Object getPerformance();
 }
