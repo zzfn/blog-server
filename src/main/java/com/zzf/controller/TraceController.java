@@ -3,6 +3,7 @@ package com.zzf.controller;
 import com.zzf.annotation.IgnoreAuth;
 import com.zzf.entity.Trace;
 import com.zzf.service.TraceService;
+import com.zzf.util.DateUtil;
 import com.zzf.util.HttpUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.PageVO;
@@ -73,36 +74,20 @@ public class TraceController {
     @GetMapping("uv")
     @IgnoreAuth
     public Object getUv() {
-        Criteria criteria = Criteria.where("time").gte(getStartTime()).lte(getEndTime());
-        AggregationOperation match = Aggregation.match(criteria);
+        Criteria criteria = Criteria.where("time").gte(DateUtil.getStartTime()).lte(DateUtil.getEndTime());
+        Criteria.where("name").is("Next.js-hydration");
+        AggregationOperation match1 = Aggregation.match(criteria);
+        AggregationOperation match2 = Aggregation.match(Criteria.where("name").is("Next.js-hydration"));
         AggregationOperation group = Aggregation.group("visitorId").count().as("visitorIdCount");
         AggregationOperation sort = Aggregation.sort(Sort.Direction.DESC, "visitorIdCount");
-        Aggregation aggregation = Aggregation.newAggregation(match, group, sort);
-        return ResultUtil.success(mongoTemplate.aggregate(aggregation, "logs", Map.class).getMappedResults());
+        Aggregation aggregation = Aggregation.newAggregation(match1,match2, group, sort);
+        return ResultUtil.success(mongoTemplate.aggregate(aggregation, "logs", Map.class).getMappedResults().size());
     }
 
     @GetMapping("remove")
     @IgnoreAuth
     public Object remove() {
         return ResultUtil.success(traceService.removeExpiredTrace());
-    }
-
-    private static Date getStartTime() {
-        Calendar todayStart = Calendar.getInstance();
-        todayStart.set(Calendar.HOUR_OF_DAY, 0);
-        todayStart.set(Calendar.MINUTE, 0);
-        todayStart.set(Calendar.SECOND, 0);
-        todayStart.set(Calendar.MILLISECOND, 0);
-        return todayStart.getTime();
-    }
-
-    private static Date getEndTime() {
-        Calendar todayEnd = Calendar.getInstance();
-        todayEnd.set(Calendar.HOUR_OF_DAY, 23);
-        todayEnd.set(Calendar.MINUTE, 59);
-        todayEnd.set(Calendar.SECOND, 59);
-        todayEnd.set(Calendar.MILLISECOND, 999);
-        return todayEnd.getTime();
     }
 
     @PostMapping("save")

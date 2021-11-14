@@ -13,4 +13,6 @@ public interface TraceService extends IService<Trace> {
     Object removeExpiredTrace();
 
     Object getPerformance();
+
+    Object getUserCount();
 }

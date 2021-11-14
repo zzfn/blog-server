@@ -52,6 +52,7 @@ public class OverviewController {
         map.put("tags", tags);
         map.put("performances", performances);
         map.put("searchKeywords",redisUtil.reverseRangeWithScores("searchKeywords", 0L, 9L));
+        map.put("userCount",traceService.getUserCount());
         return ResultUtil.success(map);
     }
 }
