@@ -5,7 +5,6 @@ import com.zzf.entity.TalkBot;
 import com.zzf.mapper.TalkBotMapper;
 import com.zzf.util.ResultUtil;
 import com.zzf.util.TalkUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -14,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
+
 /**
  * @author zzfn
  * @date 2021-06-06 1:27 上午
@@ -21,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("talk")
 public class TalkController {
-    @Autowired
+    @Resource
     TalkBotMapper talkBotMapper;
 
     @GetMapping("all")

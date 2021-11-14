@@ -42,8 +42,6 @@ public class ArticleController {
     static final String ADMIN = "admin";
 
     @Resource
-    ArticleDao articleMapper;
-    @Resource
     ArticleService articleService;
     @Resource
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
@@ -59,18 +57,18 @@ public class ArticleController {
     public Object pageArticles(ArticleVO articleVO) {
         String system = HttpUtil.getSystem();
         if (ADMIN.equals(system)) {
-            return ResultUtil.success(articleService.pageList(articleVO,false));
+            return ResultUtil.success(articleService.pageList(articleVO, false));
         } else {
-            return ResultUtil.success(articleService.pageList(articleVO,true));
+            return ResultUtil.success(articleService.pageList(articleVO, true));
         }
     }
 
-    @PostMapping("admin/save")
+    @PostMapping("save")
     @ApiOperation("保存或修改文章")
     @PreAuthorize("hasRole('ADMIN')")
     public Object saveArticle(@RequestBody Article article) {
         articleService.saveOrUpdate(article);
-        if(article.getIsRelease()){
+        if (article.getIsRelease()) {
             send.post(article);
         }
         return ResultUtil.success(article.getId());
@@ -94,14 +92,15 @@ public class ArticleController {
     }
 
     @ApiOperation("文章分类")
-    @GetMapping("/tags")
+    @GetMapping("tags")
     @IgnoreAuth
     public Object listTags() {
         return ResultUtil.success(articleService.getTagsCount());
     }
 
     @ApiOperation("文章列表不分页")
-    @GetMapping("non/list")
+    @GetMapping("list")
+    @IgnoreAuth
     public Object listArchives(@RequestParam(defaultValue = "") String code) {
         return ResultUtil.success(articleService.listByCache(code));
     }
@@ -114,7 +113,7 @@ public class ArticleController {
     }
 
     @ApiOperation("更新浏览量")
-    @GetMapping("non/updateViewed")
+    @GetMapping("updateViewed")
     public Object updateViewed(@RequestParam String id) {
         String isViewed = "isViewed::" + HttpUtil.getIp() + "::" + id;
         if (redisUtil.hasKey(isViewed)) {
@@ -139,44 +138,43 @@ public class ArticleController {
         }
     }
 
-    @ApiOperation("根据id查询文章详情-前台")
-    @GetMapping("non/{id}")
+    @ApiOperation("根据id查询文章详情")
+    @GetMapping("{id}")
+    @IgnoreAuth
     public Object getArticle(@PathVariable("id") String id) {
-        if (StringUtils.isBlank(id)) {
-            return ResultUtil.error("请传文章id");
-        }
-        Article article = articleService.getByCache(id);
-        if (null == article || !article.getIsRelease()) {
-            return ResultUtil.error("文章已下线");
-        }
-        Double num = redisUtil.zScore("viewCount", id);
-        if (null == num) {
-            article.setViewCount(1L);
+        String system = HttpUtil.getSystem();
+        if (ADMIN.equals(system)) {
+            Article article = articleService.getByDb(id);
+            return ResultUtil.success(article);
         } else {
-            article.setViewCount(num.longValue());
+            if (StringUtils.isBlank(id)) {
+                return ResultUtil.error("请传文章id");
+            }
+            Article article = articleService.getByCache(id);
+            if (null == article || !article.getIsRelease()) {
+                return ResultUtil.error("文章已下线");
+            }
+            Double num = redisUtil.zScore("viewCount", id);
+            if (null == num) {
+                article.setViewCount(1L);
+            } else {
+                article.setViewCount(num.longValue());
+            }
+            return ResultUtil.success(article);
         }
-        return ResultUtil.success(article);
     }
 
-    @ApiOperation("根据id查询文章详情-后台")
-    @GetMapping("{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public Object getArticleAdmin(@PathVariable("id") String id) {
-        Article article = articleService.getByDb(id);
-        return ResultUtil.success(article);
-    }
 
     @ApiOperation("根据id删除文章")
-    @DeleteMapping("non/{id}/{code}")
+    @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Object removeArticle(@PathVariable String id, @PathVariable String code) {
-        articleService.listByDb("");
-        articleService.listByDb(code);
+    public Object removeArticle(@PathVariable String id) {
         return ResultUtil.success(articleService.delByDb(id));
     }
 
     @ApiOperation("es搜索")
-    @GetMapping("non/search")
+    @GetMapping("search")
+    @IgnoreAuth
     public Object getList(String keyword) {
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         queryBuilder.should(QueryBuilders.matchPhraseQuery(TITLE, keyword))
@@ -200,24 +198,4 @@ public class ArticleController {
         });
         return ResultUtil.success(list);
     }
-
-    @GetMapping("es/non/reset")
-    public Object reset() {
-        elasticsearchRestTemplate.createIndex(ArticleEs.class);
-        elasticsearchRestTemplate.putMapping(ArticleEs.class);
-        return null;
-    }
-
-    @GetMapping("es/non/del")
-    public Object del() {
-        elasticsearchRestTemplate.deleteIndex(ArticleEs.class);
-        return null;
-    }
-//    @GetMapping("es/reset")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public Object reset() {
-//        articleESDao.deleteAll();
-//        return null;
-//    }
-
 }

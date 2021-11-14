@@ -3,6 +3,7 @@ package com.zzf.entity;
 import com.zzf.annotation.Dict;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
