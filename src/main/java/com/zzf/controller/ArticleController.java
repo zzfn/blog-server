@@ -75,7 +75,7 @@ public class ArticleController {
     }
 
     @ApiOperation("排行榜")
-    @GetMapping("non/hot")
+    @GetMapping("hot")
     public Object listHotArticles() {
         Collection ids = new ArrayList();
         List<Double> num = new ArrayList();
@@ -126,7 +126,7 @@ public class ArticleController {
     }
 
     @ApiOperation("点赞")
-    @PostMapping("non/star")
+    @PostMapping("star")
     public Object star(@RequestParam String id) {
         String isStared = "isStared::" + HttpUtil.getIp() + "::" + id;
         if (redisUtil.hasKey(isStared)) {

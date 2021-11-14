@@ -35,12 +35,12 @@ public class FavoriteController {
         return ResultUtil.success(favoriteService.getAllFavorite());
     }
 
-    @GetMapping("non/allTag")
+    @GetMapping("allTag")
     public Object selectAllTag() {
         return ResultUtil.success(favoriteService.selectTags());
     }
 
-    @GetMapping("non/page")
+    @GetMapping("page")
     public Object selectPage(PageVO pageVo) {
         QueryWrapper<Favorite> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");

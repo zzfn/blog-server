@@ -1,6 +1,7 @@
 package com.zzf.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.zzf.annotation.IgnoreAuth;
 import com.zzf.entity.LoginLog;
 import com.zzf.mapper.UserDao;
 import com.zzf.entity.User;
@@ -55,7 +56,8 @@ public class UserController {
      * @param loginVO 用户实体
      * @return 登录结果
      */
-    @PostMapping("non/login")
+    @PostMapping("login")
+    @IgnoreAuth
     public Object login(@RequestBody LoginVO loginVO) {
         User user = userDao.selectOne(new QueryWrapper<User>().eq("USERNAME", loginVO.getUsername()));
         if (null != user) {

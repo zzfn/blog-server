@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("overview/non")
+@RequestMapping("overview")
 @Slf4j
 @Api(tags = "统计接口")
 public class OverviewController {

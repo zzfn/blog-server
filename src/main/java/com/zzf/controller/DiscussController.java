@@ -23,7 +23,7 @@ public class DiscussController {
     @Resource
     private DiscussService discussService;
 
-    @PostMapping("non/save")
+    @PostMapping("save")
     public Object saveOne(@RequestBody Discuss discuss) {
         return ResultUtil.success(this.discussService.save(discuss));
     }
@@ -34,7 +34,7 @@ public class DiscussController {
      * @param id 主键
      * @return 单条数据
      */
-    @GetMapping("non/select")
+    @GetMapping("select")
     public Object selectOne(String id) {
         QueryWrapper<Discuss> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("ARTICLE_ID", id).orderByDesc("CREATE_TIME");
