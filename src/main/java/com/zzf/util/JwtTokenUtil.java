@@ -5,7 +5,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -15,6 +17,7 @@ import java.util.Map;
  * @author cc
  */
 @Slf4j
+@Component
 public class JwtTokenUtil {
 
     public static final String TOKEN_HEADER = "Authorization";
@@ -22,8 +25,12 @@ public class JwtTokenUtil {
     /**
      * 秘钥
      */
-    private static final String SECRET = "jwtSECRET";
+    public static String SECRET;
 
+    @Value("${secret}")
+    private void setSecret(String secret) {
+        SECRET = secret;
+    }
     /**
      * 过期时间是3600秒，既是1个小时
      */
@@ -39,6 +46,7 @@ public class JwtTokenUtil {
      * @return
      */
     public static String generateToken(Map<String, Object> claims) {
+        log.info(SECRET);
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .setClaims(claims)
