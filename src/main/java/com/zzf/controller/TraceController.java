@@ -74,7 +74,7 @@ public class TraceController {
     @GetMapping("uv")
     @IgnoreAuth
     public Object getUv() {
-        Criteria criteria = Criteria.where("time").gte(DateUtil.getStartTime()).lte(DateUtil.getEndTime());
+        Criteria criteria = Criteria.where("time").gte(DateUtil.getStartTime(0)).lte(DateUtil.getEndTime(0));
         Criteria.where("name").is("Next.js-hydration");
         AggregationOperation match1 = Aggregation.match(criteria);
         AggregationOperation match2 = Aggregation.match(Criteria.where("name").is("Next.js-hydration"));
