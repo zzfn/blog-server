@@ -13,23 +13,29 @@ import java.util.Objects;
  */
 public class HttpUtil {
     public static String getRequestHeader(String name) {
-        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
-                .getRequest();
-        return request.getHeader(name);
-    }
-
-    public static String getUserId() {
-        String token = getRequestHeader("authorization");
-        if (null != token&&token.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
-            token = token.substring(JwtTokenUtil.TOKEN_PREFIX.length());
-            return JwtTokenUtil.getUserIdFromToken(token);
+        if (null != RequestContextHolder.getRequestAttributes()) {
+            HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
+                    .getRequest();
+            return request.getHeader(name);
         } else {
             return null;
         }
     }
+
+    public static String getUserId() {
+        String token = getRequestHeader("authorization");
+        if (null != token && token.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
+            token = token.substring(JwtTokenUtil.TOKEN_PREFIX.length());
+            return JwtTokenUtil.getUserIdFromToken(token);
+        } else {
+            return "";
+        }
+    }
+
     public static String getSystem() {
         return getRequestHeader("System");
     }
+
     public static String getIp() {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
                 .getRequest();
