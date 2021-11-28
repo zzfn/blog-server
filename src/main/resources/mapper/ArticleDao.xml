@@ -45,15 +45,17 @@
         T_ARTICLE.create_time DESC
     </select>
     <select id="getTags" resultType="com.zzf.vo.Tags">
-        SELECT count(TAG) AS count,
-               SYS_DICT.CODE AS code,
-               SYS_DICT.NAME AS tag
+        SELECT count(TAG)    AS count,
+       SYS_DICT.CODE AS code,
+       SYS_DICT.NAME AS tag
         FROM T_ARTICLE
             LEFT JOIN SYS_DICT
         ON tag = SYS_DICT.CODE
-        WHERE T_ARTICLE.IS_DELETE = 0 AND T_ARTICLE.IS_RELEASE = 1
+        WHERE T_ARTICLE.IS_DELETE = 0
+          AND T_ARTICLE.IS_RELEASE = 1
         GROUP BY SYS_DICT.NAME,
             SYS_DICT.CODE
+        order by count desc
     </select>
     <select id="getArchives" resultType="com.zzf.entity.ArticleMini">
         select id,TITLE,CREATE_TIME,TAG from T_ARTICLE where IS_DELETE=0
