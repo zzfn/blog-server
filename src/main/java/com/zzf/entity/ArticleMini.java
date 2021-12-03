@@ -8,7 +8,10 @@ import lombok.Data;
  */
 @Data
 public class ArticleMini extends BaseEntity {
-
+    /**
+     * logo
+     */
+    private String logo;
     /**
      * title
      */

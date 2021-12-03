@@ -3,6 +3,7 @@ package com.zzf.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zzf.entity.Article;
 import com.zzf.service.ArticleService;
+import com.zzf.service.LogUserService;
 import com.zzf.service.TraceService;
 import com.zzf.util.RedisUtil;
 import com.zzf.vo.Tags;
@@ -35,6 +36,8 @@ public class OverviewController {
     @Resource
     ArticleDao articleDao;
     @Resource
+    LogUserService logUserService;
+    @Resource
     RedisUtil redisUtil;
 
     @ApiOperation("后台工作台统计接口")
@@ -51,8 +54,10 @@ public class OverviewController {
         map.put("releaseCount", releaseCount);
         map.put("tags", tags);
         map.put("performances", performances);
-        map.put("searchKeywords",redisUtil.reverseRangeWithScores("searchKeywords", 0L, 9L));
-        map.put("userCount",traceService.getUserCount());
+        map.put("performancesAnalyze", traceService.getPerformanceLast());
+        map.put("visitors", logUserService.visitorAnalysis());
+        map.put("searchKeywords", redisUtil.reverseRangeWithScores("searchKeywords", 0L, 9L));
+        map.put("userCount", traceService.getUserCount());
         return ResultUtil.success(map);
     }
 }

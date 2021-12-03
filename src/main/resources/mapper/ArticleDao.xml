@@ -66,7 +66,7 @@
         ORDER BY CREATE_TIME DESC
     </select>
     <select id="listLastUpdated" resultType="com.zzf.entity.ArticleMini">
-        select TITLE, ID, UPDATE_TIME
+        select TITLE,LOGO,ID, UPDATE_TIME
         from T_ARTICLE
         where IS_DELETE = 0
           and IS_RELEASE = 1

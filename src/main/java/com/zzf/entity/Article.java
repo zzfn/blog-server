@@ -13,6 +13,10 @@ import java.io.Serializable;
  */
 @Data
 public class Article extends BaseEntity implements Serializable {
+    /**
+     * logo
+     */
+    private String logo;
 
     /**
      * title

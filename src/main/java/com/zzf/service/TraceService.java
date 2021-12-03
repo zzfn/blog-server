@@ -14,6 +14,8 @@ public interface TraceService extends IService<Trace> {
 
     Object getPerformance();
 
+    Object getPerformanceLast();
+
     Object getUserCount();
 
     Object getAnyCount(Integer num);

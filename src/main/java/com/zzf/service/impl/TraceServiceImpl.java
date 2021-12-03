@@ -6,10 +6,13 @@ import com.zzf.entity.Trace;
 import com.zzf.mapper.TraceMapper;
 import com.zzf.service.TraceService;
 import com.zzf.util.DateUtil;
+import com.zzf.util.ResultUtil;
 import com.zzf.vo.PerformanceVO;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.DateOperators;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -48,6 +51,15 @@ public class TraceServiceImpl extends ServiceImpl<TraceMapper, Trace>
     }
 
     @Override
+    public Object getPerformanceLast() {
+        AggregationOperation day=Aggregation.project("time","name","value").andExpression("time").extractDayOfYear().as("day");
+        AggregationOperation group = Aggregation.group("day","name").avg("value").as("avg").max("value").as("max").min("value").as("min");
+        AggregationOperation sort = Aggregation.sort(Sort.Direction.ASC, "day");
+        Aggregation aggregation = Aggregation.newAggregation(day,group,sort);
+        return mongoTemplate.aggregate(aggregation, "logs", Map.class).getMappedResults();
+    }
+
+    @Override
     public Object getUserCount() {
         Criteria criteria = Criteria.where("name").is("Next.js-hydration");
         Query query = new Query();
@@ -83,18 +95,18 @@ public class TraceServiceImpl extends ServiceImpl<TraceMapper, Trace>
         Aggregation aggregation2 = Aggregation.newAggregation(match1, match2, group);
         Integer todayUserView = mongoTemplate.aggregate(aggregation2, "logs", Map.class).getMappedResults().size();
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE,num);
+        calendar.add(Calendar.DATE, num);
         calendar.set(Calendar.HOUR_OF_DAY, 2);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
-        LogUser logUser=new LogUser();
+        LogUser logUser = new LogUser();
         logUser.setType("PV");
         logUser.setValue(todayPageView);
         logUser.setTime(LocalDateTime.ofInstant(calendar.toInstant(), ZoneOffset.systemDefault()));
         logUserService.saveOrUpdate(logUser);
-        LogUser logUser1=new LogUser();
+        LogUser logUser1 = new LogUser();
         logUser1.setType("UV");
         logUser1.setValue(todayUserView);
         logUser1.setTime(LocalDateTime.ofInstant(calendar.toInstant(), ZoneOffset.systemDefault()));

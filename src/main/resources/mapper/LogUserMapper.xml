@@ -5,19 +5,25 @@
 <mapper namespace="com.zzf.mapper.LogUserMapper">
 
     <resultMap id="BaseResultMap" type="com.zzf.entity.LogUser">
-            <id property="id" column="ID" jdbcType="VARCHAR"/>
-            <result property="type" column="TYPE" jdbcType="VARCHAR"/>
-            <result property="value" column="VALUE" jdbcType="INTEGER"/>
-            <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
-            <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
-            <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
-            <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="IS_DELETE" jdbcType="CHAR"/>
+        <id property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="type" column="TYPE" jdbcType="VARCHAR"/>
+        <result property="value" column="VALUE" jdbcType="INTEGER"/>
+        <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="IS_DELETE" jdbcType="CHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        ID,TYPE,VALUE,
+        ID
+        ,TYPE,VALUE,
         CREATE_BY,CREATE_TIME,UPDATE_BY,
         UPDATE_TIME,IS_DELETE
     </sql>
+    <select id="visitorAnalysis" resultType="com.zzf.entity.LogUser">
+        select id, type, value, time
+        from t_log_user
+        where DATE_SUB(CURDATE(), INTERVAL 30 DAY) &lt;= time
+    </select>
 </mapper>
