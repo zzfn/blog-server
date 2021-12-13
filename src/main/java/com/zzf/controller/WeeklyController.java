@@ -1,11 +1,13 @@
 package com.zzf.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zzf.annotation.IgnoreAuth;
 import com.zzf.entity.Weekly;
 import com.zzf.service.WeeklyService;
 import com.zzf.util.ResultUtil;
-import org.springframework.data.domain.Page;
+import com.zzf.vo.PageVO;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,13 +30,15 @@ public class WeeklyController {
     /**
      * 分页查询
      *
-     * @param weekly 筛选条件
-     * @param pageRequest      分页对象
+     * @param pageVO      筛选条件
      * @return 查询结果
      */
     @GetMapping
-    public Object queryByPage(Weekly weekly, PageRequest pageRequest) {
-        return ResultUtil.success(null);
+    @IgnoreAuth
+    public Object queryByPage(PageVO pageVO) {
+        IPage<Weekly> page = new Page<>(pageVO.getCurrent(), pageVO.getPageSize());
+        IPage<Weekly> pageList = weeklyService.page(page);
+        return ResultUtil.success(pageList);
     }
 
     /**
@@ -44,8 +48,9 @@ public class WeeklyController {
      * @return 单条数据
      */
     @GetMapping("{id}")
+    @IgnoreAuth
     public Object queryById(@PathVariable("id") Long id) {
-        return ResultUtil.success(null);
+        return ResultUtil.success(weeklyService.getById(id));
     }
 
     /**
@@ -55,19 +60,9 @@ public class WeeklyController {
      * @return 新增结果
      */
     @PostMapping
-    public Object add(Weekly weekly) {
-        return ResultUtil.success(null);
-    }
-
-    /**
-     * 编辑数据
-     *
-     * @param weekly 实体
-     * @return 编辑结果
-     */
-    @PutMapping
-    public Object edit(Weekly weekly) {
-        return ResultUtil.success(null);
+    @IgnoreAuth
+    public Object add(@RequestBody Weekly weekly) {
+        return ResultUtil.success(weeklyService.saveOrUpdate(weekly));
     }
 
     /**

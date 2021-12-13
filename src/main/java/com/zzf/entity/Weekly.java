@@ -1,12 +1,10 @@
 package com.zzf.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * WEEKLY
@@ -14,12 +12,7 @@ import lombok.Data;
  */
 @TableName(value ="t_weekly")
 @Data
-public class Weekly implements Serializable {
-    /**
-     * 主键
-     */
-    @TableId
-    private Long id;
+public class Weekly extends BaseEntity implements Serializable {
 
     /**
      * 标题
@@ -46,31 +39,4 @@ public class Weekly implements Serializable {
      */
     private Boolean isRelease;
 
-    /**
-     * 创建人
-     */
-    private String createBy;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 更新人
-     */
-    private String updateBy;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
-
-    /**
-     * 删除标识
-     */
-    private Boolean isDelete;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }
