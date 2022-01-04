@@ -56,7 +56,7 @@ public class OverviewController {
         map.put("performances", performances);
         map.put("performancesAnalyze", traceService.getPerformanceLast());
         map.put("visitors", logUserService.visitorAnalysis());
-        map.put("searchKeywords", redisUtil.reverseRangeWithScores("searchKeywords", 0L, 9L));
+        map.put("searchKeywords", redisUtil.reverseRangeWithScores("searchKeywords", 0L, -1L));
         map.put("userCount", traceService.getUserCount());
         return ResultUtil.success(map);
     }
