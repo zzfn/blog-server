@@ -41,9 +41,11 @@ public class FavoriteController {
     }
 
     @GetMapping("page")
-    public Object selectPage(PageVO pageVo) {
+    @IgnoreAuth
+    public Object selectPage(PageVO pageVo, String title) {
         QueryWrapper<Favorite> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("ORDER_NUM").orderByDesc("CREATE_TIME");
+        queryWrapper.like("TITLE", title);
         IPage<Favorite> page = new Page<>(pageVo.getCurrent(), pageVo.getPageSize());
         IPage<Favorite> pageList = favoriteService.page(page, queryWrapper);
         return ResultUtil.success(pageList);
