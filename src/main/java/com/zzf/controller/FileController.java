@@ -1,48 +1,41 @@
 package com.zzf.controller;
 
-import com.alibaba.druid.stat.DruidStatManagerFacade;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.ListObjectsRequest;
 import com.aliyun.oss.model.PutObjectRequest;
-import com.zzf.service.SysConfigService;
 import com.zzf.util.RedisUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.RequestVO;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+
 /**
- * @program: jello
- * @author: nanaouyang
- * @create: 2020/03/24 12:08
+ * @author cc
  */
 @RestController
 @RequestMapping("oss")
 @Slf4j
 @Api(tags = "文件管理")
 public class FileController {
-    @Autowired
-    private SysConfigService sysConfigService;
-    @Autowired
-    RedisUtil redisUtil;
-
-    @GetMapping("/druid/stat")
-    public Object druidStat() {
-        return DruidStatManagerFacade.getInstance().getDataSourceStatDataList();
-    }
+    @Value("${oss.endpoint}")
+    private String endpoint;
+    @Value("${oss.accessKeyId}")
+    private String accessKeyId;
+    @Value("${oss.accessKeySecret}")
+    private String accessKeySecret;
+    @Value("${oss.bucketName}")
+    private String bucketName;
 
     @GetMapping("listFiles")
     public Object listFiles(String path) {
-         String endpoint=(String)redisUtil.get("endpoint");
-         String accessKeyId=(String)redisUtil.get("accessKeyId");
-         String accessKeySecret=(String)redisUtil.get("accessKeySecret");
-         String bucketName=(String)redisUtil.get("bucketName");
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest(bucketName);
         listObjectsRequest.setDelimiter("/");
@@ -50,38 +43,17 @@ public class FileController {
         return ResultUtil.success(ossClient.listObjects(listObjectsRequest));
     }
 
-    @GetMapping("listImages")
-    public Object listImages() {
-        String endpoint=(String)redisUtil.get("endpoint");
-        String accessKeyId=(String)redisUtil.get("accessKeyId");
-        String accessKeySecret=(String)redisUtil.get("accessKeySecret");
-        String bucketName=(String)redisUtil.get("bucketName");
-        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
-        ListObjectsRequest listObjectsRequest = new ListObjectsRequest(bucketName);
-        listObjectsRequest.setDelimiter("/");
-        listObjectsRequest.setPrefix("img/");
-        return ResultUtil.success(ossClient.listObjects(listObjectsRequest));
-    }
-
     @PostMapping("upload")
-    public Object upload(@RequestBody MultipartFile file) throws IOException {
-        String endpoint=(String)redisUtil.get("endpoint");
-        String accessKeyId=(String)redisUtil.get("accessKeyId");
-        String accessKeySecret=(String)redisUtil.get("accessKeySecret");
-        String bucketName=(String)redisUtil.get("bucketName");
+    public Object upload(@RequestBody MultipartFile file,@RequestParam String path) throws IOException {
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, "img/" + file.getOriginalFilename(), file.getInputStream());
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, path + file.getOriginalFilename(), file.getInputStream());
         ossClient.putObject(putObjectRequest);
         ossClient.shutdown();
         return null;
     }
 
     @DeleteMapping("deleteFile")
-    public Object deleteFile(@RequestBody RequestVO requestVo) throws IOException {
-        String endpoint=(String)redisUtil.get("endpoint");
-        String accessKeyId=(String)redisUtil.get("accessKeyId");
-        String accessKeySecret=(String)redisUtil.get("accessKeySecret");
-        String bucketName=(String)redisUtil.get("bucketName");
+    public Object deleteFile(@RequestBody RequestVO requestVo) {
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         ossClient.deleteObject(bucketName,requestVo.getId());
         ossClient.shutdown();
