@@ -4,7 +4,9 @@ import com.zzf.annotation.IgnoreAuth;
 import com.zzf.component.Send;
 import com.zzf.entity.Article;
 import com.zzf.entity.ArticleEs;
+import com.zzf.service.ArticleService;
 import com.zzf.util.HttpUtil;
+import com.zzf.util.RedisUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.ArticleVO;
 import io.swagger.annotations.Api;
@@ -14,9 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import com.zzf.mapper.ArticleDao;
-import com.zzf.service.ArticleService;
-import com.zzf.util.RedisUtil;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -26,7 +25,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author zzf
