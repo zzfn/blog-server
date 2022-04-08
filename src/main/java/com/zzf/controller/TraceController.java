@@ -84,12 +84,6 @@ public class TraceController {
         return ResultUtil.success(mongoTemplate.aggregate(aggregation, "logs", Map.class).getMappedResults().size());
     }
 
-    @GetMapping("remove")
-    @IgnoreAuth
-    public Object remove() {
-        return ResultUtil.success(traceService.removeExpiredTrace());
-    }
-
     @PostMapping("save")
     @IgnoreAuth
     public Object save(@RequestBody Trace trace) {
