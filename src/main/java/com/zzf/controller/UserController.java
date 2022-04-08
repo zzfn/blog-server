@@ -45,8 +45,6 @@ public class UserController {
      */
     @Resource
     private UserDao userDao;
-    @Resource
-    private LoginLogService loginLogService;
     @Autowired
     private RedisUtil redisUtil;
 
@@ -73,10 +71,6 @@ public class UserController {
                 tokenVO.setRefreshToken(JwtTokenUtil.generateRefreshToken(map));
                 tokenVO.setExpired(JwtTokenUtil.EXPIRATION);
                 log.info("用户{}登录成功",loginVO.getUsername());
-                LoginLog loginLog = new LoginLog();
-                loginLog.setIp(HttpUtil.getIp());
-                loginLog.setUserId(user.getId());
-                loginLogService.save(loginLog);
                 return ResultUtil.success(tokenVO);
             } else {
                 return ResultUtil.error("密码错误");
