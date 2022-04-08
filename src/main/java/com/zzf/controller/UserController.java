@@ -1,33 +1,23 @@
 package com.zzf.controller;
 
-import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zzf.annotation.IgnoreAuth;
-import com.zzf.entity.LoginLog;
-import com.zzf.mapper.UserDao;
 import com.zzf.entity.User;
-import com.zzf.service.LoginLogService;
-import com.zzf.util.HttpUtil;
+import com.zzf.mapper.UserDao;
 import com.zzf.util.JwtTokenUtil;
 import com.zzf.util.RedisUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.LoginVO;
 import com.zzf.vo.TokenVO;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * USER(TUser)表控制层
