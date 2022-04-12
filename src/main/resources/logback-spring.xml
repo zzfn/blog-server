@@ -36,7 +36,7 @@
             <pattern>${log_pattern}</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${log_path}/%d{yyyyMMdd}/error.%i.log</FileNamePattern>
+            <FileNamePattern>log/%d{yyyyMMdd}/error.%i.log</FileNamePattern>
             <maxHistory>30</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>2MB</maxFileSize>

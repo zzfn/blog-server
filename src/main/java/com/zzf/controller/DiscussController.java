@@ -1,6 +1,7 @@
 package com.zzf.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zzf.annotation.IgnoreAuth;
 import com.zzf.entity.Discuss;
 import com.zzf.service.DiscussService;
 import com.zzf.util.ResultUtil;
@@ -24,6 +25,7 @@ public class DiscussController {
     private DiscussService discussService;
 
     @PostMapping("save")
+    @IgnoreAuth
     public Object saveOne(@RequestBody Discuss discuss) {
         return ResultUtil.success(this.discussService.save(discuss));
     }
@@ -35,6 +37,7 @@ public class DiscussController {
      * @return 单条数据
      */
     @GetMapping("select")
+    @IgnoreAuth
     public Object selectOne(String id) {
         QueryWrapper<Discuss> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("ARTICLE_ID", id).orderByDesc("CREATE_TIME");

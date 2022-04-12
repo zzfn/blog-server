@@ -13,10 +13,6 @@ public class Discuss extends BaseEntity {
      */
     private String content;
     /**
-     * 备注
-     */
-    private String remark;
-    /**
      * 文章id
      */
     private String articleId;
