@@ -1,5 +1,6 @@
 package com.zzf.controller;
 
+import com.zzf.annotation.IgnoreAuth;
 import com.zzf.mapper.TalkBotMapper;
 import com.zzf.mapper.TaskMapper;
 import com.zzf.util.ResultUtil;
@@ -20,6 +21,7 @@ public class TaskController {
     TaskMapper taskMapper;
 
     @GetMapping("list")
+    @IgnoreAuth
     public Object getAllList() {
         return ResultUtil.success(taskMapper.selectList(null));
     }
