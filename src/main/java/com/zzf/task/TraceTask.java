@@ -1,6 +1,5 @@
 package com.zzf.task;
 
-import com.zzf.service.TalkService;
 import com.zzf.service.TraceService;
 import com.zzf.util.MailUtil;
 import com.zzf.util.TalkUtil;
@@ -18,8 +17,6 @@ import javax.annotation.Resource;
 public class TraceTask {
     @Resource
     TraceService traceService;
-    @Resource
-    TalkService talkService;
     @Resource
     MailUtil mailUtil;
     @Scheduled(cron = "0 0 3 ? * *")

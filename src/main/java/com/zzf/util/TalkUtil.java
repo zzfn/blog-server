@@ -2,7 +2,6 @@ package com.zzf.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.zzf.entity.TalkBot;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,8 +14,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -53,8 +50,8 @@ public class TalkUtil {
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
             byte[] signData = mac.doFinal(stringToSign.getBytes(StandardCharsets.UTF_8));
-            return URLEncoder.encode(new String(Base64.encodeBase64(signData)), "UTF-8");
-        } catch (NoSuchAlgorithmException | InvalidKeyException | UnsupportedEncodingException e) {
+            return new String(Base64.encodeBase64(signData));
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();
         }
         return null;
@@ -63,17 +60,18 @@ public class TalkUtil {
     public static Object postMessage(String message) {
         long timestamp = System.currentTimeMillis();
         String sign = TalkUtil.getSign(SECRET, timestamp);
-        String url = String.format(URL + "&timestamp=%s&sign=%s", timestamp, sign);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         JSONObject json = new JSONObject();
         JSONObject text = new JSONObject();
-        text.put("content", message);
-        json.put("msgtype", "text");
-        json.put("text", text);
+        text.put("text", message);
+        json.put("msg_type", "text");
+        json.put("timestamp", timestamp);
+        json.put("sign", sign);
+        json.put("content", text);
         HttpEntity<String> request = new HttpEntity<>(JSON.toJSONString(json), httpHeaders);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL, request, String.class);
         return ResultUtil.success(JSON.parseObject(responseEntity.getBody()));
     }
 }
