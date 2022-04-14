@@ -2,7 +2,7 @@ package com.zzf.task;
 
 import com.zzf.service.TraceService;
 import com.zzf.util.MailUtil;
-import com.zzf.util.TalkUtil;
+import com.zzf.util.BotUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -23,6 +23,6 @@ public class LogUserTask {
     @Scheduled(cron = "0 0 2 ? * *")
     public void run() {
         traceService.getAnyCount(-1);
-        TalkUtil.postMessage("统计pv、uv执行成功");
+        BotUtil.postMessage("统计pv、uv执行成功");
     }
 }

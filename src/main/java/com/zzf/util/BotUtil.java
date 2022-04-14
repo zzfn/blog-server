@@ -24,7 +24,7 @@ import java.security.NoSuchAlgorithmException;
  */
 @Component
 @Slf4j
-public class TalkUtil {
+public class BotUtil {
     /**
      * 秘钥
      */
@@ -59,7 +59,7 @@ public class TalkUtil {
 
     public static Object postMessage(String message) {
         long timestamp = System.currentTimeMillis();
-        String sign = TalkUtil.getSign(SECRET, timestamp);
+        String sign = BotUtil.getSign(SECRET, timestamp);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
