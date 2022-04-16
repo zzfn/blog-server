@@ -3,6 +3,7 @@ package com.zzf.util;
 import com.alibaba.druid.util.DruidWebUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -17,6 +18,7 @@ import java.util.Objects;
 /**
  * @author cc
  */
+@Slf4j
 public class IpUtil {
     public static String Ip2AddressKey;
 
@@ -32,6 +34,7 @@ public class IpUtil {
     }
 
     public static String getAddress(String ip) {
+        log.info("ip:{}", ip);
         RestTemplate restTemplate = new RestTemplate();
         Map<String, String> map = new HashMap<>();
         map.put("key", Ip2AddressKey);
