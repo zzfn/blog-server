@@ -1,5 +1,6 @@
 package com.zzf.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 /**
@@ -27,6 +28,7 @@ public class Discuss extends BaseEntity {
     /**
      * 用户名
      */
+    @TableField(exist = false)
     private String username;
     /**
      * 地区
