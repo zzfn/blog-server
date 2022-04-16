@@ -6,6 +6,7 @@
     <select id="queryAllById" resultType="com.zzf.entity.Discuss">
         select d.ID,
                d.CONTENT,
+               d.ARTICLE_ID,
                d.PARENT_ID,
                d.REPLY_ID,
                d.ADDRESS,
