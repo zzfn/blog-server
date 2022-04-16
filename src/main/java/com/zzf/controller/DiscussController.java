@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zzf.annotation.IgnoreAuth;
 import com.zzf.entity.Discuss;
 import com.zzf.service.DiscussService;
+import com.zzf.util.IpUtil;
 import com.zzf.util.ResultUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -12,11 +14,12 @@ import javax.annotation.Resource;
 /**
  * 评论表(Discuss)表控制层
  *
- * @author makejava
+ * @author cc
  * @since 2021-06-16 16:45:18
  */
 @RestController
 @RequestMapping("discuss")
+@Slf4j
 public class DiscussController {
     /**
      * 服务对象
@@ -27,6 +30,7 @@ public class DiscussController {
     @PostMapping("save")
     @IgnoreAuth
     public Object saveOne(@RequestBody Discuss discuss) {
+        discuss.setAddress(IpUtil.getAddress(IpUtil.getIp()));
         return ResultUtil.success(this.discussService.save(discuss));
     }
 

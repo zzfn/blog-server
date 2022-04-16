@@ -24,5 +24,12 @@ public class Discuss extends BaseEntity {
      * 回复的评论id
      */
     private String replyId;
-
+    /**
+     * 用户名
+     */
+    private String username;
+    /**
+     * 地区
+     */
+    private String address;
 }

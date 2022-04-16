@@ -2,8 +2,7 @@ package com.zzf.controller;
 
 import com.zzf.annotation.IgnoreAuth;
 import com.zzf.entity.Trace;
-import com.zzf.service.TraceService;
-import com.zzf.util.HttpUtil;
+import com.zzf.util.IpUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.PageVO;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +46,7 @@ public class TraceController {
     @PostMapping("save")
     @IgnoreAuth
     public Object save(@RequestBody Trace trace) {
-        trace.setIp(HttpUtil.getIp());
+        trace.setIp(IpUtil.getIp());
         trace.setTime(new Date());
         return ResultUtil.success(mongoTemplate.insert(trace, "logs"));
     }

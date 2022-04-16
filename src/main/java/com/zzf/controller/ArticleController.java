@@ -6,6 +6,7 @@ import com.zzf.entity.Article;
 import com.zzf.entity.ArticleEs;
 import com.zzf.service.ArticleService;
 import com.zzf.util.HttpUtil;
+import com.zzf.util.IpUtil;
 import com.zzf.util.RedisUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.ArticleVO;
@@ -117,7 +118,7 @@ public class ArticleController {
     @ApiOperation("更新浏览量")
     @GetMapping("updateViewed")
     public Object updateViewed(@RequestParam String id) {
-        String isViewed = "isViewed::" + HttpUtil.getIp() + "::" + id;
+        String isViewed = "isViewed::" + IpUtil.getIp() + "::" + id;
         if (redisUtil.hasKey(isViewed)) {
             return ResultUtil.success(false);
         } else {
@@ -130,7 +131,7 @@ public class ArticleController {
     @ApiOperation("点赞")
     @PostMapping("star")
     public Object star(@RequestParam String id) {
-        String isStared = "isStared::" + HttpUtil.getIp() + "::" + id;
+        String isStared = "isStared::" + IpUtil.getIp() + "::" + id;
         if (redisUtil.hasKey(isStared)) {
             return ResultUtil.success(false);
         } else {
