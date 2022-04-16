@@ -5,8 +5,10 @@ import com.zzf.annotation.IgnoreAuth;
 import com.zzf.entity.Discuss;
 import com.zzf.service.DiscussService;
 import com.zzf.util.IpUtil;
+import com.zzf.util.RedisUtil;
 import com.zzf.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,11 +28,19 @@ public class DiscussController {
      */
     @Resource
     private DiscussService discussService;
+    @Resource
+    private RedisUtil redisUtil;
 
     @PostMapping("save")
     @IgnoreAuth
     public Object saveOne(@RequestBody Discuss discuss) {
-        discuss.setAddress(IpUtil.getAddress("221.225.151.97"));
+        String ip = IpUtil.getIp();
+        String address = (String) redisUtil.hget("address", ip);
+        if (StringUtils.isBlank(address)) {
+            address = IpUtil.getAddress(ip);
+            redisUtil.hset("address", ip, address);
+        }
+        discuss.setAddress(address);
         return ResultUtil.success(this.discussService.save(discuss));
     }
 
