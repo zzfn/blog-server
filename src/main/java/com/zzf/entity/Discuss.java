@@ -16,7 +16,10 @@ public class Discuss extends BaseEntity {
      * 文章id
      */
     private String articleId;
-
+    /**
+     * 一級id
+     */
+    private String parentId;
     /**
      * 回复的评论id
      */
