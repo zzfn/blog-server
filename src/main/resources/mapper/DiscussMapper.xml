@@ -3,22 +3,18 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzf.mapper.DiscussMapper">
-
-    <resultMap id="BaseResultMap" type="com.zzf.entity.Discuss">
-            <id property="id" column="ID" jdbcType="VARCHAR"/>
-            <result property="content" column="CONTENT" jdbcType="VARCHAR"/>
-            <result property="articleId" column="ARTICLE_ID" jdbcType="VARCHAR"/>
-            <result property="replyId" column="REPLY_ID" jdbcType="VARCHAR"/>
-            <result property="createBy" column="CREATE_BY" jdbcType="VARCHAR"/>
-            <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
-            <result property="updateBy" column="UPDATE_BY" jdbcType="VARCHAR"/>
-            <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="IS_DELETE" jdbcType="CHAR"/>
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        ID,CONTENT,ARTICLE_ID,
-        REPLY_ID,CREATE_BY,CREATE_TIME,
-        UPDATE_BY,UPDATE_TIME,IS_DELETE
-    </sql>
+    <select id="queryAllById" resultType="com.zzf.entity.Discuss">
+        select d.ID,
+               d.CONTENT,
+               d.PARENT_ID,
+               d.REPLY_ID,
+               d.ADDRESS,
+               d.CREATE_TIME,
+               u.USERNAME
+        from t_discuss as d
+                 left join t_user as u on d.CREATE_BY = u.ID
+        where d.ARTICLE_ID = #{id}
+          and d.IS_DELETE = 0
+        order by d.CREATE_TIME desc
+    </select>
 </mapper>

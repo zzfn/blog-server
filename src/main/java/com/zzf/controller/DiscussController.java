@@ -53,9 +53,7 @@ public class DiscussController {
     @GetMapping("select")
     @IgnoreAuth
     public Object selectOne(String id) {
-        QueryWrapper<Discuss> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("ARTICLE_ID", id).orderByDesc("CREATE_TIME");
-        return ResultUtil.success(this.discussService.list(queryWrapper));
+        return ResultUtil.success(this.discussService.getListById(id));
     }
 
 }
