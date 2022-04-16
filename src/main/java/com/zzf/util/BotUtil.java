@@ -48,17 +48,16 @@ public class BotUtil {
         try {
             String stringToSign = timestamp + "\n" + secret;
             Mac mac = Mac.getInstance("HmacSHA256");
-            mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
-            byte[] signData = mac.doFinal(stringToSign.getBytes(StandardCharsets.UTF_8));
+            mac.init(new SecretKeySpec(stringToSign.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+            byte[] signData = mac.doFinal(new byte[]{});
             return new String(Base64.encodeBase64(signData));
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     public static Object postMessage(String message) {
-        long timestamp = System.currentTimeMillis();
+        long timestamp = System.currentTimeMillis()/1000;
         String sign = BotUtil.getSign(SECRET, timestamp);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -70,6 +69,7 @@ public class BotUtil {
         json.put("timestamp", timestamp);
         json.put("sign", sign);
         json.put("content", text);
+        log.info("发送消息：{}", json.toJSONString());
         HttpEntity<String> request = new HttpEntity<>(JSON.toJSONString(json), httpHeaders);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL, request, String.class);
         return ResultUtil.success(JSON.parseObject(responseEntity.getBody()));
