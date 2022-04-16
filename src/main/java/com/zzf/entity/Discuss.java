@@ -26,10 +26,10 @@ public class Discuss extends BaseEntity {
      */
     private String replyId;
     /**
-     * 用户名
+     * 昵称
      */
     @TableField(exist = false)
-    private String username;
+    private String nickName;
     /**
      * 地区
      */

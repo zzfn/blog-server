@@ -11,7 +11,7 @@
                d.REPLY_ID,
                d.ADDRESS,
                d.CREATE_TIME,
-               u.USERNAME
+               u.NICK_NAME
         from t_discuss as d
                  left join t_user as u on d.CREATE_BY = u.ID
         where d.ARTICLE_ID = #{id}
