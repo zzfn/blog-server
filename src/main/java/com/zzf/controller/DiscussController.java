@@ -30,7 +30,7 @@ public class DiscussController {
     @PostMapping("save")
     @IgnoreAuth
     public Object saveOne(@RequestBody Discuss discuss) {
-        discuss.setAddress(IpUtil.getAddress(IpUtil.getIp()));
+        discuss.setAddress(IpUtil.getAddress("221.225.151.97"));
         return ResultUtil.success(this.discussService.save(discuss));
     }
 

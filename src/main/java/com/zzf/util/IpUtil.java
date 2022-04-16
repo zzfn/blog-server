@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -19,12 +20,16 @@ import java.util.Objects;
  * @author cc
  */
 @Slf4j
+@Component
 public class IpUtil {
-    public static String Ip2AddressKey;
+    /**
+     * 秘钥
+     */
+    public static String ADDRESS_KEY;
 
-    @Value("${Ip2AddressKey}")
-    private void setIp2AddressKey(String ip2AddressKey) {
-        Ip2AddressKey = ip2AddressKey;
+    @Value("${AddressKeyId}")
+    private void setUrl(String addressKeyId) {
+        ADDRESS_KEY = addressKeyId;
     }
 
     public static String getIp() {
@@ -34,13 +39,12 @@ public class IpUtil {
     }
 
     public static String getAddress(String ip) {
-        log.info("ip:{}", ip);
         RestTemplate restTemplate = new RestTemplate();
         Map<String, String> map = new HashMap<>();
-        map.put("key", Ip2AddressKey);
+        map.put("key", ADDRESS_KEY);
         map.put("ip", ip);
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity("https://restapi.amap.com/v3/ip?key={key}&ip={ip}", String.class, map);
-        JSONObject body = JSON.parseObject(responseEntity.getBody());
+        String response = restTemplate.getForObject("https://restapi.amap.com/v3/ip?key={key}&ip={ip}", String.class, map);
+        JSONObject body = JSON.parseObject(response);
         if (Objects.nonNull(body) && body.get("province") instanceof String && body.get("city") instanceof String) {
             return body.get("province").toString() + body.get("city").toString();
         }
