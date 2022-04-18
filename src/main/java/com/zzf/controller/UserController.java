@@ -76,6 +76,9 @@ public class UserController {
     @PostMapping("register")
     @IgnoreAuth
     public Object register(@RequestBody User user) {
+        if(userDao.selectCount(new QueryWrapper<User>().eq("username",user.getUsername())) > 0){
+            return ResultUtil.error("用户名已存在");
+        }
         if (null == user.getNickName()) {
             user.setNickName(user.getUsername());
         }
