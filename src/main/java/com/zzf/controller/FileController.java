@@ -10,6 +10,7 @@ import com.zzf.vo.RequestVO;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,6 +57,7 @@ public class FileController {
     }
 
     @DeleteMapping("deleteFile")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object deleteFile(@RequestBody RequestVO requestVo) {
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         ossClient.deleteObject(bucketName, requestVo.getId());
@@ -64,6 +66,7 @@ public class FileController {
     }
 
     @DeleteMapping("deleteFolder")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object deleteFolder(@RequestBody RequestVO requestVo) {
         String prefix = requestVo.getId();
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
