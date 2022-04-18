@@ -74,6 +74,7 @@ public class UserController {
      * 注册
      */
     @PostMapping("register")
+    @IgnoreAuth
     public Object register(@RequestBody User user) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword().trim()));
