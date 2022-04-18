@@ -60,7 +60,7 @@ public class UserController {
                 tokenVO.setToken(token);
                 tokenVO.setRefreshToken(JwtTokenUtil.generateRefreshToken(map));
                 tokenVO.setExpired(JwtTokenUtil.EXPIRATION);
-                log.info("用户{}登录成功",loginVO.getUsername());
+                log.info("用户{}登录成功", loginVO.getUsername());
                 return ResultUtil.success(tokenVO);
             } else {
                 return ResultUtil.error("密码错误");
@@ -76,6 +76,9 @@ public class UserController {
     @PostMapping("register")
     @IgnoreAuth
     public Object register(@RequestBody User user) {
+        if (null == user.getNickName()) {
+            user.setNickName(user.getUsername());
+        }
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword().trim()));
         return ResultUtil.success(userDao.insert(user));
