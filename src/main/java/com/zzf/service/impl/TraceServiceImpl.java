@@ -4,19 +4,17 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zzf.entity.LogUser;
 import com.zzf.entity.Trace;
 import com.zzf.mapper.TraceMapper;
+import com.zzf.service.LogUserService;
 import com.zzf.service.TraceService;
 import com.zzf.util.DateUtil;
-import com.zzf.util.ResultUtil;
 import com.zzf.vo.PerformanceVO;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.DateOperators;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import com.zzf.service.LogUserService;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -47,7 +45,7 @@ public class TraceServiceImpl extends ServiceImpl<TraceMapper, Trace>
     public Object getPerformance() {
         AggregationOperation group = Aggregation.group("name").max("value").as("max").min("value").as("min").avg("value").as("avg");
         Aggregation aggregation = Aggregation.newAggregation(group);
-        return mongoTemplate.aggregate(aggregation, "logs", PerformanceVO.class).getMappedResults().stream().sorted((Comparator.comparing(PerformanceVO::getId))).collect(Collectors.toList());
+        return mongoTemplate.aggregate(aggregation, "logs", PerformanceVO.class).getMappedResults();
     }
 
     @Override
