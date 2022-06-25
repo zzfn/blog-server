@@ -202,4 +202,11 @@ public class ArticleController {
         });
         return ResultUtil.success(list);
     }
+    @ApiOperation("createIndex")
+    @GetMapping("createIndex")
+    @IgnoreAuth
+    public Object createIndex() {
+        elasticsearchRestTemplate.createIndex(ArticleEs.class);
+        return ResultUtil.success(null);
+    }
 }
