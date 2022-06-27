@@ -45,7 +45,7 @@ public class TraceServiceImpl extends ServiceImpl<TraceMapper, Trace>
     public Object getPerformance() {
         AggregationOperation group = Aggregation.group("name").max("value").as("max").min("value").as("min").avg("value").as("avg");
         Aggregation aggregation = Aggregation.newAggregation(group);
-        return mongoTemplate.aggregate(aggregation, "logs", PerformanceVO.class).getMappedResults().stream().filter(s->s.getId()).sorted((Comparator.comparing(PerformanceVO::getId))).collect(Collectors.toList());
+        return mongoTemplate.aggregate(aggregation, "logs", PerformanceVO.class).getMappedResults().stream().filter(s->s.getId()!=null||s.getId()!='').sorted((Comparator.comparing(PerformanceVO::getId))).collect(Collectors.toList());
     }
 
     @Override
