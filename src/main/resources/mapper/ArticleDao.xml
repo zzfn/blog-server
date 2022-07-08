@@ -28,6 +28,8 @@
     <select id="listArticle" resultType="com.zzf.entity.Article">
         SELECT T_ARTICLE.id,
         T_ARTICLE.title,
+        T_ARTICLE.logo,
+        T_ARTICLE.summary,
         T_ARTICLE.tag,
         T_ARTICLE.create_by,
         T_ARTICLE.update_by,
