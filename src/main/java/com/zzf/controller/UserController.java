@@ -9,7 +9,6 @@ import com.zzf.util.RedisUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.LoginVO;
 import com.zzf.vo.TokenVO;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,7 +27,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("user")
 @Slf4j
-@Api(tags = "用户管理")
 public class UserController {
     /**
      * 服务对象

@@ -9,7 +9,6 @@ import com.zzf.entity.Favorite;
 import com.zzf.service.FavoriteService;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.PageVO;
-import io.swagger.annotations.Api;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +22,6 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("favorite")
-@Api(tags = "收藏管理")
 public class FavoriteController {
     /**
      * 服务对象

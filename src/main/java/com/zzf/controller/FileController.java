@@ -7,7 +7,6 @@ import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.*;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.RequestVO;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +26,6 @@ import java.util.List;
 @RestController
 @RequestMapping("oss")
 @Slf4j
-@Api(tags = "文件管理")
 public class FileController {
     @Value("${oss.endpoint}")
     private String endpoint;

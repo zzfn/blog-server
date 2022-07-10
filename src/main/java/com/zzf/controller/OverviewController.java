@@ -7,8 +7,6 @@ import com.zzf.service.LogUserService;
 import com.zzf.service.TraceService;
 import com.zzf.util.RedisUtil;
 import com.zzf.vo.Tags;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import com.zzf.mapper.ArticleDao;
 import com.zzf.util.ResultUtil;
@@ -27,7 +25,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("overview")
 @Slf4j
-@Api(tags = "统计接口")
 public class OverviewController {
     @Resource
     ArticleService articleService;
@@ -40,7 +37,6 @@ public class OverviewController {
     @Resource
     RedisUtil redisUtil;
 
-    @ApiOperation("后台工作台统计接口")
     @GetMapping("/getHomeOverview")
     public Object getHomeOverview() {
         LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper<>();

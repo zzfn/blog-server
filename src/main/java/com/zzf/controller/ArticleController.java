@@ -11,8 +11,8 @@ import com.zzf.util.RedisUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.ArticleTagVO;
 import com.zzf.vo.ArticleVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -35,7 +35,7 @@ import java.util.*;
 @RestController
 @RequestMapping("article")
 @Slf4j
-@Api(tags = "文章管理")
+@Tag(name = "PmsBrandController", description = "商品品牌管理")
 public class ArticleController {
     static final String TAG_DESC = "tagDesc";
     static final String TITLE = "title";
@@ -53,8 +53,8 @@ public class ArticleController {
     private Send send;
 
     @GetMapping("page")
-    @ApiOperation("文章分页列表")
     @IgnoreAuth
+    @Operation(summary = "获取所有品牌列表",description = "需要登录后访问")
     public Object pageArticles(ArticleVO articleVO) {
         String system = HttpUtil.getSystem();
         if (ADMIN.equals(system)) {
@@ -65,7 +65,6 @@ public class ArticleController {
     }
 
     @PostMapping("save")
-    @ApiOperation("保存或修改文章")
     @PreAuthorize("hasRole('ADMIN')")
     public Object saveArticle(@RequestBody Article article) {
         articleService.saveOrUpdate(article);
@@ -75,7 +74,6 @@ public class ArticleController {
         return ResultUtil.success(article.getId());
     }
 
-    @ApiOperation("排行榜")
     @GetMapping("hot")
     public Object listHotArticles() {
         Collection ids = new ArrayList();
@@ -92,14 +90,12 @@ public class ArticleController {
         return ResultUtil.success(articles);
     }
 
-    @ApiOperation("文章分类")
     @GetMapping("tags")
     @IgnoreAuth
     public Object listTags() {
         return ResultUtil.success(articleService.getTagsCount());
     }
 
-    @ApiOperation("文章列表不分页")
     @GetMapping("list")
     @IgnoreAuth
     public Object listArchives(@RequestParam(defaultValue = "") String code) {
@@ -109,14 +105,12 @@ public class ArticleController {
         return ResultUtil.success(articleTagVO);
     }
 
-    @ApiOperation("最近更新")
     @GetMapping("lastUpdated")
     @IgnoreAuth
     public Object lastUpdated() {
         return ResultUtil.success(articleService.listLastUpdated());
     }
 
-    @ApiOperation("更新浏览量")
     @GetMapping("updateViewed")
     public Object updateViewed(@RequestParam String id) {
         String isViewed = "isViewed::" + IpUtil.getIp() + "::" + id;
@@ -129,7 +123,6 @@ public class ArticleController {
         }
     }
 
-    @ApiOperation("点赞")
     @PostMapping("star")
     public Object star(@RequestParam String id) {
         String isStared = "isStared::" + IpUtil.getIp() + "::" + id;
@@ -142,7 +135,6 @@ public class ArticleController {
         }
     }
 
-    @ApiOperation("根据id查询文章详情")
     @GetMapping("{id}")
     @IgnoreAuth
     public Object getArticle(@PathVariable("id") String id) {
@@ -169,14 +161,12 @@ public class ArticleController {
     }
 
 
-    @ApiOperation("根据id删除文章")
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public Object removeArticle(@PathVariable String id) {
         return ResultUtil.success(articleService.delByDb(id));
     }
 
-    @ApiOperation("es搜索")
     @GetMapping("search")
     @IgnoreAuth
     public Object getList(String keyword) {

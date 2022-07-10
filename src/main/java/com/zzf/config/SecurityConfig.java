@@ -88,6 +88,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             }
         });
         web.ignoring().antMatchers(HttpMethod.GET,
+                "/",
+                "/swagger-ui.html",
+                "/swagger-ui/",
+                "/*.html",
+                "/favicon.ico",
+                "/**/*.html",
+                "/**/*.css",
+                "/**/*.js",
+                "/swagger-resources/**",
+                "/v3/api-docs/**",
                 "/v3/api-docs",
                 "/swagger-resources",
                 "/swagger-resources/**",
