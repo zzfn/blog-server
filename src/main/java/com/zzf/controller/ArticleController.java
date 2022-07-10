@@ -9,6 +9,7 @@ import com.zzf.util.HttpUtil;
 import com.zzf.util.IpUtil;
 import com.zzf.util.RedisUtil;
 import com.zzf.util.ResultUtil;
+import com.zzf.vo.ArticleTagVO;
 import com.zzf.vo.ArticleVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,10 +27,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author zzf
@@ -105,7 +103,10 @@ public class ArticleController {
     @GetMapping("list")
     @IgnoreAuth
     public Object listArchives(@RequestParam(defaultValue = "") String code) {
-        return ResultUtil.success(articleService.listByCache(code));
+        ArticleTagVO articleTagVO=new ArticleTagVO();
+        articleTagVO.setTagCode(code);
+        articleTagVO.setArticleList(articleService.listByCache(code));
+        return ResultUtil.success(articleTagVO);
     }
 
     @ApiOperation("最近更新")
