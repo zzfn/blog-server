@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,12 +15,14 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class SpringDocConfig {
+    @Value("${SwaggerHost}")
+    private String url;
     final String securitySchemeName = "bearerAuth";
 
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI().addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
-                .addServersItem(new Server().url("https://api.zzfzzf.com"))
+                .addServersItem(new Server().url(url))
                 .components(new Components().addSecuritySchemes(securitySchemeName, new SecurityScheme()
                         .name(securitySchemeName)
                         .type(SecurityScheme.Type.HTTP)
