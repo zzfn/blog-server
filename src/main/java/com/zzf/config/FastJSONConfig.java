@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,10 @@ import java.util.List;
  * @date 2020/8/9 23:40
  */
 @Configuration
-public class FastJSONConfig {
-    @Bean
-    public HttpMessageConverters fastJsonHttpMessageConverters() {
+public class FastJSONConfig implements WebMvcConfigurer {
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         List<MediaType> mediaTypes = new ArrayList<>();
@@ -33,9 +35,7 @@ public class FastJSONConfig {
                 SerializerFeature.WriteMapNullValue
         );
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
-        fastJsonConfig.getSerializeConfig().put(String.class, MyStringSerializer.instance);
         fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
-        HttpMessageConverter<?> converter = fastJsonHttpMessageConverter;
-        return new HttpMessageConverters(converter);
+        converters.add(fastJsonHttpMessageConverter);
     }
 }

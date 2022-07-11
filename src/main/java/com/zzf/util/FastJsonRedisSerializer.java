@@ -15,11 +15,6 @@ import java.nio.charset.StandardCharsets;
 public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final Class<T> clazz;
-    static {
-        ParserConfig.getGlobalInstance().addAccept("com.zzf.vo");
-        ParserConfig.getGlobalInstance().addAccept("com.zzf.entity");
-        ParserConfig.getGlobalInstance().addAccept("com.baomidou.mybatisplus");
-    }
     public FastJsonRedisSerializer(Class<T> clazz) {
         super();
         this.clazz = clazz;
