@@ -33,6 +33,7 @@ public class FastJSONConfig {
                 SerializerFeature.WriteMapNullValue
         );
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        fastJsonConfig.getSerializeConfig().put(String.class, MyStringSerializer.instance);
         fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
         HttpMessageConverter<?> converter = fastJsonHttpMessageConverter;
         return new HttpMessageConverters(converter);

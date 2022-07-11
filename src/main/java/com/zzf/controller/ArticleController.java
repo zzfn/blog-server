@@ -35,7 +35,6 @@ import java.util.*;
 @RestController
 @RequestMapping("article")
 @Slf4j
-@Tag(name = "PmsBrandController", description = "商品品牌管理")
 public class ArticleController {
     static final String TAG_DESC = "tagDesc";
     static final String TITLE = "title";
@@ -54,7 +53,6 @@ public class ArticleController {
 
     @GetMapping("page")
     @IgnoreAuth
-    @Operation(summary = "获取所有品牌列表",description = "需要登录后访问")
     public Object pageArticles(ArticleVO articleVO) {
         String system = HttpUtil.getSystem();
         if (ADMIN.equals(system)) {
