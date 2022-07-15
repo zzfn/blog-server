@@ -34,6 +34,6 @@ public class FastJsonHttpConverterConfig implements WebMvcConfigurer {
         );
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
         fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
-        converters.add(fastJsonHttpMessageConverter);
+        converters.add(0,fastJsonHttpMessageConverter);
     }
 }
