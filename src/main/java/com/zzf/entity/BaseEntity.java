@@ -1,6 +1,8 @@
 package com.zzf.entity;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 
@@ -23,9 +25,11 @@ public class BaseEntity implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT,jdbcType= JdbcType.TIMESTAMP)
     private LocalDateTime createTime;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT_UPDATE,jdbcType= JdbcType.TIMESTAMP,update = "now()")
     private LocalDateTime updateTime;
 
