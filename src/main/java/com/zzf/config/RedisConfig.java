@@ -1,8 +1,7 @@
 package com.zzf.config;
 
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.zzf.util.FastJsonRedisSerializer;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import com.alibaba.fastjson2.support.spring.data.redis.FastJsonRedisSerializer;
+import com.alibaba.fastjson2.support.spring.data.redis.GenericFastJsonRedisSerializer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
@@ -28,29 +27,32 @@ public class RedisConfig extends CachingConfigurerSupport {
      * 采用RedisCacheManager作为缓存管理器
      */
     @Bean
-    @Primary
-    public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory);
-        FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
-        RedisSerializationContext.SerializationPair<Object> pair = RedisSerializationContext.SerializationPair.fromSerializer(fastJsonRedisSerializer);
-        RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(pair);
-        defaultCacheConfig = defaultCacheConfig.entryTtl(Duration.ofDays(30));
-        return new RedisCacheManager(redisCacheWriter, defaultCacheConfig);
+    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+        GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+                // 默认缓存时间
+                .entryTtl(Duration.ofSeconds(600))
+                // 设置key的序列化方式
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(stringRedisSerializer))
+                // 设置value的序列化方式
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(fastJsonRedisSerializer));
+        return RedisCacheManager.builder(connectionFactory)
+                .cacheDefaults(config)
+                .transactionAware()
+                .build();
     }
 
-    @Bean(name = "redisTemplate")
-    @ConditionalOnMissingBean(name = "redisTemplate")
+    @Bean
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<Object, Object> template = new RedisTemplate<>();
-        //使用fastjson序列化
-        FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
-        // value值的序列化采用fastJsonRedisSerializer
-        template.setValueSerializer(fastJsonRedisSerializer);
-        template.setHashValueSerializer(fastJsonRedisSerializer);
-        // key的序列化采用StringRedisSerializer
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setHashKeySerializer(new StringRedisSerializer());
-        template.setConnectionFactory(redisConnectionFactory);
-        return template;
+        RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
+        redisTemplate.setValueSerializer(fastJsonRedisSerializer);
+        redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
+        redisTemplate.setKeySerializer(stringRedisSerializer);
+        redisTemplate.setHashKeySerializer(stringRedisSerializer);
+        return redisTemplate;
     }
 }
