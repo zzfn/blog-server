@@ -27,7 +27,7 @@ public class FastJsonHttpConverterConfig implements WebMvcConfigurer {
         mediaTypes.add(MediaType.APPLICATION_JSON);
         fastJsonHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
         fastJsonConfig.setReaderFeatures(JSONReader.Feature.SupportAutoType);
-        fastJsonConfig.setWriterFeatures(JSONWriter.Feature.WriteMapNullValue);
+        fastJsonConfig.setWriterFeatures(JSONWriter.Feature.WriteNulls);
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
         fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
         converters.add(0,fastJsonHttpMessageConverter);
