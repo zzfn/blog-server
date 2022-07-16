@@ -4,26 +4,25 @@ import com.zzf.annotation.IgnoreAuth;
 import com.zzf.component.ResultAccessDeniedHandler;
 import com.zzf.component.ResultAuthenticationEntryPoint;
 import com.zzf.filter.JwtAuthorizationFilter;
-import com.zzf.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
@@ -38,9 +37,7 @@ import java.util.Objects;
 @EnableWebSecurity
 @Slf4j
 @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    UserService userService;
+public class SecurityConfig {
     @Autowired
     JwtAuthorizationFilter jwtAuthorizationFilter;
     @Autowired
@@ -48,47 +45,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     ResultAuthenticationEntryPoint resultAuthenticationEntryPoint;
     @Autowired
+    @Qualifier("requestMappingHandlerMapping")
     private RequestMappingHandlerMapping handlerMapping;
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        WebSecurity and = web.ignoring().and();
-        Map<RequestMappingInfo, HandlerMethod> handlerMethods =
-                handlerMapping.getHandlerMethods();
-        handlerMethods.forEach((info, method) -> {
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        ArrayList<String> urlList = new ArrayList<>();
+        Map<RequestMappingInfo,HandlerMethod> requestMappingInfoHandlerMethodMap = handlerMapping.getHandlerMethods();
+        log.info("0000{}",requestMappingInfoHandlerMethodMap);
+        requestMappingInfoHandlerMethodMap.forEach((info, method) -> {
             if (!Objects.isNull(method.getMethodAnnotation(IgnoreAuth.class))) {
-                // 根据请求类型做不同的处理
-                info.getMethodsCondition().getMethods().forEach(requestMethod -> {
-                    switch (requestMethod) {
-                        case GET:
-                            // getPatternsCondition得到请求url数组，遍历处理
-                            info.getPatternsCondition().getPatterns().forEach(pattern -> {
-                                // 放行
-                                and.ignoring().antMatchers(HttpMethod.GET, pattern);
-                            });
-                            break;
-                        case POST:
-                            info.getPatternsCondition().getPatterns().forEach(pattern -> {
-                                and.ignoring().antMatchers(HttpMethod.POST, pattern);
-                            });
-                            break;
-                        case DELETE:
-                            info.getPatternsCondition().getPatterns().forEach(pattern -> {
-                                and.ignoring().antMatchers(HttpMethod.DELETE, pattern);
-                            });
-                            break;
-                        case PUT:
-                            info.getPatternsCondition().getPatterns().forEach(pattern -> {
-                                and.ignoring().antMatchers(HttpMethod.PUT, pattern);
-                            });
-                            break;
-                        default:
-                            break;
-                    }
-                });
+                urlList.addAll(info.getPatternValues());
             }
         });
-        web.ignoring().antMatchers(HttpMethod.GET,
-                "/",
+        String[] array = new String[urlList.size()];
+        urlList.toArray(array);
+        return (web) -> web.ignoring().antMatchers(array);
+    }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll();
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET, "/",
                 "/swagger-ui.html",
                 "/swagger-ui/",
                 "/*.html",
@@ -103,14 +79,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-resources/**",
                 "/configuration/ui",
                 "/configuration/security",
+                "/article/search",
                 "/swagger-ui/**",
-                "/webjars/**");
-    }
-
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll();
+                "/webjars/**").permitAll();
         httpSecurity.authorizeRequests().antMatchers("/websocket").permitAll();
+        httpSecurity.authorizeRequests().antMatchers("/user/login").permitAll();
         httpSecurity.cors();
         httpSecurity
                 .csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -122,16 +95,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(resultAuthenticationEntryPoint);
         httpSecurity.headers().cacheControl();
         httpSecurity.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    @Override
-    protected AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
+        return httpSecurity.build();
     }
 }
