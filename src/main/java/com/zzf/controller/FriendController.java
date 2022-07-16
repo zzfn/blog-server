@@ -39,7 +39,11 @@ public class FriendController {
     public Object selectAll(Page<Friend> page, Friend friend) {
         return ResultUtil.success(this.friendService.page(page, new QueryWrapper<>(friend)));
     }
-
+    @GetMapping("list")
+    @IgnoreAuth
+    public Object selectList(@RequestBody Friend friend) {
+        return ResultUtil.success(this.friendService.list(new QueryWrapper<>(friend)));
+    }
     /**
      * 通过主键查询单条数据
      *
@@ -62,7 +66,6 @@ public class FriendController {
     public Object insert(@RequestBody Friend friend) {
         return ResultUtil.success(this.friendService.save(friend));
     }
-
     /**
      * 修改数据
      *
