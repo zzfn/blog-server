@@ -44,6 +44,7 @@ public class SecurityConfig {
     @Resource
     @Qualifier("requestMappingHandlerMapping")
     private RequestMappingHandlerMapping handlerMapping;
+
     private String[] getAnonymousUrls() {
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = handlerMapping.getHandlerMethods();
         Set<String> allAnonymousAccess = new HashSet<>();
@@ -56,27 +57,18 @@ public class SecurityConfig {
         }
         return allAnonymousAccess.toArray(new String[0]);
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll();
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET, "/",
-                "/swagger-ui.html",
-                "/swagger-ui/",
-                "/*.html",
                 "/favicon.ico",
-                "/**/*.html",
-                "/**/*.css",
-                "/**/*.js",
-                "/swagger-resources/**",
-                "/v3/api-docs/**",
-                "/v3/api-docs",
+                "/swagger-ui/**",
                 "/swagger-resources",
                 "/swagger-resources/**",
-                "/configuration/ui",
-                "/configuration/security",
-                "/article/search",
-                "/swagger-ui/**",
-                "/webjars/**").permitAll();
+                "/v3/api-docs",
+                "/v3/api-docs/**"
+        ).permitAll();
         httpSecurity.authorizeRequests().antMatchers("/websocket").permitAll();
         httpSecurity.authorizeRequests().antMatchers(getAnonymousUrls()).permitAll();
         httpSecurity.cors();
