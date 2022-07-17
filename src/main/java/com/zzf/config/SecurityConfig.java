@@ -1,20 +1,18 @@
 package com.zzf.config;
 
+import com.alibaba.fastjson.JSON;
 import com.zzf.annotation.IgnoreAuth;
-import com.zzf.component.ResultAccessDeniedHandler;
-import com.zzf.component.ResultAuthenticationEntryPoint;
 import com.zzf.filter.JwtAuthorizationFilter;
+import com.zzf.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,7 +22,6 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -90,18 +87,20 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(
-                        (req, res, auth) -> {
-                            res.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                            res.setStatus(HttpStatus.UNAUTHORIZED.value());
-                            res.getWriter().println("请认证后处理！");
-                        })
-                .accessDeniedHandler(
-                        (req, res, auth) -> {
-                            res.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                            res.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                            res.getWriter().println("权限不足，请联系管理员!");
-                        });
+//                .accessDeniedHandler((req, res, auth) -> {
+//                    res.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//                    res.setCharacterEncoding("UTF-8");
+//                    res.setStatus(200);
+//                    res.getWriter().println(JSON.toJSONString(ResultUtil.error(4003, "权限不足，请联系管理员")));
+//                    res.getWriter().flush();
+//                })
+                .authenticationEntryPoint((req, res, auth) -> {
+                    res.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    res.setCharacterEncoding("UTF-8");
+                    res.setStatus(200);
+                    res.getWriter().println(JSON.toJSONString(ResultUtil.error(4001, "请认证后处理")));
+                    res.getWriter().flush();
+                });
         httpSecurity.headers().cacheControl();
         httpSecurity.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
