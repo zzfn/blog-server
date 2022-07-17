@@ -56,12 +56,8 @@ public class DictAspect {
             Optional.of((List) list).ifPresent(objects -> objects.forEach(this::translation));
         } else if (resultObj instanceof IPage) {
             IPage ipage = (IPage) resultObj;
-            List list = (List) ipage.getRecords();
-            Optional.of((List) list).ifPresent(objects -> objects.forEach(this::translation));
-        } else if (resultObj instanceof Boolean||resultObj instanceof String||resultObj instanceof Integer) {
-
-        } else {
-            translation(resultObj);
+            List list = ipage.getRecords();
+            Optional.of(list).ifPresent(objects -> objects.forEach(this::translation));
         }
         return result;
     }
