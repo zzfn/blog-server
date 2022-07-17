@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,9 +21,11 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.util.ArrayList;
+import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 
 /**
@@ -38,24 +39,22 @@ import java.util.Objects;
 @Slf4j
 @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
-    @Autowired
+    @Resource
     JwtAuthorizationFilter jwtAuthorizationFilter;
-    @Autowired
+    @Resource
     @Qualifier("requestMappingHandlerMapping")
     private RequestMappingHandlerMapping handlerMapping;
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        ArrayList<String> urlList = new ArrayList<>();
-        Map<RequestMappingInfo,HandlerMethod> requestMappingInfoHandlerMethodMap = handlerMapping.getHandlerMethods();
-        log.info("0000{}",requestMappingInfoHandlerMethodMap);
-        requestMappingInfoHandlerMethodMap.forEach((info, method) -> {
-            if (!Objects.isNull(method.getMethodAnnotation(IgnoreAuth.class))) {
-                urlList.addAll(info.getPatternValues());
+    private String[] getAnonymousUrls() {
+        Map<RequestMappingInfo, HandlerMethod> handlerMethods = handlerMapping.getHandlerMethods();
+        Set<String> allAnonymousAccess = new HashSet<>();
+        for (Map.Entry<RequestMappingInfo, HandlerMethod> infoEntry : handlerMethods.entrySet()) {
+            HandlerMethod value = infoEntry.getValue();
+            IgnoreAuth methodAnnotation = value.getMethodAnnotation(IgnoreAuth.class);
+            if (!Objects.isNull(methodAnnotation)) {
+                allAnonymousAccess.addAll(infoEntry.getKey().getPatternValues());
             }
-        });
-        String[] array = new String[urlList.size()];
-        urlList.toArray(array);
-        return (web) -> web.ignoring().antMatchers(array);
+        }
+        return allAnonymousAccess.toArray(new String[0]);
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -79,7 +78,7 @@ public class SecurityConfig {
                 "/swagger-ui/**",
                 "/webjars/**").permitAll();
         httpSecurity.authorizeRequests().antMatchers("/websocket").permitAll();
-        httpSecurity.authorizeRequests().antMatchers("/user/login").permitAll();
+        httpSecurity.authorizeRequests().antMatchers(getAnonymousUrls()).permitAll();
         httpSecurity.cors();
         httpSecurity
                 .csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
