@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -22,6 +24,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -40,10 +43,6 @@ import java.util.Objects;
 public class SecurityConfig {
     @Autowired
     JwtAuthorizationFilter jwtAuthorizationFilter;
-    @Autowired
-    ResultAccessDeniedHandler resultAccessDeniedHandler;
-    @Autowired
-    ResultAuthenticationEntryPoint resultAuthenticationEntryPoint;
     @Autowired
     @Qualifier("requestMappingHandlerMapping")
     private RequestMappingHandlerMapping handlerMapping;
@@ -91,8 +90,18 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
-                .accessDeniedHandler(resultAccessDeniedHandler)
-                .authenticationEntryPoint(resultAuthenticationEntryPoint);
+                .authenticationEntryPoint(
+                        (req, res, auth) -> {
+                            res.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                            res.setStatus(HttpStatus.UNAUTHORIZED.value());
+                            res.getWriter().println("请认证后处理！");
+                        })
+                .accessDeniedHandler(
+                        (req, res, auth) -> {
+                            res.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                            res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            res.getWriter().println("权限不足，请联系管理员!");
+                        });
         httpSecurity.headers().cacheControl();
         httpSecurity.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
