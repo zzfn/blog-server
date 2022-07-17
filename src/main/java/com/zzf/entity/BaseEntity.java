@@ -28,7 +28,7 @@ public class BaseEntity implements Serializable {
     @TableField(fill = FieldFill.INSERT,jdbcType= JdbcType.TIMESTAMP)
     private LocalDateTime createTime;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE,jdbcType= JdbcType.TIMESTAMP,update = "now()")
+    @TableField(fill = FieldFill.INSERT_UPDATE,jdbcType= JdbcType.TIMESTAMP)
     private LocalDateTime updateTime;
 
     @TableField(fill = FieldFill.INSERT)

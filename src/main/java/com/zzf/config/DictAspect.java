@@ -58,7 +58,7 @@ public class DictAspect {
             IPage ipage = (IPage) resultObj;
             List list = (List) ipage.getRecords();
             Optional.of((List) list).ifPresent(objects -> objects.forEach(this::translation));
-        } else if (resultObj instanceof Boolean) {
+        } else if (resultObj instanceof Boolean||resultObj instanceof String) {
 
         } else {
             translation(resultObj);
