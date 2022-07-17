@@ -26,23 +26,10 @@ public class User extends BaseEntity {
 
     private String nickName;
     /**
-     * openid
-     */
-    private String openid;
-    /**
-     * roleName
-     */
-    @TableField(exist = false)
-    private String roleName;
-    /**
-     * roleValue
-     */
-    @TableField(exist = false)
-    private String roleValue;
-    /**
      * 头像
      */
     private String avatar;
+
     @TableField(exist = false)
     private List<Role> roleList;
 

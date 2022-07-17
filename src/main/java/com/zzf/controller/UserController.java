@@ -119,10 +119,11 @@ public class UserController {
      * 获取用户信息
      */
     @GetMapping("getUserInfo")
-    public Object getUserInfo() {
-        String uid = HttpUtil.getUserId();
+    public Object getUserInfo(@RequestHeader String authorization) {
+        String token = authorization.substring(JwtTokenUtil.TOKEN_PREFIX.length());
+        String uid = JwtTokenUtil.getUserIdFromToken(token);
         if (null != uid) {
-            User user = userDao.getUser(uid);
+            User user = userDao.selectById(uid);
             List<Role> roleList = userRoleDao.getRoles(uid);
             user.setRoleList(roleList);
             return ResultUtil.success(user);

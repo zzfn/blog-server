@@ -3,6 +3,7 @@ package com.zzf.mapper;
 import com.zzf.entity.UserRole;
 import com.zzf.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +16,6 @@ import java.util.List;
  */
 @Repository
 public interface UserRoleDao extends BaseMapper<UserRole> {
-    List<Role> getRoles(String userId);
+    List<Role> getRoles(@Param("userId") String userId);
 
 }
