@@ -2,8 +2,12 @@ package com.zzf.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zzf.annotation.IgnoreAuth;
+import com.zzf.entity.Role;
 import com.zzf.entity.User;
+import com.zzf.entity.UserRole;
 import com.zzf.mapper.UserDao;
+import com.zzf.mapper.UserRoleDao;
+import com.zzf.util.HttpUtil;
 import com.zzf.util.JwtTokenUtil;
 import com.zzf.util.RedisUtil;
 import com.zzf.util.ResultUtil;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,6 +38,8 @@ public class UserController {
      */
     @Resource
     private UserDao userDao;
+    @Resource
+    private UserRoleDao userRoleDao;
     @Autowired
     private RedisUtil redisUtil;
 
@@ -74,7 +81,7 @@ public class UserController {
     @PostMapping("register")
     @IgnoreAuth
     public Object register(@RequestBody User user) {
-        if(userDao.selectCount(new QueryWrapper<User>().eq("username",user.getUsername())) > 0){
+        if (userDao.selectCount(new QueryWrapper<User>().eq("username", user.getUsername())) > 0) {
             return ResultUtil.error("用户名已存在");
         }
         if (null == user.getNickName()) {
@@ -112,11 +119,13 @@ public class UserController {
      * 获取用户信息
      */
     @GetMapping("getUserInfo")
-    public Object getUserInfo(@RequestHeader String authorization) {
-        String token = authorization.substring(JwtTokenUtil.TOKEN_PREFIX.length());
-        String uid = JwtTokenUtil.getUserIdFromToken(token);
+    public Object getUserInfo() {
+        String uid = HttpUtil.getUserId();
         if (null != uid) {
-            return ResultUtil.success(userDao.getUser(uid));
+            User user = userDao.getUser(uid);
+            List<Role> roleList = userRoleDao.getRoles(uid);
+            user.setRoleList(roleList);
+            return ResultUtil.success(user);
         } else {
             return ResultUtil.success(false);
         }

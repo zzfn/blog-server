@@ -11,5 +11,4 @@
             USER_ID = #{userId}
         AND T_USER_ROLE.IS_DELETE=0
     </select>
-
 </mapper>
