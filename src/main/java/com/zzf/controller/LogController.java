@@ -1,37 +1,49 @@
 package com.zzf.controller;
 
 import com.zzf.annotation.IgnoreAuth;
-import com.zzf.entity.ArticleEs;
 import com.zzf.entity.LogEs;
 import com.zzf.util.ResultUtil;
-import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import com.zzf.vo.PageVO;
+import com.zzf.vo.RequestVO;
+import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("log")
+@Slf4j
 public class LogController {
     @Resource
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     @GetMapping("search")
-    @IgnoreAuth
-    public Object getList(String keyword) {
-        List<LogEs> list = new ArrayList<>();
-        NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder().build();
+    public Object getList(PageVO pageVO) {
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        queryBuilder.withSort(SortBuilders.fieldSort("time").order(SortOrder.DESC));
+        queryBuilder.withPageable(PageRequest.of(pageVO.getCurrent()-1, pageVO.getPageSize()));
+        NativeSearchQuery nativeSearchQuery = queryBuilder.build();
         SearchHits<LogEs> esSearchHits = elasticsearchRestTemplate.search(nativeSearchQuery, LogEs.class);
-        return ResultUtil.success(esSearchHits);
+        List<LogEs> searchProductList = esSearchHits.stream().map(SearchHit::getContent).collect(Collectors.toList());
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("total",esSearchHits.getTotalHits());
+        map.put("records",searchProductList);
+        return ResultUtil.success(map);
+    }
+    @PostMapping("delete")
+    public Object deleteLog(@RequestBody RequestVO requestVO) {
+        String result = elasticsearchRestTemplate.delete(requestVO.getId(), LogEs.class);
+        return ResultUtil.success(result);
     }
 }
