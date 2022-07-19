@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
  * @author zzfn
  * @date 2020-12-10 14:49
  */
-@Document(indexName = "blog", replicas = 0, shards = 5)
+@Document(indexName = "blog")
 @Data
 @Builder
 public class ArticleEs {
