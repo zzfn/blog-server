@@ -5,6 +5,7 @@ import com.zzf.entity.BaseEntity;
 import com.zzf.service.SysDictService;
 import com.zzf.util.RedisUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.zzf.vo.BaseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -40,8 +41,8 @@ public class DictAspect {
     @Around("dictExecution()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         Object result = pjp.proceed();
-        Map<String, Object> resultMap = (HashMap) result;
-        Object resultObj = null;
+        HashMap<String, Object> resultMap = (HashMap) result;
+        Object resultObj;
         if (null == resultMap) {
             return null;
         }
@@ -49,7 +50,7 @@ public class DictAspect {
             return result;
         }
         resultObj = resultMap.get("data");
-        if (resultObj instanceof BaseEntity) {
+        if (resultObj instanceof BaseEntity || resultObj instanceof BaseVo) {
             translation(resultObj);
         } else if (resultObj instanceof List) {
             List list = (List) resultObj;

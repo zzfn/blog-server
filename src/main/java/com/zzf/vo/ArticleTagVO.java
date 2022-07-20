@@ -11,7 +11,7 @@ import java.util.List;
  * @author cc
  */
 @Data
-public class ArticleTagVO {
+public class ArticleTagVO extends BaseVo {
 
     @Dict(target = "title",codeType = "TAG")
     private String tagCode;
