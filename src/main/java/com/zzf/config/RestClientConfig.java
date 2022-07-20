@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class RestClientConfig extends AbstractElasticsearchConfiguration {
         HttpHost[] httpHostsArray = new HttpHost[httpHostsList.size()];
         httpHostsArray = httpHostsList.toArray(httpHostsArray);
         RestClientBuilder builder = RestClient.builder(httpHostsArray);
-        builder.setHttpClientConfigCallback(httpClientBuilder -> httpClientBuilder.setKeepAliveStrategy((httpResponse, httpContext) -> 1000 * 60));
+        builder.setHttpClientConfigCallback(httpClientBuilder -> httpClientBuilder.setKeepAliveStrategy((httpResponse, httpContext) -> Duration.ofMinutes(5).toMillis()));
         CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
         builder.setHttpClientConfigCallback(f -> f.setDefaultCredentialsProvider(credentialsProvider));
