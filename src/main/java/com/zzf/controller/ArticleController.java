@@ -1,5 +1,6 @@
 package com.zzf.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zzf.annotation.IgnoreAuth;
 import com.zzf.component.Send;
 import com.zzf.entity.Article;
@@ -25,10 +26,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author zzf
@@ -62,7 +60,17 @@ public class ArticleController {
             return ResultUtil.success(articleService.pageList(articleVO, true));
         }
     }
-
+    @GetMapping("count")
+    @IgnoreAuth
+    public Object getCount() {
+        LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Article::getIsRelease, 1);
+        Map<String,Long> map=new HashMap<>();
+        map.put("article",articleService.count(lambdaQueryWrapper));
+        lambdaQueryWrapper.select(Article::getId).groupBy(Article::getTag);
+        map.put("tag", (long) articleService.list(lambdaQueryWrapper).size());
+        return ResultUtil.success(map);
+    }
     @PostMapping("save")
     @PreAuthorize("hasRole('ADMIN')")
     public Object saveArticle(@RequestBody Article article) {

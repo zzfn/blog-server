@@ -30,9 +30,6 @@ public class Receiver {
     @RabbitHandler
     public void receiveMessage(Article article) {
         log.info("开始刷新id-{}有关的缓存", article.getId());
-//        articleService.getByDb(article.getId());
-//        articleService.listByDb("");
-//        articleService.listByDb(article.getTag());
         Set<String> keys = redisTemplate.keys("ARTICLE" + "*");
         if (CollectionUtils.isNotEmpty(keys)) {
             redisTemplate.delete(keys);
