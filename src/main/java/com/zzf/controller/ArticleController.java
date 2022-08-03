@@ -67,9 +67,7 @@ public class ArticleController {
     @PreAuthorize("hasRole('ADMIN')")
     public Object saveArticle(@RequestBody Article article) {
         articleService.saveOrUpdate(article);
-        if (article.getIsRelease()) {
-            send.post(article);
-        }
+        send.post(article);
         return ResultUtil.success(article.getId());
     }
 
