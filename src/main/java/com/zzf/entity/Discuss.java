@@ -31,6 +31,11 @@ public class Discuss extends BaseEntity {
     @TableField(exist = false)
     private String nickName;
     /**
+     * 头像
+     */
+    @TableField(exist = false)
+    private String avatar;
+    /**
      * 地区
      */
     private String address;
