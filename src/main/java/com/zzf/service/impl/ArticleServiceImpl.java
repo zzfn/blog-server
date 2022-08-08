@@ -4,25 +4,21 @@ package com.zzf.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zzf.entity.Article;
 import com.zzf.entity.ArticleMini;
 import com.zzf.mapper.ArticleDao;
 import com.zzf.service.ArticleService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zzf.vo.ArticleVO;
-import com.zzf.vo.PageVO;
 import com.zzf.vo.Tags;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
 
 /**
