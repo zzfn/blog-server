@@ -40,7 +40,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
     public IPage<Article> pageList(ArticleVO articleVO, boolean isCached) {
         LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(isCached, Article::getIsRelease, 1).orderByDesc(Article::getOrderNum);
-        lambdaQueryWrapper.eq(null != articleVO.getId(), Article::getId, articleVO.getId());
+        lambdaQueryWrapper.eq(StringUtils.isNotEmpty(articleVO.getId()), Article::getId, articleVO.getId());
         lambdaQueryWrapper.orderBy("updateTime".equals(articleVO.getField()), "ascend".equals(articleVO.getOrder()), Article::getUpdateTime);
         lambdaQueryWrapper.orderBy("createTime".equals(articleVO.getField()), "ascend".equals(articleVO.getOrder()), Article::getCreateTime);
         lambdaQueryWrapper.eq(null != articleVO.getTag(), Article::getTag, articleVO.getTag());
