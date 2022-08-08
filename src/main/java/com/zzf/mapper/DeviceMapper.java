@@ -1,6 +1,6 @@
 package com.zzf.mapper;
 
-import com.zzf.entity.Resource;
+import com.zzf.entity.Device;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @createDate 2022-08-08 20:30:49
  * @Entity com.zzf.entity.Resource
  */
-public interface ResourceMapper extends BaseMapper<Resource> {
+public interface DeviceMapper extends BaseMapper<Device> {
 
 }
 
