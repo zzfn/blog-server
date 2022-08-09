@@ -5,6 +5,7 @@ import com.zzf.entity.Device;
 import com.zzf.service.DeviceService;
 import com.zzf.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,6 +27,7 @@ public class DeviceController {
     private DeviceService deviceService;
 
     @PostMapping("save")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object saveOne(@RequestBody Device resource) {
         return ResultUtil.success(this.deviceService.save(resource));
     }
@@ -36,11 +38,13 @@ public class DeviceController {
      * @return 单条数据
      */
     @GetMapping("list")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object selectOne(Page<Device> page) {
         return ResultUtil.success(this.deviceService.page(page));
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object deviceOne(@PathVariable("id") String id) {
         return ResultUtil.success(this.deviceService.getById(id));
     }
