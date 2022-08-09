@@ -29,7 +29,7 @@ public class DeviceController {
     @PostMapping("save")
     @PreAuthorize("hasRole('ADMIN')")
     public Object saveOne(@RequestBody Device resource) {
-        return ResultUtil.success(this.deviceService.save(resource));
+        return ResultUtil.success(this.deviceService.saveOrUpdate(resource));
     }
 
     /**
