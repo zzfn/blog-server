@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zzf.annotation.IgnoreAuth;
 import com.zzf.entity.Discuss;
 import com.zzf.service.DiscussService;
+import com.zzf.util.HttpUtil;
 import com.zzf.util.IpUtil;
 import com.zzf.util.RedisUtil;
 import com.zzf.util.ResultUtil;
@@ -41,6 +42,9 @@ public class DiscussController {
             redisUtil.hset("address", ip, address);
         }
         discuss.setAddress(address);
+        if(StringUtils.isBlank(HttpUtil.getUserId())){
+            discuss.setCreateBy(ip);
+        }
         return ResultUtil.success(this.discussService.save(discuss));
     }
 
