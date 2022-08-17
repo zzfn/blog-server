@@ -11,6 +11,7 @@
                d.REPLY_ID,
                d.ADDRESS,
                d.CREATE_TIME,
+               d.CREATE_BY,
                u.NICK_NAME,
                u.AVATAR
         from t_discuss as d
