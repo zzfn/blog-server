@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zzf.annotation.IgnoreAuth;
 import com.zzf.entity.Discuss;
 import com.zzf.service.DiscussService;
-import com.zzf.util.HttpUtil;
-import com.zzf.util.IpUtil;
-import com.zzf.util.RedisUtil;
-import com.zzf.util.ResultUtil;
+import com.zzf.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +42,7 @@ public class DiscussController {
         if(StringUtils.isBlank(HttpUtil.getUserId())){
             discuss.setCreateBy(ip);
         }
+        BotUtil.postMessage(ip+":评论了"+discuss.getReplyId()+"内容"+discuss.getContent());
         return ResultUtil.success(this.discussService.save(discuss));
     }
 
