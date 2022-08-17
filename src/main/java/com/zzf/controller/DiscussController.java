@@ -42,7 +42,7 @@ public class DiscussController {
         if(StringUtils.isBlank(HttpUtil.getUserId())){
             discuss.setCreateBy(ip);
         }
-        BotUtil.postMessage(ip+":评论了"+discuss.getReplyId()+"内容"+discuss.getContent());
+        BotUtil.postMessage(ip+":评论了文章"+discuss.getArticleId()+"内容"+discuss.getContent());
         return ResultUtil.success(this.discussService.save(discuss));
     }
 
