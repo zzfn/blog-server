@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zzf.entity.Article;
 import com.zzf.service.ArticleService;
 import com.zzf.service.LogUserService;
-import com.zzf.service.TraceService;
 import com.zzf.util.RedisUtil;
 import com.zzf.vo.Tags;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +28,6 @@ public class OverviewController {
     @Resource
     ArticleService articleService;
     @Resource
-    TraceService traceService;
-    @Resource
     ArticleDao articleDao;
     @Resource
     LogUserService logUserService;
@@ -44,16 +41,12 @@ public class OverviewController {
         lambdaQueryWrapper.eq(Article::getIsRelease, true);
         long releaseCount = articleService.count(lambdaQueryWrapper);
         List<Tags> tags = articleDao.getTags();
-        Object performances = traceService.getPerformance();
         Map<String, Object> map = new HashMap<>();
         map.put("allCount", allCount);
         map.put("releaseCount", releaseCount);
         map.put("tags", tags);
-        map.put("performances", performances);
-        map.put("performancesAnalyze", traceService.getPerformanceLast());
         map.put("visitors", logUserService.visitorAnalysis());
         map.put("searchKeywords", redisUtil.reverseRangeWithScores("searchKeywords", 0L, -1L));
-        map.put("userCount", traceService.getUserCount());
         return ResultUtil.success(map);
     }
 }

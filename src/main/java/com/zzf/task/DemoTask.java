@@ -1,6 +1,5 @@
 package com.zzf.task;
 
-import com.zzf.service.TraceService;
 import com.zzf.util.MailUtil;
 import com.zzf.util.BotUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -14,15 +13,13 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @Component
-public class LogUserTask {
-    @Resource
-    TraceService traceService;
+public class DemoTask {
 
     @Resource
     MailUtil mailUtil;
     @Scheduled(cron = "0 0 2 ? * *")
     public void run() {
-        traceService.getAnyCount(-1);
-        BotUtil.postMessage("统计pv、uv执行成功");
+        log.info("定时任务执行成功");
+        BotUtil.postMessage("定时任务执行成功");
     }
 }
