@@ -1,7 +1,11 @@
 package com.zzf.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zzf.annotation.IgnoreAuth;
+import com.zzf.entity.Article;
 import com.zzf.entity.Role;
 import com.zzf.entity.User;
 import com.zzf.entity.UserRole;
@@ -12,6 +16,7 @@ import com.zzf.util.JwtTokenUtil;
 import com.zzf.util.RedisUtil;
 import com.zzf.util.ResultUtil;
 import com.zzf.vo.LoginVO;
+import com.zzf.vo.PageVO;
 import com.zzf.vo.TokenVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,5 +135,11 @@ public class UserController {
         } else {
             return ResultUtil.success(false);
         }
+    }
+    @GetMapping("list")
+    public Object userList(PageVO pageVO) {
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        IPage<User> page = new Page<>(pageVO.getCurrent(), pageVO.getPageSize());
+        return ResultUtil.success(userDao.selectPage(page,lambdaQueryWrapper));
     }
 }

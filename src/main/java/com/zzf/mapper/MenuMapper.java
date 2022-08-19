@@ -4,7 +4,10 @@ import com.zzf.entity.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
+/**
+ * @author c.chen
+ */
 @Repository
-public interface MenuDao extends BaseMapper<Menu> {
+public interface MenuMapper extends BaseMapper<Menu> {
 
 }
