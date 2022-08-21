@@ -1,5 +1,7 @@
 package com.zzf.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.zzf.entity.Article;
 import com.zzf.entity.Menu;
 import com.zzf.service.MenuService;
 import com.zzf.util.ResultUtil;
@@ -20,7 +22,9 @@ public class MenuController {
 
     @GetMapping("list")
     public Object menuList() {
-        return ResultUtil.success(menuService.list(null));
+        LambdaQueryWrapper<Menu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.orderByAsc(Menu::getOrderNum);
+        return ResultUtil.success(menuService.list(lambdaQueryWrapper));
     }
     @GetMapping("{id}")
     public Object menuOne(@PathVariable("id") String id) {
