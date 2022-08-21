@@ -9,6 +9,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -56,6 +57,7 @@ public class DroneController {
     }
 
     @PostMapping("buildCreate")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object buildCreate(@RequestBody BuildCreateVo buildCreateVo) {
         log.info(buildCreateVo.getRepo(),buildCreateVo.getOwner());
         RestTemplate restTemplate = new RestTemplate();
