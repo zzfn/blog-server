@@ -1,17 +1,20 @@
 package com.zzf.util;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.zzf.entity.JwtUser;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author cc
@@ -31,6 +34,7 @@ public class JwtTokenUtil {
     private void setSecret(String secret) {
         SECRET = secret;
     }
+
     /**
      * 过期时间是3600秒，既是1个小时
      */
@@ -42,55 +46,36 @@ public class JwtTokenUtil {
 
     /**
      * 创建token
+     *
      * @param claims
      * @return
      */
     public static String generateToken(Map<String, Object> claims) {
-        log.info(SECRET);
-        return Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, SECRET)
-                .setClaims(claims)
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION * 1000))
-                .compact();
+        Algorithm algorithm = Algorithm.HMAC256(SECRET);
+        return JWT.create().withPayload(claims).withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION * 1000)).sign(algorithm);
     }
 
     /**
      * 创建refreshToken
+     *
      * @param claims
      * @return
      */
     public static String generateRefreshToken(Map<String, Object> claims) {
-        return Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, SECRET)
-                .setClaims(claims)
-                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION * 1000))
-                .compact();
+        Algorithm algorithm = Algorithm.HMAC256(SECRET);
+        return JWT.create().withPayload(claims).withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION * 1000)).sign(algorithm);
     }
 
     /**
-     * 刷新token
-     * @param token
-     * @return
-     */
-    public String refreshToken(String token) {
-        String refreshedToken;
-        try {
-            Claims claims = getClaimsFromToken(token);
-            claims.put("created", LocalDate.now());
-            refreshedToken = generateToken(claims);
-        } catch (Exception e) {
-            refreshedToken = null;
-        }
-        return refreshedToken;
-    }
-    /**
      * 是否过期
+     *
      * @param token
      * @return
      */
     public static boolean isTokenExpired(String token) {
-        if (null != getClaimsFromToken(token)) {
-            return getClaimsFromToken(token).getExpiration().before(new Date());
+        Map<String,Claim> claimMap=getClaimsFromToken(token);
+        if (null != claimMap) {
+            return claimMap.get("exp").asDate().before(new Date());
         } else {
             return false;
         }
@@ -99,24 +84,25 @@ public class JwtTokenUtil {
     public static Boolean validateToken(String token, UserDetails userDetails) {
         JwtUser user = (JwtUser) userDetails;
         String username = getUserNameFromToken(token);
-        return (username.equals(user.getUsername()) && !isTokenExpired(token));
+        return (Objects.equals(username, user.getUsername()) && !isTokenExpired(token));
     }
+
     /**
      * 获取载荷
+     *
      * @param token
      * @return
      */
-    private static Claims getClaimsFromToken(String token) {
-        Claims claims = null;
+    private static Map<String, Claim> getClaimsFromToken(String token) {
         try {
-            claims = Jwts.parser()
-                    .setSigningKey(SECRET)
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            log.info("JWT格式验证失败:{}", token);
+            Algorithm algorithm = Algorithm.HMAC256(SECRET);
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            DecodedJWT jwt = verifier.verify(token);
+            return jwt.getClaims();
+        } catch (JWTVerificationException exception) {
+            log.error("JWT格式验证失败:{}", token);
+            return null;
         }
-        return claims;
     }
 
     /**
@@ -125,9 +111,9 @@ public class JwtTokenUtil {
     public static String getUserNameFromToken(String token) {
         String username = null;
         try {
-            Claims claims = getClaimsFromToken(token);
-            if(null!=claims){
-                username=(String)claims.get("username");
+            Map<String, Claim> claims = getClaimsFromToken(token);
+            if (null != claims) {
+                username = claims.get("username").asString();
             }
             return username;
         } catch (Exception e) {
@@ -142,9 +128,9 @@ public class JwtTokenUtil {
     public static String getUserIdFromToken(String token) {
         String role = null;
         try {
-            Claims claims = getClaimsFromToken(token);
-            if(null!=claims){
-                role=(String)claims.get("uid");
+            Map<String,Claim> claims = getClaimsFromToken(token);
+            if (null != claims) {
+                role = claims.get("uid").asString();
             }
             return role;
         } catch (Exception e) {
