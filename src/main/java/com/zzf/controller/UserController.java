@@ -79,7 +79,16 @@ public class UserController {
             return ResultUtil.error("用户不存在");
         }
     }
-
+    @PostMapping("password/change")
+    public Object passwordChange(String password) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String userId=HttpUtil.getUserId();
+        User user=new User();
+        user.setId(userId);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword().trim()));
+        userDao.updateById(user);
+        return userDao.updateById(user);
+    }
     /**
      * 注册
      */
