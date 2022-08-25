@@ -85,7 +85,7 @@ public class UserController {
         String userId=HttpUtil.getUserId();
         User user=new User();
         user.setId(userId);
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword().trim()));
+        user.setPassword(bCryptPasswordEncoder.encode(password.trim()));
         userDao.updateById(user);
         return userDao.updateById(user);
     }
