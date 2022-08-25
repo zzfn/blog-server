@@ -87,7 +87,7 @@ public class UserController {
         user.setId(userId);
         user.setPassword(bCryptPasswordEncoder.encode(password.trim()));
         userDao.updateById(user);
-        return userDao.updateById(user);
+        return ResultUtil.success(userDao.updateById(user));
     }
     /**
      * 注册
