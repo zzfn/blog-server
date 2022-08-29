@@ -66,5 +66,6 @@ steps:
       script:
         - echo "Hello World"
         - cd /root/blog-server
+        - mv -f target/blog-server-1.0.0.jar .
         - sh ./deploy.sh
 
