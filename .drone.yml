@@ -44,11 +44,11 @@ steps:
     depends_on: [build]
     settings:
       host:
-        from_secret: host
+        from_secret: server_host
       port: 22
       username:
         from_secret: username
       password:
-        from_secret: password
+        from_secret: server_password
       target: /root/blog-server
       source: ./target/blog-server-1.0.0.jar
